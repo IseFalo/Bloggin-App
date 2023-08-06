@@ -1,0 +1,69 @@
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User, auth
+from .models import *
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+# Create your views here.
+def settings(request):
+    return render(request, 'settings.html')
+def register(request):
+    if request.method == 'POST':
+        blogname = request.POST['blog-name']
+        email = request.POST['email']
+        password1=request.POST['password1']
+        password2=request.POST['password2']
+
+
+        if not blogname:
+            messages.error(request, "Blog name is required.")
+            return redirect('register')
+
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect('register')
+        if not password1:
+            messages.error(request, "Enter First Password")
+            return redirect('register')
+        if not password2:
+            messages.error(request, "Enter Second Password")
+            return redirect('register')
+
+        if password1 == password2:
+            if User.objects.filter(username=blogname).exists():
+                messages.info(request, "Username Taken")
+                return redirect('register')
+            else:
+                user=User.objects.create_user(username=blogname, email=email, password=password1)
+                user.save()
+
+                user_login=auth.authenticate(username=blogname, password=password1)
+                auth.login(request, user_login)
+
+                user_model = User.objects.get(username=blogname, email=email)
+                new_profile=Profile.objects.create(username=user_model, email=email)
+                new_profile.save()
+                return redirect('settings')
+            
+
+    else:       
+        return render(request, 'register1.html')
+    
+def login(request):
+    if request.method == 'POST':
+        username = request.POST['blogname']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+        else:
+            messages.info(request, 'Credentials Invalid')
+            return redirect('login')
+    
+    else:
+        return render(request, 'login1.html')
+    return render(request, 'login1.html')
+def home(request):
+    return render(request, 'feed.html')

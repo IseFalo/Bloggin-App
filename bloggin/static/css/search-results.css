@@ -1,0 +1,56 @@
+.dropdown-toggle::after{
+    display: none;
+}
+hr {
+    width: 100%;
+    height: 12px;
+    border: 0;
+    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+}
+
+.nav-item{
+    margin-left: 70px;
+}
+.nav-link{
+    font-size: 15px;
+}
+
+
+
+
+
+
+@media only screen and (min-width:0px) and (max-width:576px){
+    .nav-item{
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+    .search{
+        margin-top: 10px;
+    }
+}
+@media only screen and (min-width:577px) and (max-width:768px) {
+    .nav-item{
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .search{
+        margin-top: 10px;
+    }
+
+}
+@media only screen and (min-width:769px) and (max-width:992px) {
+    .nav-item{
+        margin-top: 10px;
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    .search{
+        margin-top: 10px;
+    }
+}
+
+@media only screen and (min-width:993px) and (max-width:1200px){
+
+}
