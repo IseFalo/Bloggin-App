@@ -238,20 +238,29 @@
     
     <div class="container text-center py-5" id="edit-profile-container">
         <div class="edit-profile-div">
-            <img src="images/link 1.jpg" class="edit-profile-image mt-5" alt="" width="100" height="100">
-            <a href="" class="btn btn-md btn-primary d-block m-auto my-3" style="width: 200px;">Edit profile image</a>
-            <form action="">
+          {% for message in messages %}
+            <h5>{{message}}</h5>
+          {% endfor %}
+            <form action="{% url 'settings' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              {% if user_profile.profile_img %}
+              <img class="edit-profile-image mt-5" alt="" width="100" height="100"  src="{{user_profile.profile_img.url}}" >
+              {% else %}
+              <img class="edit-profile-image mt-5" alt="" width="100" height="100"  src="{% static 'blank-profile/blank-profile-picture.png' %}" >
+              {% endif %}
+              <input type="file" name="image" value="" class="shadow-none bg-gray-100">
+              <a href="" class="btn btn-md btn-primary d-block m-auto my-3" style="width: 200px;">Edit profile image</a>
                 <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
                     <label for="username">Blog name: </label>
-                    <input type="text" class="edit-username" name="username" value="Iseoluwa's Food Blog">
+                    <input type="text" class="edit-username" name="username" value="{{user_profile.username}}">
                 </div>
                 <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
                     <label for="bio" class="">Bio: </label>
-                    <textarea name="bio" class="edit-bio" id="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, ipsam? Molestias consequatur debitis corporis dolor modi et corrupti unde impedit minus ullam aut dolores doloribus ratione molestiae, magni ipsum reiciendis!</textarea>
+                    <textarea name="bio" class="edit-bio" id="">{{user_profile.bio}}</textarea>
                 </div>
                 <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
                     <label for="phone-no" class="">Phone Number: </label>
-                    <input type="text" class="edit-phone-no" name="phone-no" value="08023564508">
+                    <input type="text" class="edit-phone-no" name="phone-no" value="{{user_profile.phone_no}}">
                 </div>
                 <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
                     <label for="instagram-link" class="">Instagram link: </label>
@@ -265,9 +274,11 @@
                     <label for="facebook-link" class="">Facebook link: </label>
                     <input type="text" class="edit-facebook-link" name="facebook-link">
                 </div>
+                <input type="submit" value="Submit" class="btn btn-md btn-dark d-block m-auto my-3" style="width: 200px;">
+                <input type="submit" value="Delete Account" class="btn btn-md btn-danger d-block m-auto my-3" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#exampleModal">
             </form>
-            <a href="" class="btn btn-md btn-dark d-block m-auto my-3" style="width: 200px;">Submit</a>
-            <a href="" class="btn btn-md btn-danger d-block m-auto my-3" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Account</a>
+            <!-- <a href="" class="btn btn-md btn-dark d-block m-auto my-3" style="width: 200px;">Submit</a>
+            <a href="" class="btn btn-md btn-danger d-block m-auto my-3" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Account</a> -->
 
 
 

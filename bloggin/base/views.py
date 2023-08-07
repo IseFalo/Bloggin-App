@@ -64,6 +64,63 @@ def login(request):
     
     else:
         return render(request, 'login1.html')
-    return render(request, 'login1.html')
+    
 def home(request):
     return render(request, 'feed.html')
+
+def settings(request):
+    user_profile=Profile.objects.get(username=request.user)
+    if request.method == 'POST':
+        if request.FILES.get('image') == None:
+            blogname = request.POST['username']
+            image = user_profile.profile_img
+            bio = request.POST['bio']
+            phone_no=request.POST['phone-no']
+
+            
+            
+            if User.objects.filter(username=blogname).exists() and blogname != request.user.username:
+                messages.info(request, "Blog Name Taken")
+                return redirect('settings')
+            else:
+                user = User.objects.get(username=request.user.username)
+                user.username = blogname
+                user.save()
+
+                user_profile.profile_img = image
+                user_profile.bio = bio
+                user_profile.phone_no = phone_no
+                if phone_no is not None:
+                    try:
+                        phone_no = int(phone_no)
+                    except ValueError:
+                        phone_no = None
+                user_profile.phone_no = phone_no
+                user_profile.save()
+
+        if request.FILES.get('image') != None:
+            blogname = request.POST['username']
+            image = request.FILES.get('image')
+            bio = request.POST.get['bio']
+            phone_no = request.POST['phone-no']
+
+            if User.objects.filter(username=blogname).exists() and blogname != request.user.username:
+                messages.info(request, "Blog Name Taken")
+                return redirect('settings')
+            else:
+                user = User.objects.get(username=request.user.username)
+                user.username = blogname
+                user.save()
+
+                user_profile.profile_img = image
+                user_profile.bio = bio
+                if phone_no is not None:
+                    try:
+                        phone_no = int(phone_no)
+                    except ValueError:
+                        phone_no = None
+                user_profile.phone_no = phone_no
+                user_profile.save()
+            
+        return redirect('settings')
+    return render(request, 'settings.html', {'user_profile': user_profile})
