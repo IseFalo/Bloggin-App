@@ -66,7 +66,9 @@ def login(request):
         return render(request, 'login1.html')
     
 def home(request):
-    return render(request, 'feed.html')
+    posts=Post.objects.all()
+    context={'posts':posts}
+    return render(request, 'feed.html', context)
 
 def settings(request):
     user_profile=Profile.objects.get(username=request.user)
@@ -124,3 +126,16 @@ def settings(request):
             
         return redirect('settings')
     return render(request, 'settings.html', {'user_profile': user_profile})
+
+def create_post(request):
+    if request.method == 'POST':
+        author = request.user
+        title=request.POST['post-title']
+        post_cover=request.FILES.get('post-cover-image')
+        post_text=request.POST['post-text']
+
+        new_post = Post.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
+        new_post.save()
+        return redirect('/')
+    else:
+        return redirect('/')

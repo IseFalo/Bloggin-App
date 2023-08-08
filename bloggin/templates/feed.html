@@ -325,12 +325,13 @@
               <button type="button" class="btn-close" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form action="">
+              <form action="create-post" method="POST" enctype="multipart/form-data" id="post-form">
+                {% csrf_token %}
                 <div class="post-form">
                 <input type="text" class="post-title my-3" name="post-title" placeholder="Post title">
                 <label for="post-cover-image">Add post cover:</label>
                 <input type="file" name="post-cover-image" accept="image/*">
-                <textarea name="" class="post-text-area my-3" placeholder="Talk about something..."></textarea>
+                <textarea name="post-text" class="post-text-area my-3" placeholder="Talk about something..."></textarea>
               </div>
               </form>  
             </div>
@@ -369,7 +370,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Go back</button>
-              <button class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
+              <button class="btn btn-secondary" type="submit" data-bs-dismiss="modal" form="post-form">Yes</button>
             </div>
           </div>
         </div>
@@ -401,24 +402,27 @@
 
 
 
-                  
+     
                   <div class="row">
+                    {% for post in posts %}  
                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
                       <div class="card mb-3 my-3" id="post-feed-card">
                         <div class="card-header">
-                            <h5>@Iseoluwa's Food Blog</h5>
+                            <h5>{{post.author}}</h5>
                         </div>
                         <a href="">
-                          <img src="images/blog-770x510.png" class="card-img-top" id="feed-post-img" height="200" alt="...">
+                          <img src="{{post.post_cover.url}}" class="card-img-top" id="feed-post-img" height="200" alt="...">
                         </a>                    
                         <div class="card-body">
-                          <h5 class="card-title">Post title (5 mins read)</h5>  
+                          <h5 class="card-title">{{post.title}} (5 mins read)</h5>  
                           <a href="" class="comment-link text-secondary">Read by 1200 people</a>
-                          <p class="card-text"><small class="text-muted">Posted 10 mins ago and edited 5 mins ago</small></p>
+                          <p class="card-text"><small class="text-muted">{{post.created}}</small></p>
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
+                    {% endfor %}
+                    
+                    <!-- <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
                       <div class="card mb-3 my-3" id="post-feed-card">
                         <div class="card-header">
                             <h5>@Iseoluwa's Food Blog</h5>
@@ -432,9 +436,9 @@
                           <p class="card-text"><small class="text-muted">Posted 10 mins ago and edited 5 mins ago</small></p>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
 
-                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
+                    <!-- <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
                       <div class="card mb-3 my-3" id="post-feed-card">
                         <div class="card-header">
                             <h5>@Iseoluwa's Food Blog</h5>
@@ -448,9 +452,9 @@
                           <p class="card-text"><small class="text-muted">Posted 10 mins ago and edited 5 mins ago</small></p>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
 
-                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
+                    <!-- <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
                       <div class="card mb-3 my-3" id="post-feed-card">
                         <div class="card-header">
                             <h5>@Iseoluwa's Food Blog</h5>
@@ -464,10 +468,10 @@
                           <p class="card-text"><small class="text-muted">Posted 10 mins ago and edited 5 mins ago</small></p>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>                  
             </div>
-
+            
 
 
 
