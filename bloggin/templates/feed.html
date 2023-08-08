@@ -410,7 +410,7 @@
                         <div class="card-header">
                             <h5>{{post.author}}</h5>
                         </div>
-                        <a href="">
+                        <a href="{% url 'post-detail' post.id %}">
                           <img src="{{post.post_cover.url}}" class="card-img-top" id="feed-post-img" height="200" alt="...">
                         </a>                    
                         <div class="card-body">

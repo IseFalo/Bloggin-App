@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="post-detail.css">
+    <link rel="stylesheet" href="{% static 'css/post-detail.css' %}">
     <title>Post Detail- The emergence of new computers</title>
   </head>
   <body>
@@ -230,7 +231,7 @@
     <div class="container pt-5">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                <h6>Post by <a href="">Iseoluwa's Computer Blog</a>(25.3k Subscribers)</h6>
+                <h6>Post by <a href="">{{post.author}}</a>(25.3k Subscribers)</h6>
                 <p>
                     <a href="" class="btn btn-sm btn-primary">Edit Post</a>
                     <a href="" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Post</a>
@@ -255,52 +256,34 @@
                   </div>
                 </div>
                 </p>
-                <small>Posted on March 8 2023</small>
-                <h3>The emergence of new computers</h3>
+                <small>Posted on {{post.created}}</small>
+                <h3>{{post.title}}</h3>
                 <hr>
                 <div class="post-cover">
-                    <img src="images/img6.jpg" width="400" height="300" alt="">
+                    <img src="{{post.post_cover.url}}" width="400" height="300" alt="">
                 </div>
                 <hr>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora facilis omnis praesentium, reiciendis quam perspiciatis a voluptates fugiat, possimus nostrum ad voluptas, eveniet molestiae tenetur doloremque asperiores quibusdam. Blanditiis recusandae itaque corporis, ratione, deleniti assumenda aut voluptate explicabo accusantium totam, architecto corrupti error numquam ut distinctio officia? Corrupti quo facere sunt illum sapiente assumenda, minima aut eius sit eos ipsa quaerat ratione repudiandae excepturi perspiciatis ut sed. Assumenda corrupti explicabo optio dolor necessitatibus ad velit itaque nihil repudiandae, aperiam odit sed architecto fugiat mollitia perspiciatis eum reiciendis quibusdam voluptatum debitis obcaecati quidem labore? Hic doloremque aperiam maiores in officia perspiciatis!</p>
+                <p>{{post.content}}</p>
                 <p>
                     <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                      Comments(105)
+                      Comments({{post.comment_set.count}})
                     </a>
                   </p>
                   <div class="collapse mb-5" id="collapseExample">
                     <div class="comment-scroll">
                         <h6>Comments</h6>
+                        {% for comment in post.comment_set.all %}
                         <div class="row g-0">
                             <div class="col-sm-2 col-xl-1">
-                                <img src="images/link 1.jpg" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
+                                <img src="{{comment.author.profile.profile_img.url}}" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
                             </div>
                             <div class="col-sm-10 col-xl-11 text-start">
-                                <h5 class="comment-username">@Iseoluwa's Food Blog</h5>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <h5 class="comment-username">@{{comment.author}}</h5>
+                                <p>{{comment.text}}</p>
                             </div>
                         </div>
                         <hr>
-                        <div class="row g-0">
-                            <div class="col-sm-2 col-xl-1">
-                                <img src="images/link 1.jpg" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
-                            </div>
-                            <div class="col-sm-10 col-xl-11 text-start">
-                                <h5 class="comment-username">@Iseoluwa's Food Blog</h5>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row g-0">
-                            <div class="col-sm-2 col-xl-1">
-                                <img src="images/link 1.jpg" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
-                            </div>
-                            <div class="col-sm-10 col-xl-11 text-start">
-                                <h5 class="comment-username">@Iseoluwa's Food Blog</h5>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                        <hr>
+                        {% endfor %}
                     </div>
  
                   </div>
@@ -313,12 +296,13 @@
                         Leave a Comment
                       </div>
                     <div class="card-body">
-                        <form action="">
+                        <form action="" method="POST">
+                          {% csrf_token %}
                             <div class="comment-form">
-                                <input type="text" class="comment-name my-2" placeholder="Name">
-                                <input type="email" class="comment-email my-3" placeholder="Email">
-                                <textarea name="" class="my-3" id="" cols="30" rows="10" placeholder="Comment..."></textarea>
-                                <button href="#" class="btn btn-sm btn-outline-dark my-3">Post Comment</button>
+                                <!-- <input type="text" class="comment-name my-2" placeholder="Name">
+                                <input type="email" class="comment-email my-3" placeholder="Email"> -->
+                                <textarea name="comment" class="my-3" id="" cols="30" rows="10" placeholder="Comment..."></textarea>
+                                <button type="submit" class="btn btn-sm btn-outline-dark my-3">Post Comment</button>
                             </div>
                         </form>
                     </div>

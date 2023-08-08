@@ -139,3 +139,20 @@ def create_post(request):
         return redirect('/')
     else:
         return redirect('/')
+    
+def post_detail(request, pk):
+    post=Post.objects.get(id=pk)
+    if request.method == 'POST':
+        post=Post.objects.get(id=pk)
+        author = request.user
+        comment = request.POST['comment']
+
+        new_comment = Comment.objects.create(author=author, text=comment, post=post)
+        new_comment.save()
+        return redirect('post-detail', pk=pk)
+    context={'post':post}
+    return render(request, 'post-detail.html', context)
+
+
+
+    
