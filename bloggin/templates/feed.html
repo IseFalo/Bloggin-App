@@ -281,14 +281,14 @@
 
                   <hr>
                   <div id="fixedElement">
-                    <h5 class="text-center pt-5">Most Popular Categories</h5>
                     <div class="card my-3" style="width: 250px;">
-                        <div class="card-body">
-                            <h6>1.) Football</h6>
-                            <h6>2.) Music</h6>
-                            <h6>3.) Movies</h6>
-                            <h6>4.) Fashion</h6>
-                            <h6>5.) Politics</h6>
+                        <div class="card-body text-center">
+                            <h6><a href="">Settings</a></h6>
+                            <h6><a href="">About</a></h6>
+                            <h6><a href="">Privacy and Terms</a></h6>
+                            <h6><a href="">Advertisements</a></h6>
+                            <hr>
+                            <h6><a href="">Logout</a></h6>
                         </div>
                       </div>
                   </div>
@@ -307,7 +307,7 @@
         <div class="card-body">
             <a href="" data-bs-toggle="modal"  data-bs-target="#exampleModalToggle" href="#exampleModalToggle" role="button">
                 <form action="">
-                    <img src="images/link 1.jpg" class="start-post-image" alt="" srcset="">
+                    <img src="{{profile.profile_img.url}}" class="start-post-image" alt="" srcset="">
                     <input type="text" class="start-post" placeholder="Start a Post">
                 </form>
             </a>
@@ -422,53 +422,6 @@
                     </div>
                     {% endfor %}
                     
-                    <!-- <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
-                      <div class="card mb-3 my-3" id="post-feed-card">
-                        <div class="card-header">
-                            <h5>@Iseoluwa's Food Blog</h5>
-                        </div>
-                        <a href="">
-                          <img src="images/blog-770x510.png" class="card-img-top" id="feed-post-img" height="200" alt="...">
-                        </a>
-                        <div class="card-body">
-                          <h5 class="card-title">Post title (5 mins read)</h5>
-                          <a href="" class="comment-link text-secondary">Read by 1200 people</a>
-                          <p class="card-text"><small class="text-muted">Posted 10 mins ago and edited 5 mins ago</small></p>
-                        </div>
-                      </div>
-                    </div> -->
-
-                    <!-- <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
-                      <div class="card mb-3 my-3" id="post-feed-card">
-                        <div class="card-header">
-                            <h5>@Iseoluwa's Food Blog</h5>
-                        </div>
-                        <a href="">
-                          <img src="images/blog-770x510.png" class="card-img-top" id="feed-post-img"  height="200" alt="...">
-                        </a>
-                        <div class="card-body">
-                          <h5 class="card-title">Post title (5 mins read)</h5>                 
-                          <a href="" class="comment-link text-secondary">Read by 1200 people</a>
-                          <p class="card-text"><small class="text-muted">Posted 10 mins ago and edited 5 mins ago</small></p>
-                        </div>
-                      </div>
-                    </div> -->
-
-                    <!-- <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6">
-                      <div class="card mb-3 my-3" id="post-feed-card">
-                        <div class="card-header">
-                            <h5>@Iseoluwa's Food Blog</h5>
-                        </div>
-                        <a href="">
-                          <img src="images/blog-770x510.png" class="card-img-top" id="feed-post-img"  height="200" alt="...">
-                        </a>                     
-                        <div class="card-body">
-                          <h5 class="card-title">Post title (5 mins read)</h5>
-                          <a href="" class="comment-link text-secondary">Read by 1200 people</a>
-                          <p class="card-text"><small class="text-muted">Posted 10 mins ago and edited 5 mins ago</small></p>
-                        </div>
-                      </div>
-                    </div> -->
                   </div>                  
             </div>
             
@@ -478,99 +431,64 @@
 
 
             <div class="col-lg-3 d-none d-md-none d-lg-none d-xl-block" id="col">
-                <h5 class="text-center">Suggested</h5>
+              <div class="card my-3" style="width: 250px;" id="trending-card">
+                <img src="{{profile.profile_img.url}}" height="150" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h6 class="card-title">{{profile.username}}</h6>
+                  <p class="card-text">3m subscribers</p>
+                  <a href="#" class="btn btn-sm btn-outline-dark">View Profile</a>
+                </div>
+              </div>
+                
                 <div class="card my-3" style="width: 250px;" id="suggest-card">
                     <div class="card-body">
-                        <div class="row">
+                      <h5 class="text-center">Suggested</h5>
+                      <hr>
+                        <div class="row mt-4">
                             <div class="col-3">
                                 <img src="images/link 1.jpg" class="start-post-image" alt="" width="80" height="80" srcset="">
                             </div>
                             <div class="col-9">
                                 <h5>@Iseoluwa's Food Blog</h5>
                                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <h6>2000 Subscribers</h6>
                                 <a href="#" class="btn btn-sm btn-dark" id="suggest-button">Subscribe <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                   </svg></a>
                             </div>
                         </div>
+
+                        <div class="row mt-4">
+                          <div class="col-3">
+                              <img src="images/link 1.jpg" class="start-post-image" alt="" width="80" height="80" srcset="">
+                          </div>
+                          <div class="col-9">
+                              <h5>@Marvel Lovers</h5>
+                              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                              <a href="#" class="btn btn-sm btn-dark">Subscribe <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </svg></a>
+                          </div>
+                      </div>
+
+                      <div class="row mt-4">
+                        <div class="col-3">
+                            <img src="images/link 1.jpg" class="start-post-image" alt="" width="80" height="80" srcset="">
+                        </div>
+                        <div class="col-9">
+                            <h5>@Naija Politics</h5>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <a href="#" class="btn btn-sm btn-dark">Subscribe <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                              </svg></a>
+                        </div>
+                    </div>
                     </div>
                   </div>
 
-                  <div class="card my-3" style="width: 250px;" id="suggest-card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-3">
-                                <img src="images/link 1.jpg" class="start-post-image" alt="" width="80" height="80" srcset="">
-                            </div>
-                            <div class="col-9">
-                                <h5>@Naija Politics</h5>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <h6>200 Subscribers</h6>
-                                <a href="#" class="btn btn-sm btn-dark">Subscribe <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                  </svg></a>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="card my-3" style="width: 250px;" id="suggest-card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-3">
-                                <img src="images/link 1.jpg" class="start-post-image" alt="" width="80" height="80" srcset="">
-                            </div>
-                            <div class="col-9">
-                                <h5>@Soccer Land</h5>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <h6>92.3k Subscribers</h6>
-                                <a href="#" class="btn btn-sm btn-dark">Subscribe <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                  </svg></a>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="card my-3" style="width: 250px;" id="suggest-card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-3">
-                                <img src="images/link 1.jpg" class="start-post-image" alt="" width="80" height="80" srcset="">
-                            </div>
-                            <div class="col-9">
-                                <h5>@E-news</h5>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <h6>1.4m Subscribers</h6>
-                                <a href="#" class="btn btn-sm btn-dark">Subscribe <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                  </svg></a>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div class="card my-3" style="width: 250px;" id="suggest-card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-3">
-                                <img src="images/link 1.jpg" class="start-post-image" alt="" width="80" height="80" srcset="">
-                            </div>
-                            <div class="col-9">
-                                <h5>@Marvel Lovers</h5>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <h6>25.6k Subscribers</h6>
-                                <a href="#" class="btn btn-sm btn-dark">Subscribe <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                  </svg></a>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
+                 
                   <hr>
                   <div id="fixedElement">
-                    <h5 class="text-center pt-5">Top 5 Bloggers</h5>
+                    <h5 class="text-center pt-5">Trending Bloggers</h5>
                     <div class="card my-3" style="width: 250px;" id="suggest-card">
                         <div class="card-body">
                             <h6><img src="images/link 1.jpg" class="start-post-image" alt="" width="60" height="60" srcset=""> @Ise's Food Blog</h6>

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from .models import *
 from django.contrib import messages
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 def settings(request):
@@ -66,8 +67,9 @@ def login(request):
         return render(request, 'login1.html')
     
 def home(request):
+    profile = Profile.objects.get(username=request.user)
     posts=Post.objects.all()
-    context={'posts':posts}
+    context={'posts':posts, 'profile':profile}
     return render(request, 'feed.html', context)
 
 def settings(request):
@@ -153,6 +155,8 @@ def post_detail(request, pk):
     context={'post':post}
     return render(request, 'post-detail.html', context)
 
-
-
+def delete_post(request, pk):
+    post=Post.objects.get(id=pk)
+    post.delete()
+    return redirect('/')
     
