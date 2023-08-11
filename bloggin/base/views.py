@@ -159,4 +159,15 @@ def delete_post(request, pk):
     post=Post.objects.get(id=pk)
     post.delete()
     return redirect('/')
-    
+
+def edit_post(request, pk):
+    post = Post.objects.get(id=pk)
+    if request.method == 'POST':
+        post.title = request.POST['post-title']
+        new_cover = request.FILES.get('post-cover-image')
+        if new_cover:
+            post.post_cover = new_cover
+        post.content = request.POST['post-text']
+        post.edited = True
+        post.save()
+        return redirect('post-detail', pk=pk)

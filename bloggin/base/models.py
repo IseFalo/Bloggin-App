@@ -19,6 +19,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     read = models.ManyToManyField(User, related_name="blog_posts")
+    edited = models.BooleanField(default=False) 
 
     def __str__(self):
         return self.title
