@@ -1,12 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from .models import *
 from django.contrib import messages
 from django.http import HttpResponse
+from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
-def settings(request):
-    return render(request, 'settings.html')
+
 def register(request):
     if request.method == 'POST':
         blogname = request.POST['blog-name']
@@ -143,7 +143,9 @@ def create_post(request):
         return redirect('/')
     
 def post_detail(request, pk):
+    profile = Profile.objects.get(username=request.user)
     post=Post.objects.get(id=pk)
+    post.read.add(request.user)
     if request.method == 'POST':
         post=Post.objects.get(id=pk)
         author = request.user
@@ -152,7 +154,7 @@ def post_detail(request, pk):
         new_comment = Comment.objects.create(author=author, text=comment, post=post)
         new_comment.save()
         return redirect('post-detail', pk=pk)
-    context={'post':post}
+    context={'post':post, 'profile':profile}
     return render(request, 'post-detail.html', context)
 
 def delete_post(request, pk):
@@ -171,3 +173,38 @@ def edit_post(request, pk):
         post.edited = True
         post.save()
         return redirect('post-detail', pk=pk)
+    
+def profile(request, pk):
+    
+    user_profile = Profile.objects.get(username=request.user)
+    user_posts = Post.objects.filter(author=request.user)
+    top_pick_posts = user_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+
+
+
+    context = {
+        'top_pick_posts':top_pick_posts,
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+    }
+
+    return render(request, 'profile-page.html', context)
+
+
+def add_to_picks(request, pk):
+    user_profile = Profile.objects.get(username=request.user)
+    post = get_object_or_404(Post, id=pk)
+    post.is_top_pick = True
+    user_profile.top_picks.add(post)
+    post.top_pick_selected_at = timezone.now()  # Update timestamp
+    post.save()
+    return HttpResponse(status=204)
+    
+
+def remove_from_picks(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    if post.is_top_pick:
+        post.is_top_pick = False
+        post.top_pick_selected_at = None
+        post.save()
+    return HttpResponse(status=204)
