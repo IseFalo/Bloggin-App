@@ -143,7 +143,6 @@ def create_post(request):
         return redirect('/')
     
 def post_detail(request, pk):
-    profile = Profile.objects.get(username=request.user)
     post=Post.objects.get(id=pk)
     post.read.add(request.user)
     if request.method == 'POST':
@@ -175,9 +174,9 @@ def edit_post(request, pk):
         return redirect('post-detail', pk=pk)
     
 def profile(request, pk):
-    
-    user_profile = Profile.objects.get(username=request.user)
-    user_posts = Post.objects.filter(author=request.user)
+    user_object=get_object_or_404(User, id=pk)
+    user_profile = Profile.objects.get(username=user_object)
+    user_posts = Post.objects.filter(author=user_object)
     top_pick_posts = user_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
 
 

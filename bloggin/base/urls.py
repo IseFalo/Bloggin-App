@@ -10,7 +10,9 @@ urlpatterns=[
     path('post-detail/<int:pk>/', views.post_detail, name="post-detail"),
     path('delete-post/<int:pk>/', views.delete_post, name="delete-post"),
     path('edit-post/<int:pk>/', views.edit_post, name="edit-post"),
-    path('profile/<str:pk>', views.profile, name="profile"),
+    path('profile/<int:pk>/', views.profile, name='profile'),
     path('add-to-picks/<int:pk>/', views.add_to_picks, name='add_to_picks'),
     path('remove-from-picks/<int:pk>/', views.remove_from_picks, name='remove_from_picks'),
+    # path('<str:username>/subscribe/', views.subscribe, name='subscribe'),
+    # path('<str:username>/unsubscribe/', views.unsubscribe, name='unsubscribe'),
 ]
