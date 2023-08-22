@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
 # Create your views here.
 
 def register(request):
@@ -67,6 +68,8 @@ def login(request):
         return render(request, 'login1.html')
     
 def home(request):
+    current_user=request.GET.get('user')
+    logged_in_user = request.user.username
     profile = Profile.objects.get(username=request.user)
     posts=Post.objects.all()
     context={'posts':posts, 'profile':profile}
@@ -180,7 +183,6 @@ def profile(request, pk):
     top_pick_posts = user_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
 
 
-
     context = {
         'top_pick_posts':top_pick_posts,
         'user_profile': user_profile,
@@ -207,3 +209,14 @@ def remove_from_picks(request, pk):
         post.top_pick_selected_at = None
         post.save()
     return HttpResponse(status=204)
+
+def follow(request, username):
+    user = User.objects.get(username=username)
+    user_profile = Profile.objects.get(username=user)
+    user_profile.followers.add(request.user)
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+def unfollow(request, username):
+    user = User.objects.get(username=username)
+    user_profile = Profile.objects.get(username=user)
+    user_profile.followers.remove(request.user)
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))

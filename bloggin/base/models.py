@@ -12,7 +12,7 @@ class Profile(models.Model):
     bio = models.TextField(null=True, blank=True)
     phone_no = models.IntegerField(null=True, blank=True)
     top_picks = models.ManyToManyField('Post', blank=True)
-    subscribers = models.ManyToManyField(User, related_name='following', blank=True)
+    followers = models.ManyToManyField(User, related_name="following")
 
     def __str__(self):
         return self.username.username
@@ -47,13 +47,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author.username} on {self.post.title}"
-    
-
-
-class EditorPick(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"Editor's Pick by {self.profile.username}"
     

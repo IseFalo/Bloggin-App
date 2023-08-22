@@ -13,6 +13,7 @@ urlpatterns=[
     path('profile/<int:pk>/', views.profile, name='profile'),
     path('add-to-picks/<int:pk>/', views.add_to_picks, name='add_to_picks'),
     path('remove-from-picks/<int:pk>/', views.remove_from_picks, name='remove_from_picks'),
-    # path('<str:username>/subscribe/', views.subscribe, name='subscribe'),
-    # path('<str:username>/unsubscribe/', views.unsubscribe, name='unsubscribe'),
+    path('follow/<str:username>/', views.follow, name="follow"),
+    path('unfollow/<str:username>/', views.unfollow, name="unfollow"),
+    
 ]
