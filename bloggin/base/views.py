@@ -67,6 +67,10 @@ def login(request):
     else:
         return render(request, 'login1.html')
     
+def logoutUser(request):
+    logout(request)
+    return redirect("login")
+    
 def home(request):
     current_user=request.GET.get('user')
     logged_in_user = request.user.username

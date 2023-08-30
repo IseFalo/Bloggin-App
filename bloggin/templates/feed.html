@@ -32,9 +32,6 @@
               </li>
 
               <li class="nav-item text-center">
-                <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Notifications</a>
-              </li>
-              <li class="nav-item text-center">
                 <div class="dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     More
@@ -71,7 +68,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-sm btn-primary">Logout</button>
+            <a href="{% url 'logout' %}" type="button" class="btn btn-sm btn-primary">Logout</a>
           </div>
         </div>
       </div>
@@ -91,138 +88,6 @@
 
 
 
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-          <h3 class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h3>
-          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <div>
-            <h4>Today</h4>
-            <div>
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"  <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>    
-            </div>
-            <hr>
-
-            <h4>This Week</h4>
-            <div>
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-              
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-            </div>
-            <hr>
-
-            <div>
-              <h4>This Month</h4>
-                            <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-            </div>
-
-
-          </div>
-
-
-        </div>
-      </div>
 
 
 
@@ -508,7 +373,36 @@
 
 
 
-
+    <script>
+      // Function to create a notification element
+      function createNotification(message) {
+          const notificationElement = document.createElement("div");
+          notificationElement.classList.add("notification");
+          notificationElement.textContent = message;
+          return notificationElement;
+      }
+  
+      // Connect to WebSocket
+      const socket = new WebSocket('ws://${window.location.host}/ws/socket-server');
+  
+      socket.onopen = () => {
+          console.log('WebSocket connection opened');
+      };
+  
+      socket.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+          console.log('Received message:', message.message);
+  
+          // Handle the received message, e.g., display a notification
+          const notificationContainer = document.getElementById("notification-container");
+          const notificationElement = createNotification(message.message);
+          notificationContainer.appendChild(notificationElement);
+      };
+  
+      socket.onclose = () => {
+          console.log('WebSocket connection closed');
+      };
+  </script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
