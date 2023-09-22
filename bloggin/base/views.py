@@ -6,6 +6,9 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
+from notifications.models import Notification
+from notifications.signals import notify
+import random
 # Create your views here.
 
 def register(request):
@@ -72,11 +75,15 @@ def logoutUser(request):
     return redirect("login")
     
 def home(request):
-    current_user=request.GET.get('user')
-    logged_in_user = request.user.username
+    # current_user=request.GET.get('user')
+    current_user = request.user
+    
+   
     profile = Profile.objects.get(username=request.user)
+    users_already_following = profile.username.following.all()
+    suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
     posts=Post.objects.all()
-    context={'posts':posts, 'profile':profile}
+    context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users}
     return render(request, 'feed.html', context)
 
 def settings(request):
@@ -142,9 +149,10 @@ def create_post(request):
         title=request.POST['post-title']
         post_cover=request.FILES.get('post-cover-image')
         post_text=request.POST['post-text']
-
+        profile=Profile.objects.get(username=author)
         new_post = Post.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
         new_post.save()
+        notify.send(author, recipient=profile.followers.all(), verb="Has made a new post")
         return redirect('/')
     else:
         return redirect('/')
