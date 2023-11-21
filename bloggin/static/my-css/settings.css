@@ -1,0 +1,80 @@
+/* body {
+    margin-top: 20px;
+} */
+.list-group-item{
+    background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
+}
+.list-group-item.active {
+    background: rgb(139, 139, 139);
+    border: none;
+}
+.card {
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
+    background-clip: border-box;
+    border: 0;
+    border-radius: .2rem;
+}
+
+.card-header:first-child {
+    border-radius: calc(.2rem - 1px) calc(.2rem - 1px) 0 0;
+}
+
+.card-header {
+    border-bottom-width: 1px;
+}
+
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    color: inherit;
+    background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
+    border-bottom: 1px solid #e5e9f2;
+}
+
+
+
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+
+  .custom-file-input::before {
+    content: 'Add Image';
+    display: inline-block;
+    background: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .custom-file-input:hover::before {
+    background: #0056b3;
+    border-color: #0056b3;
+  }
+
+  .custom-file-input:active::before {
+    background: #004080;
+    border-color: #004080;
+  }
+
+  /* Optional: Style the file name display */
+  .custom-file-label {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .edit-profile-image{
+    border-radius: 50%;
+    box-shadow: 10px 4px 10px 0 rgba(54, 54, 54, 0.2), 0 16px 20px 0 rgba(189, 187, 187, 0.19);
+}

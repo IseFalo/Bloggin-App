@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django.db.models import Count
 
 # Create your models here.
 class Profile(models.Model):
@@ -32,6 +33,8 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+
     
 @receiver(pre_save, sender=Post)
 def update_top_pick_timestamp(sender, instance, **kwargs):

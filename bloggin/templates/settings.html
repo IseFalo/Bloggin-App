@@ -1,324 +1,258 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
-    <title>Settings- Iseoluwa"s Food Blog</title>
-  </head>
-  <body>
-    
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Bloggin</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <form class="d-flex search" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                  </svg></button>
-              </form>
-            <ul class="navbar-nav">
-    
-                <li class="nav-item text-center">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-              <li class="nav-item text-center">
-                <a class="nav-link" href="#">Profile</a>
-              </li>
-    
-              <li class="nav-item text-center">
-                <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Notifications</a>
-              </li>
-              <li class="nav-item text-center">
-                <div class="dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    More
-                  </a>              
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">About</a></li>
-                    <li><a class="dropdown-item" href="#">Advertisements</a></li>
-                    <li><a class="dropdown-item" href="#">Privacy and Terms</a></li>
-                    <li><a class="dropdown-item" href="#">Help Center</a></li>
-                    <li><a class="dropdown-item" href="#">Ad choices</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a></li>
-                  </ul>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'my-css/settings.css' %}" />
+
+    <!-- <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css"> -->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/owl-carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tooplate-artxibition.css' %}">
+    <title>Settings</title>
+</head>
+
+<body>
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="index.html" class="logo">Bloggin</a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <!-- <li><a href="index.html" class="active">Home</a></li> -->
+                            <li>
+                                <form class="d-flex search" role="search" action="">
+                                    <input class="form-control me-2" type="search" placeholder="Search"
+                                        aria-label="Search">
+                                    <button class="btn btn-outline-dark" type="submit"><svg
+                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path
+                                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                        </svg></button>
+                                </form>
+                            </li>
+                            <li><a data-bs-toggle="modal" data-bs-target="#exampleModalToggle"
+                                    href="#exampleModalToggle" role="button">Post <img width="25" height="25"
+                                        src="https://img.icons8.com/pulsar-line/48/add.png" alt="add" /></a></li>
+                            <li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+                                    aria-controls="offcanvasExample"><img width="25" height="25"
+                                        src="https://img.icons8.com/ios/50/appointment-reminders--v1.png"
+                                        alt="appointment-reminders--v1" /></a></li>
+                            <li><a href="rent-venue.html"><img src="images/link 1.jpg"
+                                        style="width: 30px; height: 30px; border: 1px solid; border-radius: 100%; object-fit: cover;"
+                                        id="nav-profile-img" alt="..."></a></li>
+                            <!-- <li><a href="shows-events.html">Shows & Events</a></li> 
+                            <li><a href="tickets.html">Tickets</a></li>  -->
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
                 </div>
-                
-              </li>
-            </ul>
-    
-          </div>
-        </div>
-      </nav>
-    
-    
-    
-    <!-- Modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <h5>Are you sure you want to logout?</h5>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-sm btn-primary">Logout</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-          <h3 class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h3>
-          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <div>
-            <h4>Today</h4>
-            <div>
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"  <span>7h</span></p>
-                </div>
-              </div>
-      
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-      
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>    
             </div>
-            <hr>
-      
-            <h4>This Week</h4>
-            <div>
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
+        </div>
+    </header>
+    <div class="container p-0">
+        <div class="row">
+            <div class="col-md-5 col-xl-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Profile Settings</h5>
+                    </div>
+                    <div class="list-group list-group-flush" role="tablist">
+                        <a class="list-group-item list-group-item-action active" id="list-group-item" data-toggle="list"
+                            href="#account" role="tab">
+                            Account
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#password"
+                            role="tab">
+                            Password
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
+                            Privacy and safety
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
+                            Email notifications
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
+                            Web notifications
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
+                            Widgets
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
+                            Your data
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
+                            Delete account
+                        </a>
+                    </div>
                 </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-      
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-      
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-              
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-      
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-      
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
             </div>
-            <hr>
-      
-            <div>
-              <h4>This Month</h4>
-                            <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
+            <div class="col-md-7 col-xl-8">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="account" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Public info</h5>
+                            </div>
+                            <div class="card-body">
+                                {% for message in messages %}
+                                <h5>{{message}}</h5>
+                                {% endfor %}
+                                <form action="{% url 'settings' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="inputUsername">Username</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="username" value="{{user_profile.username}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputUsername">Biography</label>
+                                                <textarea rows="5" name="bio" class="form-control" id="inputBio"
+                                                    placeholder="Tell something about yourself">{{user_profile.bio}}</textarea>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="inputUsername">Phone-no</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="phone-no" value="{{user_profile.phone_no}}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputUsername">Instagram link:</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="instagram-link">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputUsername">Twitter Link:</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="twitter-link">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputUsername">Facebook Link:</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="facebook-link">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="text-center">
+                                                
+                                                {% if user_profile.profile_img %}
+                                                <img class="edit-profile-image mt-5" alt="" width="100" height="100"  src="{{user_profile.profile_img.url}}" >
+                                                {% else %}
+                                                <img class="edit-profile-image mt-5" alt="" width="100" height="100"  src="{% static 'blank-profile/blank-profile-picture.png' %}" >
+                                                {% endif %}
+                                                <div class="mt-2">
+                                                    <input type="file" name="image" value=""
+                                                        class="shadow-none bg-gray-100">
+                                                </div>
+                                                <small>For best results, use an image at least 128px by 128px in .jpg
+                                                    format</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-outline-dark">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Private info</h5>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="inputFirstName">First name</label>
+                                            <input type="text" class="form-control" id="inputFirstName"
+                                                placeholder="First name">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputLastName">Last name</label>
+                                            <input type="text" class="form-control" id="inputLastName"
+                                                placeholder="Last name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Email</label>
+                                        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputAddress">Address</label>
+                                        <input type="text" class="form-control" id="inputAddress"
+                                            placeholder="1234 Main St">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputAddress2">Address 2</label>
+                                        <input type="text" class="form-control" id="inputAddress2"
+                                            placeholder="Apartment, studio, or floor">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="inputCity">City</label>
+                                            <input type="text" class="form-control" id="inputCity">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="inputState">State</label>
+                                            <select id="inputState" class="form-control">
+                                                <option selected="">Choose...</option>
+                                                <option>...</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="inputZip">Zip</label>
+                                            <input type="text" class="form-control" id="inputZip">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-outline-dark">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="password" role="tabpanel">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Password</h5>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="inputPasswordCurrent">Current password</label>
+                                        <input type="password" class="form-control" id="inputPasswordCurrent">
+                                        <small><a href="#">Forgot your password?</a></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPasswordNew">New password</label>
+                                        <input type="password" class="form-control" id="inputPasswordNew">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPasswordNew2">Verify password</label>
+                                        <input type="password" class="form-control" id="inputPasswordNew2">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-      
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-      
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
             </div>
-      
-      
-          </div>
-      
-      
         </div>
-      </div>
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    <div class="container text-center py-5" id="edit-profile-container">
-        <div class="edit-profile-div">
-          {% for message in messages %}
-            <h5>{{message}}</h5>
-          {% endfor %}
-            <form action="{% url 'settings' %}" method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-              {% if user_profile.profile_img %}
-              <img class="edit-profile-image mt-5" alt="" width="100" height="100"  src="{{user_profile.profile_img.url}}" >
-              {% else %}
-              <img class="edit-profile-image mt-5" alt="" width="100" height="100"  src="{% static 'blank-profile/blank-profile-picture.png' %}" >
-              {% endif %}
-              <input type="file" name="image" value="" class="shadow-none bg-gray-100">
-              <a href="" class="btn btn-md btn-primary d-block m-auto my-3" style="width: 200px;">Edit profile image</a>
-                <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
-                    <label for="username">Blog name: </label>
-                    <input type="text" class="edit-username" name="username" value="{{user_profile.username}}">
-                </div>
-                <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
-                    <label for="bio" class="">Bio: </label>
-                    <textarea name="bio" class="edit-bio" id="">{{user_profile.bio}}</textarea>
-                </div>
-                <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
-                    <label for="phone-no" class="">Phone Number: </label>
-                    <input type="text" class="edit-phone-no" name="phone-no" value="{{user_profile.phone_no}}">
-                </div>
-                <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
-                    <label for="instagram-link" class="">Instagram link: </label>
-                    <input type="text" class="edit-instagram-link" name="instagram-link">
-                </div>
-                <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
-                    <label for="twitter-link" class="">Twitter link: </label>
-                    <input type="text" class="edit-twitter-link" name="twitter-link">
-                </div>
-                <div class="formfield justify-content-center my-5 d-sm-block d-md-flex">
-                    <label for="facebook-link" class="">Facebook link: </label>
-                    <input type="text" class="edit-facebook-link" name="facebook-link">
-                </div>
-                <input type="submit" value="Submit" class="btn btn-md btn-dark d-block m-auto my-3" style="width: 200px;">
-                <input type="submit" value="Delete Account" class="btn btn-md btn-danger d-block m-auto my-3" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            </form>
-            <!-- <a href="" class="btn btn-md btn-dark d-block m-auto my-3" style="width: 200px;">Submit</a>
-            <a href="" class="btn btn-md btn-danger d-block m-auto my-3" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Account</a> -->
-
-
-
-        </div>
-
     </div>
-    
-        <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to delete this account?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger">Delete Account</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-  
 
 
 
@@ -335,13 +269,30 @@
 
 
 
+    <script src="assets/js/jquery-2.1.0.min.js"></script>
 
+    <!-- Bootstrap -->
+    <script src="assets/js/popper.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
 
+    <!-- Plugins -->
+    <script src="assets/js/scrollreveal.min.js"></script>
+    <script src="assets/js/waypoints.min.js"></script>
+    <script src="assets/js/jquery.counterup.min.js"></script>
+    <script src="assets/js/imgfix.min.js"></script>
+    <script src="assets/js/mixitup.js"></script>
+    <script src="assets/js/accordions.js"></script>
+    <script src="assets/js/owl-carousel.js"></script>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-   
-  </body>
+    <!-- Global Init -->
+    <script src="assets/js/custom.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+</body>
+
 </html>
