@@ -16,5 +16,7 @@ urlpatterns=[
     path('remove-from-picks/<int:pk>/', views.remove_from_picks, name='remove_from_picks'),
     path('follow/<str:username>/', views.follow, name="follow"),
     path('unfollow/<str:username>/', views.unfollow, name="unfollow"),
-    
+
+    path('get_notifications/', views.get_notifications, name='get_notifications'),
+
 ]

@@ -1,197 +1,263 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    
-    <link rel="stylesheet" href="{% static 'my-css/feed-style.css' %}">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.css' %}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/owl-carousel.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/tooplate-artxibition.css' %}">
-    
-    
-  </head>
-  <body>
+  <link rel="stylesheet" href="{% static 'my-css/feed-style.css' %}">
 
-    <header class="header-area header-sticky">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
-                        <a href="index.html" class="logo">Bloggin</a>
-                        <!-- ***** Logo End ***** -->
-                        <!-- ***** Menu Start ***** -->
-                        <ul class="nav">
-                            <!-- <li><a href="index.html" class="active">Home</a></li> -->
-                            <li><form class="d-flex search" role="search" action="">
-                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-dark" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                                  </svg></button>
-                              </form></li>
-                            <li><a data-bs-toggle="modal"  data-bs-target="#exampleModalToggle" href="#exampleModalToggle" role="button">Post <img width="25" height="25" src="https://img.icons8.com/pulsar-line/48/add.png" alt="add"/></a></li>
-                            <li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample"><img width="25" height="25" src="https://img.icons8.com/ios/50/appointment-reminders--v1.png" alt="appointment-reminders--v1"/></a></li>
-                            <li><a href="{% url 'profile' user.id %}"><img src="{{profile.profile_img.url}}" style="width: 30px; height: 30px; border: 1px solid; border-radius: 100%; object-fit: cover;" id="nav-profile-img" alt="..."></a></li>
-                            <!-- <li><a href="shows-events.html">Shows & Events</a></li> 
-                            <li><a href="tickets.html">Tickets</a></li>  -->
-                        </ul>        
-                        <a class='menu-trigger'>
-                            <span>Menu</span>
-                        </a>
-                        <!-- ***** Menu End ***** -->
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.css' %}">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/owl-carousel.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/tooplate-artxibition.css' %}">
 
 
-    <section class="mt-3">
-      <div class="container">
+</head>
 
+<body>
 
-        <h4 class="carousel-h3">Trending Posts</h4>
-        <div id="cCarousel">
-          <div class="arrow" id="prev"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-          </svg></div>
-          <div class="arrow" id="next"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-          </svg></div>
-      
-          <div id="carousel-vp">
-            <div id="cCarousel-inner">
-             
-              <article class="cCarousel-item">
-                <img src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400" alt="Moon">
-                <div class="infos">
-                  <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
-                  <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                  </svg> 3</p>
-                </div>
-              </article>
-      
-              <article class="cCarousel-item">
-                <img src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400" alt="Moon">
-                <div class="infos">
-                  <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
-                  <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                  </svg> 3</p>
-                </div>
-              </article>
-      
-              <article class="cCarousel-item">
-                <img src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400" alt="Moon">
-                <div class="infos">
-                  <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
-                  <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                  </svg> 3</p>
-                </div>
-              </article>
-      
-              <article class="cCarousel-item">
-                <img src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400" alt="Moon">
-                <div class="infos">
-                  <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
-                  <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                  </svg> 3</p>
-                </div>
-              </article>
-      
-              <article class="cCarousel-item">
-                <img src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400" alt="Moon">
-                <div class="infos">
-                  <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
-                  <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                  </svg> 3</p>
-                </div>
-              </article>
-
-              <article class="cCarousel-item">
-                <img src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400" alt="Moon">
-                <div class="infos">
-                  <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
-                  <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
-                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                  </svg> 3</p>
-                </div>
-              </article>
-      
-  
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-
-    </section>
+  <header class="header-area header-sticky">
     <div class="container">
-      <hr>
-    </div>
-   
-
-    
-
-          <!--Logout Modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Logout</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <h5>Are you sure you want to logout?</h5>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-sm btn-primary">Logout</button>
-          </div>
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="index.html" class="logo">Bloggin</a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <!-- <li><a href="index.html" class="active">Home</a></li> -->
+              <li>
+                <form class="d-flex search" role="search" action="">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-dark" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                      height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                      <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg></button>
+                </form>
+              </li>
+              <li><a data-bs-toggle="modal" data-bs-target="#exampleModalToggle" href="#exampleModalToggle"
+                  role="button">Post <img width="25" height="25" src="https://img.icons8.com/pulsar-line/48/add.png"
+                    alt="add" /></a></li>
+              <li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+                  aria-controls="offcanvasExample"><img width="25" height="25"
+                    src="https://img.icons8.com/ios/50/appointment-reminders--v1.png"
+                    alt="appointment-reminders--v1" /></a></li>
+              <li><a href="{% url 'profile' user.id %}"><img src="{{profile.profile_img.url}}"
+                    style="width: 30px; height: 30px; border: 1px solid; border-radius: 100%; object-fit: cover;"
+                    id="nav-profile-img" alt="..."></a></li>
+              <!-- <li><a href="shows-events.html">Shows & Events</a></li>
+                            <li><a href="tickets.html">Tickets</a></li>  -->
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
         </div>
       </div>
     </div>
+  </header>
+
+
+  <section class="mt-3">
+    <div class="container">
+
+
+      <h4 class="carousel-h3">Trending Posts</h4>
+      <div id="cCarousel">
+        <div class="arrow" id="prev"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+          </svg></div>
+        <div class="arrow" id="next"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-arrow-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
+          </svg></div>
+
+        <div id="carousel-vp">
+          <div id="cCarousel-inner">
+
+            <article class="cCarousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400"
+                alt="Moon">
+              <div class="infos">
+                <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
+                <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-heart" viewBox="0 0 16 16">
+                    <path
+                      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chat-left" viewBox="0 0 16 16">
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                  </svg> 3</p>
+              </div>
+            </article>
+
+            <article class="cCarousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400"
+                alt="Moon">
+              <div class="infos">
+                <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
+                <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-heart" viewBox="0 0 16 16">
+                    <path
+                      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chat-left" viewBox="0 0 16 16">
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                  </svg> 3</p>
+              </div>
+            </article>
+
+            <article class="cCarousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400"
+                alt="Moon">
+              <div class="infos">
+                <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
+                <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-heart" viewBox="0 0 16 16">
+                    <path
+                      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chat-left" viewBox="0 0 16 16">
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                  </svg> 3</p>
+              </div>
+            </article>
+
+            <article class="cCarousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400"
+                alt="Moon">
+              <div class="infos">
+                <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
+                <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-heart" viewBox="0 0 16 16">
+                    <path
+                      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chat-left" viewBox="0 0 16 16">
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                  </svg> 3</p>
+              </div>
+            </article>
+
+            <article class="cCarousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400"
+                alt="Moon">
+              <div class="infos">
+                <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
+                <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-heart" viewBox="0 0 16 16">
+                    <path
+                      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chat-left" viewBox="0 0 16 16">
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                  </svg> 3</p>
+              </div>
+            </article>
+
+            <article class="cCarousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1564292284209-60cce69f08ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODQ0MTA1MTJ8&ixlib=rb-4.0.3&q=80&w=400"
+                alt="Moon">
+              <div class="infos">
+                <p class="gen-trend-title">Deposit a variety of assets on Hubble, raise your collateral ratio...</p>
+                <p class="gen-trend-info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                  </svg> 600 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-heart" viewBox="0 0 16 16">
+                    <path
+                      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chat-left" viewBox="0 0 16 16">
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                  </svg> 3</p>
+              </div>
+            </article>
+
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </section>
+  <div class="container">
+    <hr>
+  </div>
+
+
+
+
+  <!--Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Logout</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5>Are you sure you want to logout?</h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-sm btn-primary">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
@@ -202,33 +268,38 @@
 
 
 
-<!-- Create Post -->
-<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <!-- Create Post -->
+  <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+    tabindex="-1">
     <div class="modal-dialog modal-fullscreen">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalToggleLabel">Create Post</h5>
-          <button type="button" class="btn-close" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+            data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form action="create-post" method="POST" enctype="multipart/form-data" id="post-form">
             {% csrf_token %}
             <div class="post-form">
-            <input type="text" class="post-title my-3" name="post-title" placeholder="Post title">
-            <label for="post-cover-image">Add post cover:</label>
-            <input type="file" name="post-cover-image" accept="image/*">
-            <textarea name="post-text" class="post-text-area my-3" placeholder="Talk about something..."></textarea>
-          </div>
-          </form>  
+              <input type="text" class="post-title my-3" name="post-title" placeholder="Post title">
+              <label for="post-cover-image">Add post cover:</label>
+              <input type="file" name="post-cover-image" accept="image/*">
+              <textarea name="post-text" class="post-text-area my-3" placeholder="Talk about something..."></textarea>
+            </div>
+          </form>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">Add Post</button>
+          <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+            data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal"
+            data-bs-dismiss="modal">Add Post</button>
         </div>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+    tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -238,14 +309,16 @@
           Are you sure you want to close?
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Go back</button>
+          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+            data-bs-dismiss="modal">Go back</button>
           <button class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+    tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -255,7 +328,8 @@
           Are you sure you want to post this?
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Go back</button>
+          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+            data-bs-dismiss="modal">Go back</button>
           <button class="btn btn-secondary" type="submit" data-bs-dismiss="modal" form="post-form">Yes</button>
         </div>
       </div>
@@ -277,136 +351,187 @@
 
 
 
-<!-- Notifications -->
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-          <h3 class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h3>
-          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <div>
-            <h4>Today</h4>
-            <div>
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"  <span>7h</span></p>
-                </div>
-              </div>
+  <!-- Notifications -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h3 class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h3>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        <h4>Today</h4>
+        <div>
 
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>    
-            </div>
-            <hr>
-
-            <h4>This Week</h4>
-            <div>
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-              
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-            </div>
-            <hr>
-
-            <div>
-              <h4>This Month</h4>
-                            <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-2">
-                  <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-                </div>
-                <div class="col-10 justify-content-start">
-                  <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-                </div>
-              </div>
-            </div>
-
-
+          <div id="notifications-container">
+            <!-- Notifications will be appended here using JavaScript -->
           </div>
 
+          {% comment %} <div class="row">
+            <div class="col-2">
+              <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
+            </div>
+            <div class="col-10 justify-content-start">
+              <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
+            </div>
+          </div> {% endcomment %}
+
+
+        </div>
+        <hr>
+
+        {% comment %} <h4>This Week</h4>
+        <div>
+
+          <div class="row">
+            <div class="col-2">
+              <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
+            </div>
+            <div class="col-10 justify-content-start">
+              <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
+            </div>
+          </div>
+
+        </div>
+        <hr> {% endcomment %}
+
+        {% comment %} <div>
+          <h4>This Month</h4>
+          <div class="row">
+            <div class="col-2">
+              <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
+            </div>
+            <div class="col-10 justify-content-start">
+              <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
+            </div>
+          </div>
+
+        </div> {% endcomment %}
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <div class="container my-5">
+    <div class="row" id="row">
+
+      <div class="col-lg-3 d-none d-md-none d-lg-none d-xl-block" id="col">
+        <div id="fixedElement">
+          <div class="card bg-light" style="width: 250px;" id="trending-card">
+            <div class="mt-4"
+              style="width: 100px; height: 100px; overflow: hidden; border-radius: 50%; margin: 0 auto; border: 1px solid; box-shadow: 10px 4px 10px 0 rgba(54, 54, 54, 0.2), 0 16px 20px 0 rgba(189, 187, 187, 0.19);">
+              <img src="{{profile.profile_img.url}}" style="width: 100%; height: 100%; object-fit: cover;"
+                class="rounded-circle" id="feed-profile-img" alt="...">
+            </div>
+
+            <div class="card-body text-center">
+              <h6 class="card-title"><a href="{% url 'profile' profile.username.id %}"> {{profile.username}}</a></h6>
+              <p class="card-text">{{profile.followers.count}} Followers</p>
+            </div>
+          </div>
+
+
+
+
+
+          <div class="card my-3" id="footer-card" style="width: 250px;">
+            <div class="card-body text-center">
+              <h6><a href="">Settings</a></h6>
+              <h6><a href="">About</a></h6>
+              <h6><a href="">Privacy and Terms</a></h6>
+              <h6><a href="">Advertisements</a></h6>
+              <hr>
+              <h6><a href="">Logout</a></h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6" id="col">
+
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="gradient-cards">
+
+              {% for post in posts %}
+              <div class="post-card">
+                <div class="container-card bg-white-box">
+                  <img src="{{post.post_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
+                    height="100" style="margin-right: 20px;">
+                  <div>
+                    <small>By {{post.author}}</small>
+                    <p class="post-card-title">{{post.title}} (5 mins read)</p>
+                    <p class="post-card-content">{{post.content}}</p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-eye" viewBox="0 0 16 16">
+                        <path
+                          d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                        <path
+                          d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                      </svg> {{post.read.count}} | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                        <path
+                          d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                      </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-chat-left" viewBox="0 0 16 16">
+                        <path
+                          d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                      </svg> 3</p>
+                    <div class="row">
+                      <div class="col-9">
+                        <small>Posted {{post.created}} (edited)</small>
+                      </div>
+                      <div class="col-3">
+                        <small><a href="" class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg"
+                              class="three-dots" width="20" height="20" fill="currentColor" class="bi bi-three-dots"
+                              viewBox="0 0 16 16">
+                              <path
+                                d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+                            </svg></a> <a href=""><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                              class="save-svg" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
+                              <path
+                                d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+                            </svg></a>
+                          <div class="dropdown">
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                              <li><a class="dropdown-item" href="#">Edit</a></li>
+                              <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                  data-bs-target="#exampleModal">Delete</a></li>
+                              <li><a class="dropdown-item" href="#">Add to Picks</a></li>
+                              <li><a class="dropdown-item" href="#">Remove from Picks</a></li>
+                            </ul>
+                          </div>
+                        </small>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+
+
+
+
+
+
+
+
+
+
+            </div>
+          </div>
 
         </div>
       </div>
@@ -416,144 +541,39 @@
 
 
 
-
-<div class="container my-5">
-     <div class="row" id="row">
-
-        <div class="col-lg-3 d-none d-md-none d-lg-none d-xl-block" id="col">
-            <div id="fixedElement">
-              <div class="card bg-light" style="width: 250px;" id="trending-card">
-                <div class="mt-4" style="width: 100px; height: 100px; overflow: hidden; border-radius: 50%; margin: 0 auto; border: 1px solid; box-shadow: 10px 4px 10px 0 rgba(54, 54, 54, 0.2), 0 16px 20px 0 rgba(189, 187, 187, 0.19);">
-                  <img src="{{profile.profile_img.url}}" style="width: 100%; height: 100%; object-fit: cover;" class="rounded-circle" id="feed-profile-img" alt="...">
+      <div class="col-lg-3 d-none d-md-none d-lg-none d-xl-block" id="col">
+        <div id="fixedElement">
+          <div class="card" style="width: 100%;" id="suggest-card">
+            <div class="card-body">
+              <h5 class="text-center">Suggested</h5>
+              <hr>
+              {% for user in suggested_users %}
+              <div class="row mt-4">
+                <div class="col-3">
+                  <img src="{{ user.profile_img.url }}" class="start-post-image" alt="" width="80" height="80"
+                    srcset="">
                 </div>
-                
-                <div class="card-body text-center">
-                  <h6 class="card-title"><a href="{% url 'profile' profile.username.id %}"> {{profile.username}}</a></h6>
-                  <p class="card-text">{{profile.followers.count}} Followers</p>
+                <div class="col-9">
+                  <h5>@{{ user.username }}</h5>
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                  <a href="#" class="btn btn-sm btn-dark" id="suggest-button">Subscribe <svg
+                      xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                      class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                      <path
+                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </svg></a>
                 </div>
               </div>
-
-               
-
-                
-                
-                  <div class="card my-3" id="footer-card" style="width: 250px;">
-                      <div class="card-body text-center">
-                          <h6><a href="">Settings</a></h6>
-                          <h6><a href="">About</a></h6>
-                          <h6><a href="">Privacy and Terms</a></h6>
-                          <h6><a href="">Advertisements</a></h6>
-                          <hr>
-                          <h6><a href="">Logout</a></h6>
-                      </div>
-                    </div>
-                </div>
-          </div>
+              {% endfor %}
 
 
-
-
-
-
-<div class="col-sm-12 col-md-12 col-lg-12 col-xl-6" id="col">         
-                      
-                  <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="gradient-cards">
-
-                          {% for post in posts %}  
-                            <div class="post-card">
-                              <div class="container-card bg-white-box">
-                                  <img src="{{post.post_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100" height="100" style="margin-right: 20px;">
-                              <div>
-                                <small>By {{post.author}}</small>
-                                  <p class="post-card-title">{{post.title}} (5 mins read)</p>
-                                  <p class="post-card-content">{{post.content}}</p>
-                                  <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                                  </svg> {{post.read.count}} | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
-                                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                                  </svg> 3</p>
-                                  <div class="row">
-                                    <div class="col-9">
-                                        <small>Posted {{post.created}} (edited)</small>
-                                    </div>
-                                    <div class="col-3">
-                                        <small><a href="" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" class="three-dots" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                                          </svg></a> <a href=""><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="save-svg" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
-                                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
-                                          </svg></a>
-                                          <div class="dropdown">
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                              <li><a class="dropdown-item" href="#">Edit</a></li>
-                                              <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a></li>
-                                              <li><a class="dropdown-item" href="#">Add to Picks</a></li>
-                                              <li><a class="dropdown-item" href="#">Remove from Picks</a></li>
-                                            </ul>
-                                          </div>
-                                        </small>
-
-
-                                    </div>
-                                  </div>
-                              </div>    
-                              </div>
-                            </div>
-                            {% endfor %}
-
-
-
-
-
-
-
-
-                        
-                  
-                          </div>
-                    </div>
-                    
-                  </div>                  
             </div>
-
-
-
-
-
-
-            <div class="col-lg-3 d-none d-md-none d-lg-none d-xl-block" id="col">
-                <div id="fixedElement">
-                    <div class="card" style="width: 100%;" id="suggest-card">
-                        <div class="card-body">
-                          <h5 class="text-center">Suggested</h5>
-                          <hr>
-                          {% for user in suggested_users %}
-                            <div class="row mt-4">
-                                <div class="col-3">
-                                    <img src="{{ user.profile_img.url }}" class="start-post-image" alt="" width="80" height="80" srcset="">
-                                </div>
-                                <div class="col-9">
-                                    <h5>@{{ user.username }}</h5>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                    <a href="#" class="btn btn-sm btn-dark" id="suggest-button">Subscribe <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                      </svg></a>
-                                </div>
-                            </div>
-                            {% endfor %}
-    
-                            
-                        </div>
-                      </div>
           </div>
-    
-            </div>
         </div>
+
+      </div>
     </div>
+  </div>
 
 
 
@@ -563,26 +583,74 @@
 
 
 
-    <script src="{% static 'assets/js/jquery-2.1.0.min.js' %}"></script>
+  <script src="{% static 'assets/js/jquery-2.1.0.min.js' %}"></script>
 
-    <!-- Bootstrap -->
-    <script src="{% static 'assets/js/popper.js' %}"></script>
-    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+  <!-- Bootstrap -->
+  <script src="{% static 'assets/js/popper.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
 
-    <!-- Plugins -->
-    <script src="{% static 'assets/js/scrollreveal.min.js' %}"></script>
-    <script src="{% static 'assets/js/waypoints.min.js' %}"></script>
-    <script src="{% static 'assets/js/jquery.counterup.min.js' %}"></script>
-    <script src="{% static 'assets/js/imgfix.min.js' %}"></script> 
-    <script src="{% static 'assets/js/mixitup.js' %}"></script>
-    <script src="{% static 'my-js.js' %}"></script>  
-    <script src="{% static 'assets/js/accordions.js' %}"></script>
-    <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
-    
-    <!-- Global Init -->
-    <script src="{% static 'assets/js/custom.js' %}"></script>
+  <!-- Plugins -->
+  <script src="{% static 'assets/js/scrollreveal.min.js' %}"></script>
+  <script src="{% static 'assets/js/waypoints.min.js' %}"></script>
+  <script src="{% static 'assets/js/jquery.counterup.min.js' %}"></script>
+  <script src="{% static 'assets/js/imgfix.min.js' %}"></script>
+  <script src="{% static 'assets/js/mixitup.js' %}"></script>
+  <script src="{% static 'my-js.js' %}"></script>
+  <script src="{% static 'assets/js/accordions.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-  </body>
+  <!-- Global Init -->
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+    integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
+  </script>
+
+  <script>
+    // Your AJAX script for fetching and updating notifications
+    function fetchNotifications() {
+        $.ajax({
+            url: '/get_notifications/',  // Update with your actual URL
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Process the retrieved data and update the notifications container
+                updateNotifications(data);
+            },
+            error: function (error) {
+                console.log('Error fetching notifications:', error);
+            }
+        });
+    }
+
+    function updateNotifications(notifications) {
+        // Assuming notifications is an array of objects with 'message' attribute
+        var container = $('#notifications-container');
+
+        // Clear existing notifications
+        container.empty();
+
+        // Append new notifications
+        notifications.forEach(function (notification) {
+            container.append('<div class="row">' +
+                '<div class="col-2">' +
+                '<img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">' +
+                '</div>' +
+                '<div class="col-10 justify-content-start">' +
+                '<p><a href="#">'+ notification.author +'</a> ' + notification.message + ' <span>' + notification.created_at_formatted + '</span></p>' +
+                '</div>' +
+                '</div>' +
+                '<hr>');
+        });
+    }
+
+    // Fetch notifications initially and set an interval to refresh every 3 minutes
+    fetchNotifications();
+    setInterval(fetchNotifications, 180000);  // 180000 milliseconds = 3 minutes
+</script>
+</body>
+
 </html>

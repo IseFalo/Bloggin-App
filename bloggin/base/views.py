@@ -9,6 +9,12 @@ from django.http import HttpResponseRedirect
 from notifications.models import Notification
 from notifications.signals import notify
 import random
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.utils import timezone
+from datetime import timedelta
+
+from .models import Notification as note
 # Create your views here.
 
 def register(request):
@@ -48,11 +54,11 @@ def register(request):
                 new_profile=Profile.objects.create(username=user_model, email=email)
                 new_profile.save()
                 return redirect('settings')
-            
 
-    else:       
+
+    else:
         return render(request, 'register1.html')
-    
+
 def login(request):
     if request.method == 'POST':
         username = request.POST['blogname']
@@ -66,19 +72,19 @@ def login(request):
         else:
             messages.info(request, 'Credentials Invalid')
             return redirect('login')
-    
+
     else:
         return render(request, 'login1.html')
-    
+
 def logoutUser(request):
     logout(request)
     return redirect("login")
-    
+@login_required
 def home(request):
     # current_user=request.GET.get('user')
     current_user = request.user
-    
-   
+
+
     profile = Profile.objects.get(username=request.user)
     users_already_following = profile.username.following.all()
     suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
@@ -95,8 +101,8 @@ def settings(request):
             bio = request.POST['bio']
             phone_no=request.POST['phone-no']
 
-            
-            
+
+
             if User.objects.filter(username=blogname).exists() and blogname != request.user.username:
                 messages.info(request, "Blog Name Taken")
                 return redirect('settings')
@@ -139,7 +145,7 @@ def settings(request):
                         phone_no = None
                 user_profile.phone_no = phone_no
                 user_profile.save()
-            
+
         return redirect('settings')
     return render(request, 'settings.html', {'user_profile': user_profile})
 
@@ -156,7 +162,7 @@ def create_post(request):
         return redirect('/')
     else:
         return redirect('/')
-    
+
 def post_detail(request, pk):
     post=Post.objects.get(id=pk)
     post.read.add(request.user)
@@ -187,7 +193,7 @@ def edit_post(request, pk):
         post.edited = True
         post.save()
         return redirect('post-detail', pk=pk)
-    
+
 def profile(request, pk):
     user_object=get_object_or_404(User, id=pk)
     user_profile = Profile.objects.get(username=user_object)
@@ -212,7 +218,7 @@ def add_to_picks(request, pk):
     post.top_pick_selected_at = timezone.now()  # Update timestamp
     post.save()
     return HttpResponse(status=204)
-    
+
 
 def remove_from_picks(request, pk):
     post = get_object_or_404(Post, id=pk)
@@ -232,3 +238,47 @@ def unfollow(request, username):
     user_profile = Profile.objects.get(username=user)
     user_profile.followers.remove(request.user)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+def format_time_difference(created_at):
+    now = timezone.now()
+    time_difference = now - created_at
+
+    # If the notification was created less than 2 minutes ago
+    if time_difference.total_seconds() < 120:
+        return "Just Now"
+
+    # If the notification was created less than 1 hour ago
+    elif time_difference.total_seconds() < 3600:
+        minutes_ago = int(time_difference.total_seconds() / 60)
+        return f"{minutes_ago} {'minute' if minutes_ago == 1 else 'minutes'} ago"
+
+    # If the notification was created less than 24 hours ago
+    elif time_difference.total_seconds() < 86400:
+        hours_ago = int(time_difference.total_seconds() / 3600)
+        return f"{hours_ago} {'hour' if hours_ago == 1 else 'hours'} ago"
+
+    # If the notification was created less than 48 hours ago (but more than 24 hours ago)
+    elif time_difference.total_seconds() < 172800:
+        return "Yesterday"
+
+    # If the notification was created less than 1 week ago (but more than 48 hours ago)
+    elif time_difference.total_seconds() < 604800:
+        days_ago = int(time_difference.total_seconds() / 86400)
+        return f"{days_ago} {'day' if days_ago == 1 else 'days'} ago"
+
+    # For any other case, return the formatted date and time
+    else:
+        return created_at.strftime("%Y-%m-%d %H:%M:%S")
+    
+def get_notifications(request):
+    user = request.user 
+    notifications = note.objects.filter(user=user).order_by('-created_at')[:10]
+    data = [
+        {'message': notification.message, 
+         'post.id':notification.post.id,
+         'author': notification.comment.author.username,
+         'created_at_formatted': format_time_difference(notification.created_at),
+         } 
+         for notification in notifications
+         ]
+    return JsonResponse(data, safe=False)
