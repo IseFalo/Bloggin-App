@@ -57,7 +57,7 @@ def register(request):
 
 
     else:
-        return render(request, 'register1.html')
+        return render(request, 'base/register1.html')
 
 def login(request):
     if request.method == 'POST':
@@ -74,7 +74,7 @@ def login(request):
             return redirect('login')
 
     else:
-        return render(request, 'login1.html')
+        return render(request, 'base/login1.html')
 
 def logoutUser(request):
     logout(request)
@@ -90,7 +90,7 @@ def home(request):
     suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
     posts=Post.objects.all()
     context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users}
-    return render(request, 'feed.html', context)
+    return render(request, 'base/feed.html', context)
 
 def settings(request):
     user_profile=Profile.objects.get(username=request.user)
@@ -147,7 +147,7 @@ def settings(request):
                 user_profile.save()
 
         return redirect('settings')
-    return render(request, 'settings.html', {'user_profile': user_profile})
+    return render(request, 'base/settings.html', {'user_profile': user_profile})
 
 def create_post(request):
     if request.method == 'POST':
@@ -175,7 +175,7 @@ def post_detail(request, pk):
         new_comment.save()
         return redirect('post-detail', pk=pk)
     context={'post':post, 'profile':profile}
-    return render(request, 'post-detail.html', context)
+    return render(request, 'base/post-detail.html', context)
 
 def delete_post(request, pk):
     post=Post.objects.get(id=pk)
@@ -207,7 +207,7 @@ def profile(request, pk):
         'user_posts': user_posts,
     }
 
-    return render(request, 'profile-page.html', context)
+    return render(request, 'base/profile-page.html', context)
 
 
 def add_to_picks(request, pk):
