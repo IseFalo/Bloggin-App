@@ -740,22 +740,13 @@ hr {
     width: 100%;
     margin-inline: auto;
   }
-  
-  .container-card {
-    position: relative;
-    border: 2px solid transparent;
+  .feed-post-card{
     background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
     color: #0c0a0e;
-    background-clip: padding-box;
+    border: 2px solid transparent;
     border-radius: 5px;
-    display: flex;
-    align-items: center;
-    padding: 40px;
-  
-    img {
-      margin-bottom: 32px;
-    }
   }
+
   
   
   .bg-green-box,
@@ -806,6 +797,8 @@ hr {
     max-width: 470px;
     padding-bottom: 8px;
   }
+
+
   .three-dots{
     color: #0c0a0e;
   }

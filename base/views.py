@@ -6,8 +6,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
-from notifications.models import Notification
-from notifications.signals import notify
+from random import sample
 import random
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -199,12 +198,14 @@ def profile(request, pk):
     user_profile = Profile.objects.get(username=user_object)
     user_posts = Post.objects.filter(author=user_object)
     top_pick_posts = user_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+    suggested_posts = sample(list(user_posts), min(3, len(user_posts)))
 
 
     context = {
         'top_pick_posts':top_pick_posts,
         'user_profile': user_profile,
         'user_posts': user_posts,
+        'suggested_posts':suggested_posts,
     }
 
     return render(request, 'base/profile-page.html', context)
