@@ -160,7 +160,10 @@ hr {
       width: auto !important;
     }
   }
-  
+  .post-detail-card{
+    background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
+    border-radius: 5px;
+  }
   .gradient-cards {
     display: block;
     grid-template-columns: repeat(2, 1fr);
@@ -226,42 +229,5 @@ hr {
     border-radius: 45px;
   }
   
-  /* .bg-green-box::after {
-    background: linear-gradient(71deg, #0d1212, #3da077, #0d1212);
-  }
-  
-  .bg-white-box::after {
-    background: linear-gradient(71deg, #121013, #b0afb0, #121013);
-  }
-  
-  .bg-yellow-box::after {
-    background: linear-gradient(71deg, #110e0e, #afa220, #110e0e);
-  }
-  
-  .bg-blue-box::after {
-    background: linear-gradient(71deg, #0c0a0e, #5f6fad, #0c0a0e);
-  } */
-  
 
   
-  .post-card-title {
-    font-weight: 600;
-    line-height: 32px;
-    letter-spacing: -0.02em;
-    color: black;
-    font-size: 18px;
-    max-width: 470px;
-    padding-bottom: 8px;
-  }
-  .three-dots{
-    color: #0c0a0e;
-  }
-  .three-dots:hover{
-    color: #818181;
-  }
-  .save-svg{
-    color: #0c0a0e;
-  }
-  .save-svg:hover{
-    color: #818181;
-  }

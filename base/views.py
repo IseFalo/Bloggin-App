@@ -92,11 +92,11 @@ def home(request):
     return render(request, 'base/feed.html', context)
 
 def settings(request):
-    user_profile=Profile.objects.get(username=request.user)
+    profile=Profile.objects.get(username=request.user)
     if request.method == 'POST':
         if request.FILES.get('image') == None:
             blogname = request.POST['username']
-            image = user_profile.profile_img
+            image = profile.profile_img
             bio = request.POST['bio']
             phone_no=request.POST['phone-no']
 
@@ -110,16 +110,16 @@ def settings(request):
                 user.username = blogname
                 user.save()
 
-                user_profile.profile_img = image
-                user_profile.bio = bio
-                user_profile.phone_no = phone_no
+                profile.profile_img = image
+                profile.bio = bio
+                profile.phone_no = phone_no
                 if phone_no is not None:
                     try:
                         phone_no = int(phone_no)
                     except ValueError:
                         phone_no = None
-                user_profile.phone_no = phone_no
-                user_profile.save()
+                profile.phone_no = phone_no
+                profile.save()
 
         if request.FILES.get('image') != None:
             blogname = request.POST['username']
@@ -135,18 +135,18 @@ def settings(request):
                 user.username = blogname
                 user.save()
 
-                user_profile.profile_img = image
-                user_profile.bio = bio
+                profile.profile_img = image
+                profile.bio = bio
                 if phone_no is not None:
                     try:
                         phone_no = int(phone_no)
                     except ValueError:
                         phone_no = None
-                user_profile.phone_no = phone_no
-                user_profile.save()
+                profile.phone_no = phone_no
+                profile.save()
 
         return redirect('settings')
-    return render(request, 'base/settings.html', {'user_profile': user_profile})
+    return render(request, 'base/settings.html', {'profile': profile})
 
 def create_post(request):
     if request.method == 'POST':
@@ -157,14 +157,17 @@ def create_post(request):
         profile=Profile.objects.get(username=author)
         new_post = Post.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
         new_post.save()
-        notify.send(author, recipient=profile.followers.all(), verb="Has made a new post")
+        
         return redirect('/')
     else:
         return redirect('/')
 
 def post_detail(request, pk):
     post=Post.objects.get(id=pk)
+
     post.read.add(request.user)
+    user = request.user
+    profile= Profile.objects.get(username=user)
     if request.method == 'POST':
         post=Post.objects.get(id=pk)
         author = request.user
@@ -195,15 +198,15 @@ def edit_post(request, pk):
 
 def profile(request, pk):
     user_object=get_object_or_404(User, id=pk)
-    user_profile = Profile.objects.get(username=user_object)
+    profile = Profile.objects.get(username=user_object)
     user_posts = Post.objects.filter(author=user_object)
-    top_pick_posts = user_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+    top_pick_posts = profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
     suggested_posts = sample(list(user_posts), min(3, len(user_posts)))
 
 
     context = {
         'top_pick_posts':top_pick_posts,
-        'user_profile': user_profile,
+        'profile': profile,
         'user_posts': user_posts,
         'suggested_posts':suggested_posts,
     }

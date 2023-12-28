@@ -1,3 +1,4 @@
+{% extends 'base\base.html' %}
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -5,66 +6,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  {% block title %}Home{% endblock %}
 
-  <link rel="stylesheet" href="{% static 'my-css/feed-style.css' %}">
-
-  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.css' %}">
-
-  <link rel="stylesheet" type="text/css" href="{% static 'assets/css/owl-carousel.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/css/tooplate-artxibition.css' %}">
 
 
 </head>
 
 <body>
-
-  <header class="header-area header-sticky">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <nav class="main-nav">
-            <!-- ***** Logo Start ***** -->
-            <a href="index.html" class="logo">Bloggin</a>
-            <!-- ***** Logo End ***** -->
-            <!-- ***** Menu Start ***** -->
-            <ul class="nav">
-              <!-- <li><a href="index.html" class="active">Home</a></li> -->
-              <li>
-                <form class="d-flex search" role="search" action="">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-outline-dark" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                      height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                      <path
-                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                    </svg></button>
-                </form>
-              </li>
-              <li><a data-bs-toggle="modal" data-bs-target="#exampleModalToggle" href="#exampleModalToggle"
-                  role="button">Post <img width="25" height="25" src="https://img.icons8.com/pulsar-line/48/add.png"
-                    alt="add" /></a></li>
-              <li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-                  aria-controls="offcanvasExample"><img width="25" height="25"
-                    src="https://img.icons8.com/ios/50/appointment-reminders--v1.png"
-                    alt="appointment-reminders--v1" /></a></li>
-              <li><a href="{% url 'profile' user.id %}"><img src="{{profile.profile_img.url}}"
-                    style="width: 30px; height: 30px; border: 1px solid; border-radius: 100%; object-fit: cover;"
-                    id="nav-profile-img" alt="..."></a></li>
-              <!-- <li><a href="shows-events.html">Shows & Events</a></li>
-                            <li><a href="tickets.html">Tickets</a></li>  -->
-            </ul>
-            <a class='menu-trigger'>
-              <span>Menu</span>
-            </a>
-            <!-- ***** Menu End ***** -->
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
-
+  {% block content %}
+  
 
   <section class="mt-3">
     <div class="container">
@@ -268,153 +218,7 @@
 
 
 
-  <!-- Create Post -->
-  <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
-    tabindex="-1">
-    <div class="modal-dialog modal-fullscreen">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalToggleLabel">Create Post</h5>
-          <button type="button" class="btn-close" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
-            data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="create-post" method="POST" enctype="multipart/form-data" id="post-form">
-            {% csrf_token %}
-            <div class="post-form">
-              <input type="text" class="post-title my-3" name="post-title" placeholder="Post title">
-              <label for="post-cover-image">Add post cover:</label>
-              <input type="file" name="post-cover-image" accept="image/*">
-              <textarea name="post-text" class="post-text-area my-3" placeholder="Talk about something..."></textarea>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
-            data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal"
-            data-bs-dismiss="modal">Add Post</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
-    tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalToggleLabel2">End Creating</h5>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to close?
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
-            data-bs-dismiss="modal">Go back</button>
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
-    tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalToggleLabel2">Post Confirm</h5>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to post this?
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
-            data-bs-dismiss="modal">Go back</button>
-          <button class="btn btn-secondary" type="submit" data-bs-dismiss="modal" form="post-form">Yes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <!-- Notifications -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header">
-      <h3 class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h3>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div>
-        <h4>Today</h4>
-        <div>
-
-          <div id="notifications-container">
-            <!-- Notifications will be appended here using JavaScript -->
-          </div>
-
-          {% comment %} <div class="row">
-            <div class="col-2">
-              <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-            </div>
-            <div class="col-10 justify-content-start">
-              <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-            </div>
-          </div> {% endcomment %}
-
-
-        </div>
-        <hr>
-
-        {% comment %} <h4>This Week</h4>
-        <div>
-
-          <div class="row">
-            <div class="col-2">
-              <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-            </div>
-            <div class="col-10 justify-content-start">
-              <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-            </div>
-          </div>
-
-        </div>
-        <hr> {% endcomment %}
-
-        {% comment %} <div>
-          <h4>This Month</h4>
-          <div class="row">
-            <div class="col-2">
-              <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">
-            </div>
-            <div class="col-10 justify-content-start">
-              <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up" <span>7h</span></p>
-            </div>
-          </div>
-
-        </div> {% endcomment %}
-      </div>
-    </div>
-  </div>
-
-
-
-
-
-
+  
 
   <div class="container my-5">
     <div class="row" id="row">
@@ -523,7 +327,7 @@
           </div>
 
 
-          Edit post modal  
+
 <div class="modal fade" id="exampleModal1Toggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
   <div class="modal-dialog modal-fullscreen">
     <div class="modal-content">
@@ -658,74 +462,8 @@
 
 
 
-  <script src="{% static 'assets/js/jquery-2.1.0.min.js' %}"></script>
 
-  <!-- Bootstrap -->
-  <script src="{% static 'assets/js/popper.js' %}"></script>
-  <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
-
-  <!-- Plugins -->
-  <script src="{% static 'assets/js/scrollreveal.min.js' %}"></script>
-  <script src="{% static 'assets/js/waypoints.min.js' %}"></script>
-  <script src="{% static 'assets/js/jquery.counterup.min.js' %}"></script>
-  <script src="{% static 'assets/js/imgfix.min.js' %}"></script>
-  <script src="{% static 'assets/js/mixitup.js' %}"></script>
-  <script src="{% static 'my-js.js' %}"></script>
-  <script src="{% static 'assets/js/accordions.js' %}"></script>
-  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
-
-  <!-- Global Init -->
-  <script src="{% static 'assets/js/custom.js' %}"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-    integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
-  </script>
-
-  <script>
-    // Your AJAX script for fetching and updating notifications
-    function fetchNotifications() {
-        $.ajax({
-            url: '/get_notifications/',  // Update with your actual URL
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                // Process the retrieved data and update the notifications container
-                updateNotifications(data);
-            },
-            error: function (error) {
-                console.log('Error fetching notifications:', error);
-            }
-        });
-    }
-
-    function updateNotifications(notifications) {
-        // Assuming notifications is an array of objects with 'message' attribute
-        var container = $('#notifications-container');
-
-        // Clear existing notifications
-        container.empty();
-
-        // Append new notifications
-        notifications.forEach(function (notification) {
-            container.append('<div class="row">' +
-                '<div class="col-2">' +
-                '<img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">' +
-                '</div>' +
-                '<div class="col-10 justify-content-start">' +
-                '<p><a href="#">'+ notification.author +'</a> ' + notification.message + ' <span>' + notification.created_at_formatted + '</span></p>' +
-                '</div>' +
-                '</div>' +
-                '<hr>');
-        });
-    }
-
-    // Fetch notifications initially and set an interval to refresh every 3 minutes
-    fetchNotifications();
-    setInterval(fetchNotifications, 180000);  // 180000 milliseconds = 3 minutes
-</script>
+{% endblock %}
 </body>
 
 </html>
