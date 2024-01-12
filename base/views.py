@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from random import sample
+from django.db.models import Q
 import random
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -148,6 +149,23 @@ def settings(request):
         return redirect('settings')
     return render(request, 'base/settings.html', {'profile': profile})
 
+def search_view(request):
+    query = request.GET.get('q')
+
+    if query:
+        results = Post.objects.filter(Q(title__icontains=query))
+    else:
+        results = Post.objects.none()
+
+    context = {
+        'query': query,
+        'results': results,
+    }
+
+    return render(request, 'base/search-results.html', context)
+
+
+
 def create_post(request):
     if request.method == 'POST':
         author = request.user
@@ -164,10 +182,11 @@ def create_post(request):
 
 def post_detail(request, pk):
     post=Post.objects.get(id=pk)
-
+    all_posts=Post.objects.all()
     post.read.add(request.user)
     user = request.user
     profile= Profile.objects.get(username=user)
+    suggested_posts = sample(list(all_posts), min(5, len(all_posts)))
     if request.method == 'POST':
         post=Post.objects.get(id=pk)
         author = request.user
@@ -176,7 +195,7 @@ def post_detail(request, pk):
         new_comment = Comment.objects.create(author=author, text=comment, post=post)
         new_comment.save()
         return redirect('post-detail', pk=pk)
-    context={'post':post, 'profile':profile}
+    context={'post':post, 'profile':profile, 'suggested_posts':suggested_posts}
     return render(request, 'base/post-detail.html', context)
 
 def delete_post(request, pk):
@@ -198,9 +217,10 @@ def edit_post(request, pk):
 
 def profile(request, pk):
     user_object=get_object_or_404(User, id=pk)
-    profile = Profile.objects.get(username=user_object)
+    profile = Profile.objects.get(username=request.user)
     user_posts = Post.objects.filter(author=user_object)
-    top_pick_posts = profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+    author_profile = Profile.objects.get(username=user_object)
+    top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
     suggested_posts = sample(list(user_posts), min(3, len(user_posts)))
 
 
@@ -209,6 +229,7 @@ def profile(request, pk):
         'profile': profile,
         'user_posts': user_posts,
         'suggested_posts':suggested_posts,
+        'author_profile':author_profile,
     }
 
     return render(request, 'base/profile-page.html', context)

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% static 'my-css/feed-style.css' %}" />
     <link rel="stylesheet" href="{% static 'my-css/post-detail.css' %}" />
     <link rel="stylesheet" href="{% static 'my-css/settings.css' %}" />
-
+    
     <!-- <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css"> -->
 
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.css' %}">
@@ -36,7 +36,7 @@
                         <ul class="nav">
                             <!-- <li><a href="index.html" class="active">Home</a></li> -->
                             <li>
-                                <form class="d-flex search" role="search" action="">
+                                <form class="d-flex search" role="search" action="{% url 'search_view' %}" method="get">
                                     <input class="form-control me-2" type="search" placeholder="Search"
                                         aria-label="Search">
                                     <button class="btn btn-outline-dark" type="submit"><svg
@@ -48,15 +48,24 @@
                                 </form>
                             </li>
                             <li><a data-bs-toggle="modal" data-bs-target="#exampleModalToggle"
-                                    href="#exampleModalToggle" role="button">Post <img width="25" height="25"
+                                    href="#exampleModalToggle" role="button"><img width="25" height="25"
                                         src="https://img.icons8.com/pulsar-line/48/add.png" alt="add" /></a></li>
                             <li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
                                     aria-controls="offcanvasExample"><img width="25" height="25"
                                         src="https://img.icons8.com/ios/50/appointment-reminders--v1.png"
                                         alt="appointment-reminders--v1" /></a></li>
-                            <li><a href="{% url 'profile' user.id %}"><img src="{{profile.profile_img.url}}"
+                            <li><a  class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{profile.profile_img.url}}"
                                         style="width: 30px; height: 30px; border: 1px solid; border-radius: 100%; object-fit: cover;"
-                                        id="nav-profile-img" alt="..."></a></li>
+                                        id="nav-profile-img" alt="..."></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'profile' user.id %}">Profile</a></li>
+                                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                                          </ul>
+                                    
+                            </li>
                         </ul>
                         <a class='menu-trigger'>
                             <span>Menu</span>
