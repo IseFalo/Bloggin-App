@@ -40,7 +40,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-2 d-none d-md-block d-lg-block d-xl-block">
-            <img src="{{post.post_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
+            <img src="{{result.post_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
               height="100">
           </div>
           <div class="col-sm-12 col-md-10">
@@ -52,7 +52,7 @@
       </div>
       {% endfor %}
       {% else %}
-        <p>No search query provided.</p>
+      <p>No search query provided.</p>
 
       {% endif %}
     </div>

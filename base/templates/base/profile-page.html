@@ -144,15 +144,17 @@
 
       <div class="row mt-5">
 
-        <div class="col-xl-8">
+        <div class="col-xl-8" id="posts">
           {% for post in user_posts %}
           <div class="card feed-post-card" id="feed-post-card"
             style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
             <div class="card-body">
               <div class="row">
                 <div class="col-2 d-none d-md-block d-lg-block d-xl-block">
+                  {% if post.post_cover %}
                   <img src="{{post.post_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
                     height="100">
+                  {% endif %}
                 </div>
                 <div class="col-sm-12 col-md-10">
                   <div>
@@ -289,8 +291,14 @@
           </div>
           {% endfor %}
 
-          <button class="btn btn-sm btn-outline-dark" id="view-all" type="submit">View more posts</button>
 
+          <div id="spinner-box" class="text-center">
+            <div class="spinner-border" role="status"></div>
+          </div>
+          <button class="btn btn-sm btn-outline-dark" id="view-all">View more posts</button>
+          <div id="alert" class="alert alert-danger mt-2 not-visible" role="alert">
+            No more posts to load
+          </div>
         </div>
 
 
@@ -309,8 +317,10 @@
                 {% for post in suggested_posts %}
                 <div class="row mt-4">
                   <div class="col-3">
+                    {% if post_cover %}
                     <img src="{{post.post_cover.url}}" class="profile-suggested-posts" alt="" width="60" height="60"
                       srcset="">
+                    {% endif %}
                   </div>
                   <div class="col-9">
                     <h5><a href="">{{ post.title|truncatewords:10 }}</a></h5>
@@ -355,7 +365,36 @@
 
 
 
+  <script>
+    // var _current_item = $('.feed-post-card').length
+    // console.log(_current_item);
+    const loadBtn = document.getElementById('view-all')
+    function loadmorePost() {
+      var _current_item = $('.feed-post-card').length
+      
+      $.ajax({
+        url:'{% url "load" pk=user_object.pk %}',
+        type: 'GET',
+        data:{
+          'total_item':_current_item,
+        },
+        beforeSend: function(){
 
+        },
+        success:function(response){
+          console.log(response)
+        },
+        error:function (err) {
+          console.log(err);
+        }
+      })
+    }
+
+    loadBtn.addEventListener('click', ()=>{
+      loadmorePost()
+    })
+
+  </script>
 
   {% endblock %}
 </body>

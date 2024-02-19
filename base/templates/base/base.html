@@ -20,6 +20,7 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/owl-carousel.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tooplate-artxibition.css' %}">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 
 <body>
@@ -36,8 +37,9 @@
                         <ul class="nav">
                             <!-- <li><a href="index.html" class="active">Home</a></li> -->
                             <li>
-                                <form class="d-flex search" role="search" action="{% url 'search_view' %}" method="get">
-                                    <input class="form-control me-2" type="search" placeholder="Search"
+                                <form class="d-flex search" role="search" action="{% url 'search_view' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input class="form-control me-2" name="query" type="search" placeholder="Search"
                                         aria-label="Search">
                                     <button class="btn btn-outline-dark" type="submit"><svg
                                             xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -252,7 +254,7 @@
     <!-- Bootstrap -->
     <script src="{% static 'assets/js/popper.js' %}"></script>
     <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- Plugins -->
     <script src="{% static 'assets/js/scrollreveal.min.js' %}"></script>
     <script src="{% static 'assets/js/waypoints.min.js' %}"></script>
@@ -319,6 +321,9 @@
         // Fetch notifications initially and set an interval to refresh every 3 minutes
         fetchNotifications();
         setInterval(fetchNotifications, 180000);  // 180000 milliseconds = 3 minutes
+
+
+        
     </script>
     {% block content %}
     {% endblock %}

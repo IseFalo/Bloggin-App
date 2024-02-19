@@ -15,7 +15,14 @@
 
 <body>
   {% block content %}
-
+  <style>
+    #like{
+      cursor: pointer;
+    }
+    #unlike{
+      cursor: pointer;
+    }
+  </style>
 
 
 
@@ -38,6 +45,16 @@
           ">
 
           <h6>Post by <a href="{% url 'profile' post.author.id %}">{{post.author}}</a>(25.3k Subscribers)</h6>
+          {% include 'base/likes.html' %}
+          {% if user in post.likes.all %}
+          <a id="unlike" hx-get="{% url 'like-post' post.id %}"
+          hx-target="#like-{{post.id}}"
+          hx-swap="innerHTML">Unlike</a>
+          {% else %}
+          <a id="like" hx-get="{% url 'like-post' post.id %}"
+          hx-target="#like-{{post.id}}"
+          hx-swap="innerHTML">like</a>
+          {% endif %}
                 <p>
                   {% if request.user == post.author%}
                     <a href="" class="btn btn-sm btn-primary" data-bs-toggle="modal"  data-bs-target="#exampleModalToggle" href="#exampleModalToggle" role="button">Edit Post</a>
@@ -159,41 +176,7 @@
                 <p>{{post.content}}</p>
 
 
-                <form action="" method="POST">
-                  {% csrf_token %}
-                  <div class="comment-form">
-                    <textarea name="comment" class="my-3" id="" cols="30" rows="5" placeholder="Comment..."></textarea>
-                      <button type="submit" class="btn btn-sm btn-outline-dark my-3">Post Comment</button>
-                  </div>
-                </form>
-
-                <p>
-                  <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    Comments({{post.comment_set.count}})
-                  </a>
-                </p>
-
-
-
-                <div class="collapse mb-5" id="collapseExample">
-                  <div class="comment-scroll">
-                      {% for comment in post.comment_set.all %}
-                      <div class="row g-0">
-                          <div class="col-sm-2 col-xl-1">
-                              <img src="{{comment.author.profile.profile_img.url}}" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
-                          </div>
-                          <div class="col-sm-10 col-xl-11 text-start">
-                              <h5 class="comment-username">@{{comment.author}}</h5>
-                              <p>{{comment.text}}</p>
-                          </div>
-                      </div>
-                      <hr>
-                      {% endfor %}
-                     
-                  </div>
-
-                </div>
-
+                {% include 'base/comment.html' %}
         </div>
       </div>
 
@@ -209,8 +192,10 @@
             {% for post in suggested_posts %}
             <div class="row mt-4">
               <div class="col-3">
+                {% if post.post_cover %}
                 <img src="{{post.post_cover.url}}" class="profile-suggested-posts" alt="" width="60" height="60"
                   srcset="">
+                {% endif %}
               </div>
               <div class="col-9">
                 <h5><a href="">{{ post.title|truncatewords:10 }}</a></h5>

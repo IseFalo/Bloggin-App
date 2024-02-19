@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from .models import *
 from django.contrib import messages
+from django.core import serializers
 from django.http import HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
@@ -13,8 +14,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import timedelta
-
+from django.core.paginator import Paginator
 from .models import Notification as note
+from django.template.loader import render_to_string
 # Create your views here.
 
 def register(request):
@@ -84,13 +86,26 @@ def home(request):
     # current_user=request.GET.get('user')
     current_user = request.user
 
-
     profile = Profile.objects.get(username=request.user)
     users_already_following = profile.username.following.all()
     suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
     posts=Post.objects.all()
-    context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users}
+    paginator = Paginator(posts, 5)
+    page = int(request.GET.get('page', 1))
+    posts = paginator.page(page)
+    context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users, 'page':page}
+    
     return render(request, 'base/feed.html', context)
+
+def like_post(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    user_exists = post.likes.filter(username=request.user.username)
+
+    if user_exists:
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+    return HttpResponse(post.likes.count())
 
 def settings(request):
     profile=Profile.objects.get(username=request.user)
@@ -150,19 +165,21 @@ def settings(request):
     return render(request, 'base/settings.html', {'profile': profile})
 
 def search_view(request):
-    query = request.GET.get('q')
+    
+    profile = Profile.objects.get(username=request.user)
+    if request.method == 'POST':
+        query = request.POST['query']
+        results = Post.objects.filter(title__contains=query)
 
-    if query:
-        results = Post.objects.filter(Q(title__icontains=query))
+        context = {
+            'query': query,
+            'results': results,
+            'profile':profile,
+        }
+
+        return render(request, 'base/search-results.html', context)
     else:
-        results = Post.objects.none()
-
-    context = {
-        'query': query,
-        'results': results,
-    }
-
-    return render(request, 'base/search-results.html', context)
+        return render(request, 'base/search-results.html')
 
 
 
@@ -187,6 +204,12 @@ def post_detail(request, pk):
     user = request.user
     profile= Profile.objects.get(username=user)
     suggested_posts = sample(list(all_posts), min(5, len(all_posts)))
+    comment_count = post.comment_set.count()
+    replies_count = sum(comment.replies.count() for comment in post.comment_set.all())
+    total_count = comment_count + replies_count
+    context={'post':post, 'profile':profile, 'suggested_posts':suggested_posts, 'total_count':total_count}
+    return render(request, 'base/post-detail.html', context)
+def comment_sent(request, pk):
     if request.method == 'POST':
         post=Post.objects.get(id=pk)
         author = request.user
@@ -194,9 +217,9 @@ def post_detail(request, pk):
 
         new_comment = Comment.objects.create(author=author, text=comment, post=post)
         new_comment.save()
-        return redirect('post-detail', pk=pk)
-    context={'post':post, 'profile':profile, 'suggested_posts':suggested_posts}
-    return render(request, 'base/post-detail.html', context)
+        context={'post':post}
+        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+    
 
 def delete_post(request, pk):
     post=Post.objects.get(id=pk)
@@ -218,7 +241,7 @@ def edit_post(request, pk):
 def profile(request, pk):
     user_object=get_object_or_404(User, id=pk)
     profile = Profile.objects.get(username=request.user)
-    user_posts = Post.objects.filter(author=user_object)
+    user_posts = Post.objects.filter(author=user_object)[0:5]
     author_profile = Profile.objects.get(username=user_object)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
     suggested_posts = sample(list(user_posts), min(3, len(user_posts)))
@@ -230,11 +253,23 @@ def profile(request, pk):
         'user_posts': user_posts,
         'suggested_posts':suggested_posts,
         'author_profile':author_profile,
+        'user_object':user_object,
     }
 
     return render(request, 'base/profile-page.html', context)
 
+def load_more(request, pk):
+    user_object=get_object_or_404(User, id=pk)
+    user_posts = list(Post.objects.filter(author=user_object).values()[total_item:total_item+limit])
+    total_item = int(request.GET.get('total_item'))
 
+    limit = 2
+
+    data={
+        'user_posts':user_posts,
+        'user_object':user_object,
+    }
+    return JsonResponse(data=data)
 def add_to_picks(request, pk):
     user_profile = Profile.objects.get(username=request.user)
     post = get_object_or_404(Post, id=pk)
@@ -307,3 +342,5 @@ def get_notifications(request):
          for notification in notifications
          ]
     return JsonResponse(data, safe=False)
+
+

@@ -68,12 +68,12 @@
                                             <div class="form-group">
                                                 <label for="inputUsername">Username</label>
                                                 <input type="text" class="form-control" id="inputUsername"
-                                                name="username" value="{{user_profile.username}}">
+                                                name="username" value="{{profile.username}}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="inputUsername">Biography</label>
                                                 <textarea rows="5" name="bio" class="form-control" id="inputBio"
-                                                    placeholder="Tell something about yourself">{{user_profile.bio}}</textarea>
+                                                    placeholder="Tell something about yourself">{{profile.bio}}</textarea>
                                             </div>
                                             
                                             <div class="form-group">
@@ -102,14 +102,12 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="text-center">
-                                                
-                                                {% if user_profile.profile_img %}
-                                                <img class="edit-profile-image mt-5" alt="" width="100" height="100"  src="{{user_profile.profile_img.url}}" >
-                                                {% else %}
-                                                <img class="edit-profile-image mt-5" alt="" width="100" height="100"  src="{% static 'blank-profile/blank-profile-picture.png' %}" >
+                                                <h6 id="outputName">{{profile.username}}</h6>
+                                                {% if profile.profile_img %}
+                                                <img class="edit-profile-image mt-5" id="settings-profile-img" alt="" width="100" height="100"  src="{{profile.profile_img.url}}" >
                                                 {% endif %}
                                                 <div class="mt-2">
-                                                    <input type="file" name="image" value=""
+                                                    <input id="profile-image-input" type="file" name="image" value=""
                                                         class="shadow-none bg-gray-100">
                                                 </div>
                                                 <small>For best results, use an image at least 128px by 128px in .jpg
@@ -207,41 +205,35 @@
 
 
 
+    <script>
+    document.getElementById('profile-image-input').addEventListener('change', function (event) {
+        var input = event.target
+        var reader = new FileReader();
 
+        reader.onload = function () {
+            var dataURL = reader.result;
+            var previewImage = document.getElementById('settings-profile-img');
+            previewImage.src = dataURL;
 
+        };
+        reader.readAsDataURL(input.files[0]);
+    })
+    const realnameInput = document.getElementById('inputUsername');
+    const realnameOutput = document.getElementById('outputName');
 
+    realnameInput.addEventListener('input', (event) => {
+    realnameOutput.innerText = event.target.value;
+    });
 
+    </script>
+
+    <script src="{% static 'my-js/settings.js' %}"></script>
 
 
 {% endblock %}
 
-
-
-
-    <script src="assets/js/jquery-2.1.0.min.js"></script>
-
-    <!-- Bootstrap -->
-    <script src="assets/js/popper.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-
-    <!-- Plugins -->
-    <script src="assets/js/scrollreveal.min.js"></script>
-    <script src="assets/js/waypoints.min.js"></script>
-    <script src="assets/js/jquery.counterup.min.js"></script>
-    <script src="assets/js/imgfix.min.js"></script>
-    <script src="assets/js/mixitup.js"></script>
-    <script src="assets/js/accordions.js"></script>
-    <script src="assets/js/owl-carousel.js"></script>
-
-    <!-- Global Init -->
-    <script src="assets/js/custom.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
-        crossorigin="anonymous"></script>
+    
 </body>
+
 
 </html>
