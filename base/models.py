@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.db.models import Count
 import uuid
+import readtime
 # Create your models here.
 class Profile(models.Model):
     username = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
@@ -14,6 +15,7 @@ class Profile(models.Model):
     phone_no = models.IntegerField(null=True, blank=True)
     top_picks = models.ManyToManyField('Post', blank=True)
     followers = models.ManyToManyField(User, related_name="following")
+    saved_posts = models.ManyToManyField('Post', related_name="saved_by")
 
     def __str__(self):
         return self.username.username
@@ -22,10 +24,17 @@ class Category(models.Model):
     name = models.CharField(max_length=150)
     def __str__(self):
         return self.name
+class Series(models.Model):
+    creator=models.ForeignKey(User, on_delete=models.CASCADE)
+    name=models.CharField(max_length=200)
+    description = models.TextField(null=True)
+
+    def __str__(self):
+        return self.name
 class Post(models.Model):
     author= models.ForeignKey(User, on_delete=models.CASCADE)
     title=models.CharField(max_length=500)
-    # category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     post_cover = models.ImageField(upload_to="post_covers")
     content=models.TextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -34,10 +43,34 @@ class Post(models.Model):
     likes = models.ManyToManyField(User, related_name="likedposts", through="LikedPost")
     edited = models.BooleanField(default=False)
     is_top_pick = models.BooleanField(default=False)
+    series = models.ForeignKey(Series, null=True, on_delete=models.SET_NULL)
     top_pick_selected_at = models.DateTimeField(null=True, blank=True)
-
+    STATUS_CHOICES = (
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     def __str__(self):
         return self.title
+    
+    def get_read_time_in_seconds(self):
+        """
+        Calculates the estimated reading time for the post's content.
+        """
+        word_count = len(self.content.split())
+        read_time_in_seconds = word_count*0.5
+        return round(read_time_in_seconds)
+    
+
+    def get_read_time_in_minutes(self):
+        word_count = len(self.content.split())
+        read_time_in_seconds = word_count*0.5
+        read_time_in_minutes = read_time_in_seconds/60
+        if read_time_in_minutes < 1:
+            # read_time_in_minutes = 1
+            return('<1')
+        return round(read_time_in_minutes)
+
 
 class LikedPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -101,3 +134,17 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification | {self.user.username}"
+    
+
+
+# class DraftedPost(models.Model):
+#     author= models.ForeignKey(User, on_delete=models.CASCADE)
+#     title=models.CharField(max_length=500)
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+#     post_cover = models.ImageField(upload_to="post_covers")
+#     content=models.TextField()
+#     created = models.DateTimeField(auto_now_add=True)
+    
+
+#     def __str__(self):
+#         return f"Draft | {self.title}"

@@ -8,13 +8,13 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from random import sample
-from django.db.models import Q
+from django.template import loader
 import random
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import timedelta
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Notification as note
 from django.template.loader import render_to_string
 # Create your views here.
@@ -81,6 +81,20 @@ def login(request):
 def logoutUser(request):
     logout(request)
     return redirect("login")
+
+
+# def get_read_time(words):
+#     """
+#     Calculates the estimated reading time for the post's content.
+#     """
+#     word_count = len(words)
+#     read_time_in_seconds = word_count*0.5
+#     if read_time_in_seconds<60:
+#         return round(read_time_in_seconds)
+#     else:
+#         read_time_in_minutes = read_time_in_seconds/60
+#         return round(read_time_in_minutes)
+
 @login_required
 def home(request):
     # current_user=request.GET.get('user')
@@ -89,11 +103,9 @@ def home(request):
     profile = Profile.objects.get(username=request.user)
     users_already_following = profile.username.following.all()
     suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
-    posts=Post.objects.all()
-    paginator = Paginator(posts, 5)
-    page = int(request.GET.get('page', 1))
-    posts = paginator.page(page)
-    context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users, 'page':page}
+    posts=Post.objects.filter(status='published').order_by("-updated")
+
+    context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users,}
     
     return render(request, 'base/feed.html', context)
 
@@ -191,12 +203,45 @@ def create_post(request):
         post_text=request.POST['post-text']
         profile=Profile.objects.get(username=author)
         new_post = Post.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
-        new_post.save()
         
-        return redirect('/')
+        if request.POST.get('save_draft'):
+                new_post.status = 'draft'
+        else:
+            
+            new_post.status = 'published'
+        new_post.save()
+        if request.POST.get('save_draft'):
+            return redirect('drafts_list')  # Redirect to drafts list
+        else:
+            return redirect('/')
+        
+        # return redirect('/')
     else:
         return redirect('/')
+    
+def drafts_list(request):
+    drafts = Post.objects.filter(status='draft', author=request.user)
+    return render(request, 'base/drafts.html', {'drafts': drafts})
+def publish_post(request, pk):
 
+    if request.method == 'POST':
+        post = Post.objects.get(id=pk)
+        post.status="published"
+        post.save()
+    return redirect('/')
+# def draft_post(request):
+#     if request.method == 'POST':
+#         author = request.user
+#         title=request.POST['post-title']
+#         post_cover=request.FILES.get('post-cover-image')
+#         post_text=request.POST['post-text']
+#         profile=Profile.objects.get(username=author)
+#         new_draft = DraftedPost.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
+#         new_draft.save()
+        
+#         return redirect('/')
+#     else:
+#         return redirect('/')
 def post_detail(request, pk):
     post=Post.objects.get(id=pk)
     all_posts=Post.objects.all()
@@ -237,7 +282,12 @@ def edit_post(request, pk):
         post.edited = True
         post.save()
         return redirect('post-detail', pk=pk)
-
+def save_post(request, pk):
+    user_profile=Profile.objects.get(username=request.user)
+    post = Post.objects.get(id=pk)
+    user_profile.saved_posts.add(post)
+    user_profile.save()
+    return redirect('/')
 def profile(request, pk):
     user_object=get_object_or_404(User, id=pk)
     profile = Profile.objects.get(username=request.user)
@@ -245,8 +295,8 @@ def profile(request, pk):
     author_profile = Profile.objects.get(username=user_object)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
     suggested_posts = sample(list(user_posts), min(3, len(user_posts)))
-
-
+    user_series = Series.objects.filter(creator=user_object)
+    saved_posts = profile.saved_posts.all()
     context = {
         'top_pick_posts':top_pick_posts,
         'profile': profile,
@@ -254,22 +304,36 @@ def profile(request, pk):
         'suggested_posts':suggested_posts,
         'author_profile':author_profile,
         'user_object':user_object,
+        'user_series':user_series,
+        'saved_posts':saved_posts,
+       
     }
 
     return render(request, 'base/profile-page.html', context)
 
-def load_more(request, pk):
-    user_object=get_object_or_404(User, id=pk)
-    user_posts = list(Post.objects.filter(author=user_object).values()[total_item:total_item+limit])
-    total_item = int(request.GET.get('total_item'))
-
-    limit = 2
-
-    data={
-        'user_posts':user_posts,
-        'user_object':user_object,
+def load_more(request, username):
+    page = request.POST.get('page')
+    user_object=get_object_or_404(User, username=username)
+    results_per_page = 5
+    user_posts = Post.objects.filter(author=user_object)
+    paginator = Paginator(user_posts, results_per_page)
+    try:
+        user_posts = paginator.page(page)
+    except PageNotAnInteger:
+        user_posts=paginator.page(2)
+    except EmptyPage:
+        user_posts=paginator.page(paginator.num_pages)
+    
+    posts_html = loader.render_to_string(
+        'base/profile-page.html',
+        {'user_posts':user_posts}
+    )
+    output_data={
+        'posts_html':posts_html,
+        'has_next':user_posts.has_next()
     }
-    return JsonResponse(data=data)
+
+    return JsonResponse(output_data)
 def add_to_picks(request, pk):
     user_profile = Profile.objects.get(username=request.user)
     post = get_object_or_404(Post, id=pk)
@@ -342,5 +406,28 @@ def get_notifications(request):
          for notification in notifications
          ]
     return JsonResponse(data, safe=False)
+
+
+
+def add_post_to_series(request, series_id, post_id):
+    series = Series.objects.get(id=series_id)
+    post_to_add = Post.objects.get(id=post_id)
+    post_to_add.series = series
+    post_to_add.save()
+    return redirect()
+    
+
+def create_series(request):
+    user = request.user
+    name=request.POST['series-name']
+    new_series = Series.objects.create(creator=user, name=name)
+    new_series.save()
+    return redirect('/')
+
+def series_detail(request, pk):
+  series = Series.objects.get(pk=pk)
+  series_posts = Post.objects.filter(series=series, author=request.user)
+  context = {'series': series, 'series_posts': series_posts}
+  return render(request, 'base/series.html', context)
 
 

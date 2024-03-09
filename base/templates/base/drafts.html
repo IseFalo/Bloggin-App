@@ -1,0 +1,199 @@
+{% extends 'base\base.html' %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    {% block title %}{{post.title}}{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      
+    <div class="container">
+      <ul class="nav nav-tabs justify-content-center mt-5">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">All</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Profiles</a>
+        </li>
+
+      </ul>
+      
+
+
+
+    {% for draft in drafts %}
+    <div class="card search-card" id="search-card"
+      style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
+
+
+      <div class="card-body">
+        <div class="row">
+          <div class="col-2 d-none d-md-block d-lg-block d-xl-block">
+            {% if draft.post_cover %}
+            <img src="{{draft.post_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
+              height="100">
+            {% endif %}
+          </div>
+          <div class="col-sm-12 col-md-10">
+            <p>By <a href="">Ise's Food Blog</a></p>
+
+            <h6>{{draft.title}}</h6>
+            <p>{{draft.content|truncatewords:20}}</p>
+            <a data-bs-toggle="modal" data-bs-target="#exampleModalToggle{{draft.id}}" href="#exampleModalToggle{{draft.id}}" role="button">Add Post</a>
+        </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+    <!-- Create Post -->
+    <div class="modal fade" id="exampleModalToggle{{draft.id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Create Post</h5>
+                    <button type="button" class="btn-close" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'publish_post' draft.id %}" method="POST" enctype="multipart/form-data" id="post-form">
+                        {% csrf_token %}
+                        <div class="post-form">
+                            <input type="text" class="post-title my-3" name="draft-post-title"  value="{{draft.title}}">
+                            <label for="draft-post-cover-image">Add post cover:</label>
+                            <input type="file" name="draft-post-cover-image" accept="image/*">
+                            <textarea name="draft-post-text" class="post-text-area my-3" placeholder="Talk about something...">{{draft.content}}</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+                        data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle5"
+                        data-bs-toggle="modal" data-bs-dismiss="modal">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel2">End Creating</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to close?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                        data-bs-dismiss="modal">Go back</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="exampleModalToggle5" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel2">Post Confirm</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to post this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                        data-bs-dismiss="modal">Go back</button>
+                    <button class="btn btn-secondary" type="submit" data-bs-dismiss="modal"
+                        form="post-form">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+      {% endfor %}
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+   
+  </body>
+</html>

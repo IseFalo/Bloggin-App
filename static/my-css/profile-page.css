@@ -159,6 +159,9 @@
     margin-top: 50px;
     width: 100%;
 }
+.not-visible{
+    display: none;
+}
 hr {
     height: 12px;
     border: 0;
