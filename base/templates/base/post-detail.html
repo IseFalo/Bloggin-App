@@ -1,5 +1,6 @@
 {% extends 'base\base.html' %}
 {% load static %}
+
 <!doctype html>
 <html lang="en">
 
@@ -173,7 +174,7 @@
                   {% endif %}  
                 </div>
                 <hr>
-                <p>{{post.content}}</p>
+                <p>{{post.content|safe}}</p>
 
 
                 {% include 'base/comment.html' %}

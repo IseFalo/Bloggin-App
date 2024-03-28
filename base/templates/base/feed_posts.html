@@ -11,8 +11,7 @@
             </div>
             <div class="col-sm-12 col-md-9">
                 <div>
-                    <small>By <a href="{% url 'profile' post.author.id %}">{{post.author}}</a></small>
-                    <h6>{{post.category}}</h6>
+                    <small>By <a href="{% url 'profile' post.author.id %}">{{post.author}}</a>--- Category: {{post.category}}</small>
                     <p class="post-card-title"><a
                             href="{% url 'post-detail' post.id %}">{{post.title|truncatewords:10}}</a> {{post.get_read_time_in_minutes}} mins read</p>
                     <p class="post-card-content">{{post.content|truncatewords:20}}</p>

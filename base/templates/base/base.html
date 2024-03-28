@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -61,8 +62,9 @@
                                         id="nav-profile-img" alt="..."></a>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="{% url 'profile' user.id %}">Profile</a></li>
-                                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
                                             <li><a class="dropdown-item" href="{% url 'drafts' %}">Drafts</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'saved_posts_list' %}">Saved</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li><a class="dropdown-item" href="#">Logout</a></li>
                                           </ul>
@@ -79,7 +81,7 @@
         </div>
     </header>
 
-    <!-- Create Post
+    <!-- Create Post -->
     <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
         tabindex="-1">
         <div class="modal-dialog modal-fullscreen">
@@ -93,7 +95,7 @@
                     <form action="create-post" method="POST" enctype="multipart/form-data" id="post-form">
                         {% csrf_token %}
                         <div class="post-form">
-                            <input type="text" class="post-title my-3" name="post-title" placeholder="Post title">
+                            <input type="text" class="post-title my-3" id="post-title" name="post-title" placeholder="Post title">
                             <label for="post-cover-image">Add post cover:</label>
                             <input type="file" name="post-cover-image" accept="image/*">
                             <textarea name="post-text" class="post-text-area my-3"
@@ -160,7 +162,7 @@
 
 
 
- -->
+
 
 
 
@@ -323,7 +325,20 @@
         fetchNotifications();
         setInterval(fetchNotifications, 180000);  // 180000 milliseconds = 3 minutes
 
+    
 
+
+
+
+        $(document).ready(function() {
+    $("#post-form").submit(function(event) {
+        if (!$("#post-title").val()) {
+            alert("Please enter a title.");
+            event.preventDefault();
+        }
+        // ... similarly for other fields
+    });
+});
         
     </script>
     {% block content %}

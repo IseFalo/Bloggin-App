@@ -1,0 +1,175 @@
+{% extends 'base\base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block title %}Profile- {{user_profile.username}}{% endblock %}
+
+  <script type="text/javascript">
+
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+  </script>
+</head>
+
+<body>
+
+  {% block content %}
+  {% include 'base/profile_info.html' %}
+  {% include 'base/profile_top_picks_carousel.html' %}
+
+  <div class="container">
+  
+  <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="#">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Posts</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Series</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link active" href="#">Organizations</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link btn btn-outline-dark" href="#"><svg
+        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+        fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+    </svg></a>
+    </li>
+
+  </ul>
+
+
+  
+</div>
+
+
+
+
+
+
+  <section>
+    <div class="container">
+      <p class="container-title">Organizations</p>
+
+      <!-- <form action="{% url 'create-series' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="series-name">
+        <button type="submit">Create Series</button>
+      </form> -->
+
+
+      <a data-bs-toggle="modal" class="text-center" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" role="button">
+        <form action="">
+            <img src="images/link 1.jpg" class="start-post-image" alt="" srcset="">
+            <input type="text" class="start-post" placeholder="Create Organization">
+        </form>
+      </a>
+      
+      
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Create Organization</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{% url 'create-organization-profile' %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="org-name" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="org-name" name="org-name">
+                </div>
+
+                <div class="mb-3">
+                  <label for="org-bio" class="col-form-label">Bio:</label>
+                  <textarea class="form-control" id="org-bio" name="org-bio"></textarea>
+                </div>
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create Organization</button>
+            </div>
+        </form>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row mt-5">
+        {% for organization in user_organizations %}
+        <div class="col-xl-6" id="posts">
+          <div class="card feed-post-card" id="feed-post-card"
+            style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
+            <style>
+              .card-body {
+                display: flex;
+                flex-direction: column;
+              }
+              .col-3, .col-sm-12.col-md-9 {
+                flex-grow: 1;
+              }
+            </style>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-3 d-none d-md-block d-lg-block d-xl-block">
+                  
+                  <img src="" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
+                    height="100">
+                  
+                </div>
+                <div class="col-sm-12 col-md-9">
+                  <div>
+                    <small>By <a href="">...</a></small>
+
+                    <p class="post-card-title"><a
+                        href="{% url 'organization-profile' organization.pk %}">{{organization.name}}</a> (5 mins read)</p>
+                    <p class="post-card-content"></p>
+                    <small>Created by {{organization.creator}}</small>
+
+                  </div>
+                </div>
+              </div>
+            </div>  
+          </div>
+
+
+
+        </div>
+
+        {% endfor %}
+      </div>
+
+      
+    </div>
+
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+  {% endblock %}
+</body>
+
+</html>

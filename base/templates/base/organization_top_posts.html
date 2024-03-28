@@ -1,0 +1,73 @@
+<section class="container">
+    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+      <div class="container my-5">
+        <div class="carousel-inner">
+          <!-- {% for post in top_pick_posts %} -->
+          <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="10000">
+            <div class="row g-0">
+              <div class="col-lg-6" style="position: relative;">
+                <img src="" class="d-block w-100" alt="..." id="caro-img"
+                  style="background-size: 100%; image-rendering: -webkit-optimize-contrast;" height="100%" width="100%">
+              </div>
+              <div class="col-lg-6  d-flex align-items-center px-5" id="captions">
+                <div class="captions">
+                  <h4 class="text-muted">Editor's Pick {{ forloop.counter }}</h4>
+                  <h3></h3>
+                  <p>Read by people</p>
+                  <a class="btn btn-sm btn-outline-dark" href="">View Post</a>
+                  <p>Posted on {{post.created}} and {% if post.edited %}
+                    edited
+                    {% endif %}</p>
+                  <p>{{post.get_read_time_in_minutes}} mins read</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- {% endfor %} -->
+          <!-- <div class="carousel-item" data-bs-interval="2000">
+              <div class="row g-0">
+                <div class="col-lg-6">
+                  <img src="images/blog-770x510.png" class="d-block w-100" alt="..." id="caro-img" style="background-size: 100%; image-rendering: -webkit-optimize-contrast;" height="100%" width="100%">
+                </div>
+                <div class="col-lg-6  d-flex align-items-center px-5" id="captions">
+                  <div class="captions">
+                    <h4 class="text-muted">Editor's Pick 2</h4>
+                    <h3>Topic Name</h3>
+                    <p>Read by 4000 people</p>
+                    <button class="btn btn-sm btn-outline-dark" type="submit">View Post</button>
+                    <p>Posted 30 mins ago and edited 2 mins ago</p>
+                    <p>5 mins read</p>
+                  </div>
+                </div>
+              </div>       
+            </div>
+            <div class="carousel-item">
+             <div class="row g-0">
+              <div class="col-lg-6">
+                <img src="images/blog-770x510.png" class="d-block w-100" alt="..." id="caro-img" style="background-size: 100%; image-rendering: -webkit-optimize-contrast;" height="100%" width="100%">
+              </div>
+              <div class="col-lg-6  d-flex align-items-center px-5" id="captions">
+                <div class="captions">
+                  <h4 class="text-muted">Editor's Pick 3</h4>
+                  <h3>Topic Name</h3>
+                  <p>Read by 300 people</p>
+                  <button class="btn btn-sm btn-outline-dark" type="submit">View Post</button>
+                  <p>Posted 30 mins ago and edited 2 mins ago</p>
+                  <p>5 mins read</p>
+                </div>
+              </div>
+             </div>
+            </div> -->
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+
+  </section>

@@ -16,51 +16,49 @@
 </head>
 
 <body>
-  <!-- <style>
+  <!-- <style> 
     .not-visible{
       display: none;
     }
   </style> -->
-
   {% block content %}
-  {% include 'base/profile_info.html' %}
+  {% include 'base/organization_profile_info.html' %}
 
-  {% include 'base/profile_top_picks_carousel.html' %}
-  <style>
-    p img[src^="/media/uploads/"] {
-    display: none;
-    
-  }
-  </style>
+  {% include 'base/organization_top_posts.html' %}
+  
+
+
+
   <div class="container">
+  
   
   <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="">Home</a>
+      <a class="nav-link active" aria-current="page" href="#">Home</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'profile-post-list' pk=user_object.pk %}">Posts</a>
+      <a class="nav-link" href="#">Posts</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'series-list' pk=user_object.pk %}">Series</a>
+      <a class="nav-link" href="{% url 'organization-series-list' organization_profile.pk %}">Series</a>
     </li>
 
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'organization-profile-list' pk=user_object.pk %}">Organizations</a>
-    </li>
     
-
-    <li class="nav-item">
-      <a class="nav-link btn btn-outline-dark" href="#"><svg
-        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-        fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-        <path
-            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-    </svg></a>
-    </li>
   </ul>
 </div>
+<form action="{% url 'create-series' %}" method="POST">
+  {% csrf_token %}
+  <input type="text" name="series-name">
+  <button type="submit">Create Series</button>
+</form>
+{% for series in user_series %}
+<li><a href="{% url 'series-detail' pk=series.pk %}">{{series.name}}</a></li>
 
+{% endfor %}
+Saved Posts
+{% for saved_post in saved_posts %}
+<li><a href="{% url 'post-detail' saved_post.id %}">{{saved_post.title}}</a></li>
+{% endfor %}
   <section>
     <div class="container">
       <p class="container-title">Posts</p>
@@ -70,8 +68,17 @@
       </form>
 
       <div class="row mt-5">
+
         <div class="col-xl-8" id="posts">
-          {% for post in user_posts %}
+          {% for post in organization_posts %}
+          <style>
+            p img{
+              display: none;
+            }
+            p:empty {
+              display: none;
+            }
+          </style>
           <div class="card feed-post-card" id="feed-post-card"
             style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
             <div class="card-body">
@@ -88,7 +95,7 @@
 
                     <p class="post-card-title"><a
                         href="{% url 'post-detail' post.id %}">{{post.title|truncatewords:10}}</a> (5 mins read)</p>
-                    <p class="post-card-content">{{post.content_without_images_or_empty_paragraphs|safe|truncatewords:20}}</p>
+                    <p class="post-card-content">{{post.content|safe|truncatewords:20}}</p>
                     <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-eye" viewBox="0 0 16 16">
                         <path
@@ -123,8 +130,7 @@
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
                             data-bs-target="#exampleModal">Delete</a></li>
                         <li><a class="dropdown-item" href="#">Save</a></li>
-                        <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add Post to Series</a></li>
-                        <li><a class="dropdown-item" href="">Add to Picks</a></li>
+                        <li><a class="dropdown-item" href="#">Add to Picks</a></li>
                         <li><a class="dropdown-item" href="#">Remove from Picks</a></li>
                       </ul>
                     </div>
@@ -132,40 +138,12 @@
                   </div>
                 </div>
 
-                <!-- Add Post to series Modal -->
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add this post to your series</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <form action="{% url 'add_post_to_series' post.id %}" method="POST">
-                       {% csrf_token %}
-                      <div class="modal-body">
-                        <div class="mb-3">
-                          <label for="select-series">Select Series:</label>
-                          <select name="series_id" id="select-series">
-                            <option value="">--- Select Series ---</option>
-                            {% for series in user_series %}
-                            <option value="{{ series.id }}">{{series.name}}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                      </div>
-                    </form>
-                    </div>
-                  </div>
-                </div>
-                <!-- Add Post to series Modal -->
-
 
 
               </div>
+
+
+
             </div>
 
 
@@ -279,9 +257,7 @@
                   </div>
                   <div class="col-9">
                     <h5><a href="">{{ post.title|truncatewords:10 }}</a></h5>
-                    
-                    <p>{{post.content_without_images_or_empty_paragraphs|safe|truncatewords:20}}</p>
-
+                    <p>{{post.content|safe|truncatewords:20}}</p>
                     <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-eye" viewBox="0 0 16 16">
                         <path
@@ -317,10 +293,6 @@
     </div>
 
   </section>
-
-
-
-
 
 
 

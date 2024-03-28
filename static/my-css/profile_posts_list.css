@@ -361,7 +361,14 @@ footer{
     font-weight: 300;
     line-height: 60px;
   }
-  
+  .card.feed-post-card {
+    width: 50%; /* Adjust as needed */
+    height: 250px; /* Adjust according to your content */
+    background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
+    color: #0c0a0e;
+    border: 2px solid transparent;
+    margin-bottom: 10px;
+  }
   .post-card {
     color: #0c0a0e;
     max-width: 100%;

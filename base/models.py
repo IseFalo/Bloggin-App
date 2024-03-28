@@ -4,6 +4,8 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.db.models import Count
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 import uuid
 import readtime
 # Create your models here.
@@ -28,7 +30,7 @@ class Series(models.Model):
     creator=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=200)
     description = models.TextField(null=True)
-
+    organization = models.ForeignKey('Organization', null=True, on_delete=models.SET_NULL)
     def __str__(self):
         return self.name
 class Post(models.Model):
@@ -36,7 +38,7 @@ class Post(models.Model):
     title=models.CharField(max_length=500)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     post_cover = models.ImageField(upload_to="post_covers")
-    content=models.TextField()
+    content= RichTextUploadingField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     read = models.ManyToManyField(User, related_name="blog_posts")
@@ -50,6 +52,7 @@ class Post(models.Model):
         ('published', 'Published'),
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    organization = models.ForeignKey('Organization', null=True ,on_delete=models.SET_NULL)
     def __str__(self):
         return self.title
     
@@ -60,6 +63,7 @@ class Post(models.Model):
         word_count = len(self.content.split())
         read_time_in_seconds = word_count*0.5
         return round(read_time_in_seconds)
+    
     
 
     def get_read_time_in_minutes(self):
@@ -135,16 +139,14 @@ class Notification(models.Model):
     def __str__(self):
         return f"Notification | {self.user.username}"
     
+class Organization(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    name=models.CharField(max_length=200, unique=True)
+    profile_img=models.ImageField(upload_to="profile_images", default="blank-org-profile.jpg")
+    bio=models.TextField()
+    top_picks = models.ManyToManyField('Post', blank=True, related_name='featured_in_organizations')
+    followers = models.ManyToManyField(User, related_name="followings")
+    members = models.ManyToManyField(User, related_name="organizations")
 
-
-# class DraftedPost(models.Model):
-#     author= models.ForeignKey(User, on_delete=models.CASCADE)
-#     title=models.CharField(max_length=500)
-#     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
-#     post_cover = models.ImageField(upload_to="post_covers")
-#     content=models.TextField()
-#     created = models.DateTimeField(auto_now_add=True)
-    
-
-#     def __str__(self):
-#         return f"Draft | {self.title}"
+    def __str__(self):
+        return self.name

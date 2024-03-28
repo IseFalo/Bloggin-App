@@ -10,6 +10,8 @@ from django.http import HttpResponseRedirect
 from random import sample
 from django.template import loader
 import random
+import re
+from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
@@ -221,7 +223,8 @@ def create_post(request):
     
 def drafts_list(request):
     drafts = Post.objects.filter(status='draft', author=request.user)
-    return render(request, 'base/drafts.html', {'drafts': drafts})
+    profile = Profile.objects.get(username=request.user)
+    return render(request, 'base/drafts.html', {'drafts': drafts, 'profile':profile})
 def publish_post(request, pk):
 
     if request.method == 'POST':
@@ -288,15 +291,24 @@ def save_post(request, pk):
     user_profile.saved_posts.add(post)
     user_profile.save()
     return redirect('/')
+def saved_posts_list(request):
+    profile = Profile.objects.get(username=request.user)
+    saved_posts = profile.saved_posts.all()
+    context = {'saved_posts': saved_posts, 'profile':profile}
+    return render(request, 'base/saved_posts_list.html', context)
 def profile(request, pk):
     user_object=get_object_or_404(User, id=pk)
     profile = Profile.objects.get(username=request.user)
     user_posts = Post.objects.filter(author=user_object)[0:5]
+    for post in user_posts:
+        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
+        post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
     author_profile = Profile.objects.get(username=user_object)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
     suggested_posts = sample(list(user_posts), min(3, len(user_posts)))
     user_series = Series.objects.filter(creator=user_object)
     saved_posts = profile.saved_posts.all()
+    created_organizations=Organization.objects.filter(creator=request.user)
     context = {
         'top_pick_posts':top_pick_posts,
         'profile': profile,
@@ -306,10 +318,21 @@ def profile(request, pk):
         'user_object':user_object,
         'user_series':user_series,
         'saved_posts':saved_posts,
+        'created_organizations':created_organizations,
        
     }
 
     return render(request, 'base/profile-page.html', context)
+
+
+def profile_post_list(request, pk):
+    user_object=get_object_or_404(User, pk=pk)
+    profile = Profile.objects.get(username=request.user)
+    author_profile = Profile.objects.get(username=user_object)
+    user_posts = Post.objects.filter(author=user_object)[0:5]
+    top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+    context = {'user_object':user_object, 'profile':profile, 'user_posts':user_posts, 'author_profile':author_profile, 'top_pick_posts':top_pick_posts}
+    return render(request, 'base/profile_post_list.html', context)
 
 def load_more(request, username):
     page = request.POST.get('page')
@@ -409,18 +432,22 @@ def get_notifications(request):
 
 
 
-def add_post_to_series(request, series_id, post_id):
-    series = Series.objects.get(id=series_id)
-    post_to_add = Post.objects.get(id=post_id)
-    post_to_add.series = series
-    post_to_add.save()
-    return redirect()
+def add_post_to_series(request, post_id):
+    if request.method == 'POST':
+        series_id = request.POST.get('series_id')
+        series = Series.objects.get(id=series_id)
+        post_to_add = Post.objects.get(id=post_id)
+        post_to_add.series = series
+        post_to_add.save()
+        return redirect('/')
     
 
 def create_series(request):
     user = request.user
     name=request.POST['series-name']
-    new_series = Series.objects.create(creator=user, name=name)
+    selected_organization_id = request.POST.get('organization_id')
+    organization = Organization.objects.get(pk=selected_organization_id)
+    new_series = Series.objects.create(creator=user, name=name, organization=organization)
     new_series.save()
     return redirect('/')
 
@@ -428,6 +455,71 @@ def series_detail(request, pk):
   series = Series.objects.get(pk=pk)
   series_posts = Post.objects.filter(series=series, author=request.user)
   context = {'series': series, 'series_posts': series_posts}
-  return render(request, 'base/series.html', context)
+  return render(request, 'base/series-detail.html', context)
+
+def series_list(request, pk):
+    user_object=User.objects.get(pk=pk)
+    user_series = Series.objects.filter(creator=user_object)
+    author_profile = Profile.objects.get(username=user_object)
+    created_organizations=Organization.objects.filter(creator=request.user)
+    top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+    context = {'user_series':user_series, 'author_profile':author_profile, 'user_object':user_object, 'created_organizations':created_organizations, 'top_pick_posts':top_pick_posts}
+    return render(request, 'base/profile-series-list.html', context)
 
 
+
+def create_organization_profile(request):
+    if request.method == 'POST':
+        org_name = request.POST['org-name']
+        org_bio = request.POST['org-bio']
+        new_org = Organization.objects.create(creator=request.user, name=org_name, bio=org_bio)
+        new_org.members.add(request.user)
+        new_org.save()
+    return redirect('/')
+
+def organization_profile_list(request, pk):
+    user_object=User.objects.get(pk=pk)
+    author_profile = Profile.objects.get(username=user_object)
+    user_organizations = user_object.organizations.all()
+    top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+    context = {'user_object':user_object, 'author_profile':author_profile, 'user_organizations':user_organizations, 'top_pick_posts':top_pick_posts}
+    return render(request, 'base/profile-organization-list.html', context)
+
+def organization_profile(request, pk):
+    organization_profile = Organization.objects.get(pk=pk)
+    organization_posts = Post.objects.filter(organization=organization_profile)
+    suggested_posts = sample(list(organization_posts), min(3, len(organization_posts)))
+    context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'suggested_posts':suggested_posts}
+    return render(request, 'base/organization-profile.html', context)
+
+def organization_series(request, pk):
+    organization_profile = Organization.objects.get(pk=pk)
+    organization_series = Series.objects.filter(organization=organization_profile)
+    context = {'organization_series':organization_series, 'organization_profile':organization_profile}
+    return render(request, 'base/organization_series_profile.html', context)
+def follow_organization(request, pk):
+    organization_profile = Organization.objects.get(pk=pk)
+    organization_profile.followers.add(request.user)
+    organization_profile.save()
+    return redirect('/')
+# class AddUserToOrganizationView(View):
+#     def post(self, request):
+#         user_id = request.POST.get('user_id')
+#         organization_id = request.POST.get('organization_id')
+        
+#         if user_id and organization_id:
+#             user = User.objects.get(pk=user_id)
+#             organization = Organization.objects.get(pk=organization_id)
+#             organization.members.add(user)
+#             organization.save()
+#             return redirect('/')  # Redirect to a relevant page after adding the user
+#         return redirect('/')
+        
+def add_org_member(request, user_id):
+   if request.method == 'POST':
+       selected_organization_id = request.POST.get('organization_id')
+       organization = Organization.objects.get(pk=selected_organization_id)
+       user = User.objects.get(pk=user_id)
+       organization.members.add(user)
+       organization.save()
+       return 
