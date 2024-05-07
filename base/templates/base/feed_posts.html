@@ -11,10 +11,10 @@
             </div>
             <div class="col-sm-12 col-md-9">
                 <div>
-                    <small>By <a href="{% url 'profile' post.author.id %}">{{post.author}}</a>--- Category: {{post.category}}</small>
+                    <small>By <a href="{% url 'profile' post.author.username %}">{{post.author}}</a>--- Category: {{post.category}}</small>
                     <p class="post-card-title"><a
-                            href="{% url 'post-detail' post.id %}">{{post.title|truncatewords:10}}</a> {{post.get_read_time_in_minutes}} mins read</p>
-                    <p class="post-card-content">{{post.content|truncatewords:20}}</p>
+                            href="{% url 'post-detail' post.id %}">{{post.title|truncatewords:10}}</a> ({{post.get_read_time_in_minutes}} mins read)</p>
+                    <p class="post-card-content">{{post.content_without_images_or_empty_paragraphs|safe|truncatewords:20}}</p>
                     <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-eye" viewBox="0 0 16 16">
                             <path

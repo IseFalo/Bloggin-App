@@ -420,6 +420,7 @@ hr {
     outline: 0;
 }
 .post-form{
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -427,6 +428,7 @@ hr {
     text-align: center;
 }
 .post-title{
+  
     width: 100%;
     height: 7vh;
     border-radius: 10px;
@@ -443,7 +445,19 @@ hr {
     padding-left: 10px;
 }
 .post-text-area:focus{
-    outline: 0;
+  
+  outline: 0;
+}
+/* .django-ckeditor-widget textarea{
+  width: 100%;
+  display: none;
+} */
+.django-ckeditor-widget textarea {
+  border: none;
+  outline: none; /* Optional: remove outline on focus */
+  resize: none; /* Optional: prevent resizing */
+  /* Add any additional styling here */
+  /* For example, set background color, font size, etc. */
 }
 #feed-post-card{
     width: 70%;
@@ -722,7 +736,9 @@ hr {
       grid-template-columns: 1fr;
     }
   }
-  
+  .card-wrapper{
+    display: flex;
+  }
   .container-title {
     text-align: center;
     padding: 0 !important;

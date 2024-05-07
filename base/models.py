@@ -29,6 +29,7 @@ class Category(models.Model):
 class Series(models.Model):
     creator=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=200)
+    series_cover = models.ImageField(upload_to="series_covers" , default="series-default.png")
     description = models.TextField(null=True)
     organization = models.ForeignKey('Organization', null=True, on_delete=models.SET_NULL)
     def __str__(self):
@@ -37,12 +38,12 @@ class Post(models.Model):
     author= models.ForeignKey(User, on_delete=models.CASCADE)
     title=models.CharField(max_length=500)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
-    post_cover = models.ImageField(upload_to="post_covers")
+    post_cover = models.ImageField(upload_to="post_covers", default="no-image.png")
     content= RichTextUploadingField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     read = models.ManyToManyField(User, related_name="blog_posts")
-    likes = models.ManyToManyField(User, related_name="likedposts", through="LikedPost")
+    likes = models.ManyToManyField(User, related_name="likedposts")
     edited = models.BooleanField(default=False)
     is_top_pick = models.BooleanField(default=False)
     series = models.ForeignKey(Series, null=True, on_delete=models.SET_NULL)
@@ -75,6 +76,9 @@ class Post(models.Model):
             return('<1')
         return round(read_time_in_minutes)
 
+    @property
+    def like_count(self):
+        return self.likes.all().count()
 
 class LikedPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

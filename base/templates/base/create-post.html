@@ -1,0 +1,86 @@
+{% extends 'base\base.html' %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    {% block title %}Create Post{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      
+    <div class="container">
+    <h4 class="text-center">Create Post</h4>
+    <form action="" method="POST" enctype="multipart/form-data" id="post-form">
+        {% csrf_token %}
+        {% for message in messages %}
+        <p>{{message}}</p>
+        {% endfor %}
+        {{form.media}}
+        <label for="title">Post title:</label>
+        {{form.title}}
+        <label for="category">Category:</label>
+        {{form.category}}
+        <label for="post_cover" style="display: block;">Post Cover:</label>
+        <img src="{{post.post_cover.url}}" alt="" id="post-cover-preview" width="100" height="100">
+        {{form.post_cover}}
+        <label for="content" style="display: block;" class="my-3">Content:</label>
+        {{form.content}}
+        <hr>
+        <button type="submit" class="btn btn-primary" name="save_draft">Draft</button>
+        <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3"
+                data-bs-toggle="modal" data-bs-dismiss="modal">Add Post</button>
+
+
+                <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+                tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalToggleLabel2">Post Confirm</h5>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to post this?
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                                data-bs-dismiss="modal">Go back</button>
+                            <button class="btn btn-secondary" type="submit" name="published" data-bs-dismiss="modal" form="post-form">Yes</button>
+                
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+    </form>
+    </div>
+
+
+
+
+
+
+
+<script>
+    document.getElementById('post-cover-input').addEventListener('change', function (event) {
+        var input = event.target
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            var dataURL = reader.result;
+            var previewImage = document.getElementById('post-cover-preview');
+            previewImage.src = dataURL;
+
+        };
+        reader.readAsDataURL(input.files[0]);
+    })
+</script>
+
+{% endblock %}
+   
+  </body>
+</html>

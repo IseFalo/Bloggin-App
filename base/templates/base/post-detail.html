@@ -47,15 +47,8 @@
 
           <h6>Post by <a href="{% url 'profile' post.author.id %}">{{post.author}}</a>(25.3k Subscribers)</h6>
           {% include 'base/likes.html' %}
-          {% if user in post.likes.all %}
-          <a id="unlike" hx-get="{% url 'like-post' post.id %}"
-          hx-target="#like-{{post.id}}"
-          hx-swap="innerHTML">Unlike</a>
-          {% else %}
-          <a id="like" hx-get="{% url 'like-post' post.id %}"
-          hx-target="#like-{{post.id}}"
-          hx-swap="innerHTML">like</a>
-          {% endif %}
+         
+          
                 <p>
                   {% if request.user == post.author%}
                     <a href="" class="btn btn-sm btn-primary" data-bs-toggle="modal"  data-bs-target="#exampleModalToggle" href="#exampleModalToggle" role="button">Edit Post</a>
@@ -199,7 +192,7 @@
                 {% endif %}
               </div>
               <div class="col-9">
-                <h5><a href="">{{ post.title|truncatewords:10 }}</a></h5>
+                <h5><a href="{% url 'post-detail' post.id %}">{{ post.title|truncatewords:10 }}</a></h5>
                 <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-eye" viewBox="0 0 16 16">
                     <path

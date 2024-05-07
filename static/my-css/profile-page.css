@@ -369,7 +369,9 @@ footer{
     width: 100%;
     margin-inline: auto;
   }
-  
+  .not-visible{
+    display: none;
+  }
   .container-card {
     position: relative;
     border: 2px solid transparent;

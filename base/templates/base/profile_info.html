@@ -4,6 +4,8 @@
     <h2>{{author_profile.username}}</h2>
     <h4>{{author_profile.followers.count}} Followers | 3 Following | {{user_posts.count}} posts</h4>
     <p>{{author_profile.bio}}</p>
+    
+    {% if request.user != author_profile.username %}
     <button type="button" class="btn btn-sm btn-outline-dark justify-content-center" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Add to Organization</button>
       
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -34,7 +36,6 @@
         </div>
       </div>
     </div>
-    {% if request.user != author_profile.username %}
     {% if request.user in author_profile.followers.all %}
     <a href="" class="btn btn-sm btn-outline-dark px-5">Unfollow <svg
         xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill"

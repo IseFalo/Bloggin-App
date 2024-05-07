@@ -11,6 +11,7 @@ from random import sample
 from django.template import loader
 import random
 import re
+from datetime import date
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -19,7 +20,11 @@ from datetime import timedelta
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Notification as note
 from django.template.loader import render_to_string
+from .forms import PostForm
+from django.urls import reverse
 # Create your views here.
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -106,21 +111,39 @@ def home(request):
     users_already_following = profile.username.following.all()
     suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
     posts=Post.objects.filter(status='published').order_by("-updated")
-
-    context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users,}
+    form = PostForm(request.POST or None)
+    today = date.today()
+    top_read_posts = Post.objects.filter(read__in=[current_user], status='published') \
+                                  .annotate(read_count=Count('read')) \
+                                  .order_by('-read_count')[:6]
+    for post in posts:
+        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
+        post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
+    context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users, 'top_read_posts':top_read_posts, 'form':form}
     
     return render(request, 'base/feed.html', context)
 
 def like_post(request, pk):
     post = get_object_or_404(Post, id=pk)
-    user_exists = post.likes.filter(username=request.user.username)
+    user =request.user
+    like = False
+    if request.method == 'POST':
+        post_id = request.POST['post_id']
+        get_post = get_object_or_404(Post, id=post_id)
+        if user in get_post.likes.all():
+            get_post.likes.remove(user)
+            like = False
+        else:
+            get_post.likes.add(user)
+            like=True
+        data={
+            "liked":like,
+            "likes_count":get_post.likes.all().count(),
 
-    if user_exists:
-        post.likes.remove(request.user)
-    else:
-        post.likes.add(request.user)
-    return HttpResponse(post.likes.count())
-
+        }
+        return JsonResponse(data, safe=False)
+    return redirect("/")
+    
 def settings(request):
     profile=Profile.objects.get(username=request.user)
     if request.method == 'POST':
@@ -198,40 +221,55 @@ def search_view(request):
 
 
 def create_post(request):
+    form = PostForm()
+    profile = Profile.objects.get(username=request.user)
     if request.method == 'POST':
-        author = request.user
-        title=request.POST['post-title']
-        post_cover=request.FILES.get('post-cover-image')
-        post_text=request.POST['post-text']
-        profile=Profile.objects.get(username=author)
-        new_post = Post.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
+        form = PostForm(request.POST or None, request.FILES)
+        if form.is_valid():
+            author = request.user
         
-        if request.POST.get('save_draft'):
-                new_post.status = 'draft'
-        else:
+            title=form.cleaned_data['title']
+            post_cover=form.cleaned_data['post_cover']
+            post_text=form.cleaned_data['content']
+            if not title or not post_text:
+                messages.error(request,"Please don't leave any field empty")  # Get all form errors (including non-field errors)
+                return render(request, 'base/create-post.html', {'form': form, 'profile':profile})
+            profile=Profile.objects.get(username=author)
+            new_post = Post.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
             
-            new_post.status = 'published'
-        new_post.save()
-        if request.POST.get('save_draft'):
-            return redirect('drafts_list')  # Redirect to drafts list
+            if request.POST.get('save_draft'):
+                    new_post.status = 'draft'
+            else:
+                
+                new_post.status = 'published'
+            new_post.save()
+            if request.POST.get('save_draft'):
+                return redirect('drafts_list')  # Redirect to drafts list
+            else:
+                return redirect('/')
+            
         else:
-            return redirect('/')
-        
-        # return redirect('/')
+            return render(request, 'base/create-post.html', {'form': form, 'profile':profile})  # Render form with validation errors
     else:
-        return redirect('/')
+        # Handle GET requests (optional)
+        return render(request, 'base/create-post.html', {'form': PostForm(), 'profile':profile})  # Render empty form
+    
     
 def drafts_list(request):
     drafts = Post.objects.filter(status='draft', author=request.user)
     profile = Profile.objects.get(username=request.user)
     return render(request, 'base/drafts.html', {'drafts': drafts, 'profile':profile})
 def publish_post(request, pk):
-
+    post = Post.objects.get(id=pk)
+    form = PostForm(instance=post)
     if request.method == 'POST':
-        post = Post.objects.get(id=pk)
-        post.status="published"
-        post.save()
-    return redirect('/')
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post.status = "published"
+            form.save()
+            return redirect('/')
+    context = {'form':form, 'post':post}
+    return render(request, 'base/create-post.html', context)
 # def draft_post(request):
 #     if request.method == 'POST':
 #         author = request.user
@@ -296,10 +334,10 @@ def saved_posts_list(request):
     saved_posts = profile.saved_posts.all()
     context = {'saved_posts': saved_posts, 'profile':profile}
     return render(request, 'base/saved_posts_list.html', context)
-def profile(request, pk):
-    user_object=get_object_or_404(User, id=pk)
+def profile(request, username):
+    user_object=get_object_or_404(User, username=username)
     profile = Profile.objects.get(username=request.user)
-    user_posts = Post.objects.filter(author=user_object)[0:5]
+    user_posts = Post.objects.filter(status='published', author=user_object)[0:5]
     for post in user_posts:
         content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
         post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
@@ -324,7 +362,29 @@ def profile(request, pk):
 
     return render(request, 'base/profile-page.html', context)
 
-
+def load_post_data_view(request, num_posts):
+    visible = 3
+    upper = num_posts
+    lower = upper - visible
+    size = Post.objects.all().count()
+    qs = Post.objects.all()
+    data = []
+    for obj in qs:
+        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', obj.content)
+        item = {
+            
+            "id":obj.id,
+            
+            "title":obj.title,
+            "cover":obj.post_cover.url if obj.post_cover else None,
+            "content": content_without_images_or_empty_paragraphs,
+            "author":obj.author.username,
+            "liked":True if request.user in obj.likes.all() else False,
+            "count":obj.like_count,
+            "get_read_time_in_minutes":obj.get_read_time_in_minutes(),
+        }
+        data.append(item)
+    return JsonResponse({'data':data[lower:upper], 'size':size})
 def profile_post_list(request, pk):
     user_object=get_object_or_404(User, pk=pk)
     profile = Profile.objects.get(username=request.user)
@@ -460,10 +520,14 @@ def series_detail(request, pk):
 def series_list(request, pk):
     user_object=User.objects.get(pk=pk)
     user_series = Series.objects.filter(creator=user_object)
+    for series in user_series:
+        post_count = series.post_set.count()
+        series.post_count = post_count
     author_profile = Profile.objects.get(username=user_object)
+    profile = Profile.objects.get(username=request.user)
     created_organizations=Organization.objects.filter(creator=request.user)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
-    context = {'user_series':user_series, 'author_profile':author_profile, 'user_object':user_object, 'created_organizations':created_organizations, 'top_pick_posts':top_pick_posts}
+    context = {'user_series':user_series, 'author_profile':author_profile, 'user_object':user_object, 'created_organizations':created_organizations, 'top_pick_posts':top_pick_posts, 'profile':profile}
     return render(request, 'base/profile-series-list.html', context)
 
 
@@ -481,22 +545,37 @@ def organization_profile_list(request, pk):
     user_object=User.objects.get(pk=pk)
     author_profile = Profile.objects.get(username=user_object)
     user_organizations = user_object.organizations.all()
+    profile = Profile.objects.get(username=request.user)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
-    context = {'user_object':user_object, 'author_profile':author_profile, 'user_organizations':user_organizations, 'top_pick_posts':top_pick_posts}
+    context = {'user_object':user_object, 'author_profile':author_profile, 'user_organizations':user_organizations, 'top_pick_posts':top_pick_posts, 'profile':profile}
     return render(request, 'base/profile-organization-list.html', context)
 
 def organization_profile(request, pk):
     organization_profile = Organization.objects.get(pk=pk)
     organization_posts = Post.objects.filter(organization=organization_profile)
+    for post in organization_posts:
+        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
+        post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
+    profile = Profile.objects.get(username=request.user)
     suggested_posts = sample(list(organization_posts), min(3, len(organization_posts)))
-    context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'suggested_posts':suggested_posts}
+    most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
+    context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'suggested_posts':suggested_posts, 'profile':profile, 'most_read_posts':most_read_posts}
     return render(request, 'base/organization-profile.html', context)
 
 def organization_series(request, pk):
     organization_profile = Organization.objects.get(pk=pk)
+    organization_posts = Post.objects.filter(organization=organization_profile)
     organization_series = Series.objects.filter(organization=organization_profile)
-    context = {'organization_series':organization_series, 'organization_profile':organization_profile}
+    most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
+    context = {'organization_series':organization_series, 'organization_profile':organization_profile, 'most_read_posts':most_read_posts, 'organization_posts':organization_posts}
     return render(request, 'base/organization_series_profile.html', context)
+def organization_posts_list(request, pk):
+    organization_profile = Organization.objects.get(pk=pk)
+    organization_posts = Post.objects.filter(organization=organization_profile)
+    profile = Profile.objects.get(username=request.user)
+    most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
+    context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'profile':profile, 'most_read_posts':most_read_posts}
+    return render(request, 'base/organization_posts_list.html', context)
 def follow_organization(request, pk):
     organization_profile = Organization.objects.get(pk=pk)
     organization_profile.followers.add(request.user)

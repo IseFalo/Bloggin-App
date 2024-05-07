@@ -24,13 +24,13 @@
   
   <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
     <li class="nav-item">
-      <a class="nav-link" aria-current="page" href="#">Home</a>
+      <a class="nav-link" aria-current="page" href="{% url 'profile' pk=user_object.pk %}">Home</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Posts</a>
+      <a class="nav-link" href="{% url 'profile-post-list' pk=user_object.pk %}">Posts</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Series</a>
+      <a class="nav-link" href="{% url 'series-list' pk=user_object.pk %}">Series</a>
     </li>
 
     <li class="nav-item">
@@ -68,15 +68,15 @@
       </form> -->
 
 
-      <a data-bs-toggle="modal" class="text-center" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" role="button">
+      <a data-bs-toggle="modal" class="text-center" data-bs-target="#exampleModal7" data-bs-whatever="@getbootstrap" role="button">
         <form action="">
-            <img src="images/link 1.jpg" class="start-post-image" alt="" srcset="">
+            <img src="{{profile.profile_img.url}}" class="start-post-image" alt="" srcset="">
             <input type="text" class="start-post" placeholder="Create Organization">
         </form>
       </a>
       
       
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="exampleModal7" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -123,21 +123,19 @@
             </style>
             <div class="card-body">
               <div class="row">
-                <div class="col-3 d-none d-md-block d-lg-block d-xl-block">
+                <div class="col-2 d-none d-md-block d-lg-block d-xl-block">
                   
-                  <img src="" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
-                    height="100">
+                  <img src="{{organization.profile_img.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="50"
+                    height="50">
                   
                 </div>
-                <div class="col-sm-12 col-md-9">
+                <div class="col-sm-12 col-md-10">
                   <div>
-                    <small>By <a href="">...</a></small>
-
+                    
+                    <h6>Created by {{organization.creator}}---  ({{organization.members.count}} members)</h6>
                     <p class="post-card-title"><a
-                        href="{% url 'organization-profile' organization.pk %}">{{organization.name}}</a> (5 mins read)</p>
-                    <p class="post-card-content"></p>
-                    <small>Created by {{organization.creator}}</small>
-
+                      href="{% url 'organization-profile' organization.pk %}">{{organization.name}}</a> </p>
+                      <p class="post-card-content"></p>
                   </div>
                 </div>
               </div>

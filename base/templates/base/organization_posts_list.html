@@ -6,36 +6,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% block title %}Profile- {{user_profile.username}}{% endblock %}
+  {% block title %}Organization- {{organization_profile.name}}{% endblock %}
 
   <script type="text/javascript">
     // A CSRF token is required when making post requests in Django
     // To be used for making AJAX requests in script.js
     window.CSRF_TOKEN = "{{ csrf_token }}";
   </script>
+  <link rel="stylesheet" href="{% static 'my-css/profile_posts_list.css' %}" />
 </head>
 
 <body>
 
   {% block content %}
-  {% include 'base/profile_info.html' %}
-  {% include 'base/profile_top_picks_carousel.html' %}
+  {% include 'base/organization_profile_info.html' %}
+  {% include 'base/organization_top_posts.html' %}
   <div class="container">
   
   <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
     <li class="nav-item">
-      <a class="nav-link" aria-current="page" href="{% url 'profile' pk=user_object.pk %}">Home</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'profile-post-list' pk=user_object.pk %}">Posts</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="#">Series</a>
-    </li>
+        <a class="nav-link" aria-current="page" href="{% url 'organization-profile' organization_profile.pk %}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Posts</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'organization-series-list' organization_profile.pk %}">Series</a>
+      </li>
 
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'organization-profile-list' pk=user_object.pk %}">Organizations</a>
-    </li>
+
 
     <li class="nav-item">
       <a class="nav-link btn btn-outline-dark" href="#"><svg
@@ -45,35 +44,14 @@
             d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
     </svg></a>
     </li>
-
   </ul>
-
-
-  
 </div>
 
-
-
-
-
-
-  <section>
+<section>
     <div class="container">
-      <p class="container-title">Series</p>
-      <div class="container" style="display: flex; justify-content: center;">
-        <div class="card" style="width: 60%; text-align: center; margin: 0 auto;">
+      <p class="container-title">Posts</p>
 
-          <div class="card-body">
-            <a data-bs-toggle="modal"  data-bs-target="#exampleModal" href="#exampleModal" role="button">
-              <form action="">
-                  <img src="{{profile.profile_img.url}}" class="start-post-image" alt="" srcset="">
-                  <input type="text" class="start-post" placeholder="Create Series">
-              </form>
-          </a>
-          </div>
-        </div>
-      </div>
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -108,11 +86,11 @@
         </form>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
       <div class="row mt-5">
-        {% for series in user_series %}
+        {% for post in organization_posts %}
         <div class="col-xl-6" id="posts">
           <div class="card feed-post-card" id="feed-post-card"
             style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
@@ -128,18 +106,19 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-3 d-none d-md-block d-lg-block d-xl-block">
-                  
-                  <img src="{{series.series_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
+                  {% if post.post_cover %}
+                  <img src="{{post.post_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
                     height="100">
-                  
+                  {% endif %}
                 </div>
                 <div class="col-sm-12 col-md-9">
                   <div>
+                    <small>By <a href="">{{post.author}}</a></small>
 
                     <p class="post-card-title"><a
-                        href="{% url 'series-detail' series.id %}">{{series.name}}</a></p>
+                        href="">{{post.title|truncatewords:10}}</a> (5 mins read)</p>
                     <p class="post-card-content"></p>
-                    <small>{{series.post_count}} Posts</small>
+                    <small>Posted {{post.created}} (edited)</small>
 
                   </div>
                 </div>
@@ -160,22 +139,9 @@
 
         {% endfor %}
       </div>
-
-      
     </div>
 
   </section>
-
-
-
-
-
-
-
-
-
-
-
 
 
  

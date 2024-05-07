@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% block title %}Profile- {{user_profile.username}}{% endblock %}
+  {% block title %}Organization- {{organization_profile.name}}{% endblock %}
 
   <script type="text/javascript">
     // A CSRF token is required when making post requests in Django
@@ -37,7 +37,7 @@
       <a class="nav-link active" aria-current="page" href="#">Home</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Posts</a>
+      <a class="nav-link" href="{% url 'organization-posts-list' organization_profile.pk %}">Posts</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'organization-series-list' organization_profile.pk %}">Series</a>
@@ -46,26 +46,9 @@
     
   </ul>
 </div>
-<form action="{% url 'create-series' %}" method="POST">
-  {% csrf_token %}
-  <input type="text" name="series-name">
-  <button type="submit">Create Series</button>
-</form>
-{% for series in user_series %}
-<li><a href="{% url 'series-detail' pk=series.pk %}">{{series.name}}</a></li>
-
-{% endfor %}
-Saved Posts
-{% for saved_post in saved_posts %}
-<li><a href="{% url 'post-detail' saved_post.id %}">{{saved_post.title}}</a></li>
-{% endfor %}
   <section>
     <div class="container">
       <p class="container-title">Posts</p>
-      <form class="d-flex search" role="search">
-        <input class="form-control me-2 mt-3" type="search" placeholder="Search Profile..." aria-label="Search">
-        <button class="btn btn-outline-dark mt-3" type="submit">Search</button>
-      </form>
 
       <div class="row mt-5">
 
@@ -95,7 +78,7 @@ Saved Posts
 
                     <p class="post-card-title"><a
                         href="{% url 'post-detail' post.id %}">{{post.title|truncatewords:10}}</a> (5 mins read)</p>
-                    <p class="post-card-content">{{post.content|safe|truncatewords:20}}</p>
+                    <p class="post-card-content">{{post.content_without_images_or_empty_paragraphs|safe|truncatewords:20}}</p>
                     <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-eye" viewBox="0 0 16 16">
                         <path
@@ -257,7 +240,7 @@ Saved Posts
                   </div>
                   <div class="col-9">
                     <h5><a href="">{{ post.title|truncatewords:10 }}</a></h5>
-                    <p>{{post.content|safe|truncatewords:20}}</p>
+                    <p>{{post.content_without_images_or_empty_paragraphs|safe|truncatewords:20}}</p>
                     <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-eye" viewBox="0 0 16 16">
                         <path
