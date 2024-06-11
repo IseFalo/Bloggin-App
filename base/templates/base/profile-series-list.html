@@ -24,17 +24,17 @@
   
   <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
     <li class="nav-item">
-      <a class="nav-link" aria-current="page" href="{% url 'profile' pk=user_object.pk %}">Home</a>
+      <a class="nav-link" aria-current="page" href="{% url 'profile' user_object.username %}">Home</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'profile-post-list' pk=user_object.pk %}">Posts</a>
+      <a class="nav-link" href="{% url 'profile-post-list' user_object.username %}">Posts</a>
     </li>
     <li class="nav-item">
       <a class="nav-link active" href="#">Series</a>
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'organization-profile-list' pk=user_object.pk %}">Organizations</a>
+      <a class="nav-link" href="{% url 'organization-profile-list' user_object.username %}">Organizations</a>
     </li>
 
     <li class="nav-item">

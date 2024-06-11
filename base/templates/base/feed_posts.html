@@ -1,6 +1,12 @@
-
+{% for post in page_obj %}
+{% if forloop.last %}
+<div class="card feed-post-card" id="feed-post-card" hx-get="{% url 'home' %}?page={{ page_obj.number|add:1 }}" hx-trigger="revealed" hx-swap="afterend"
+    style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
+{% else %}
 <div class="card feed-post-card" id="feed-post-card"
     style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
+{% endif %}
+
     <div class="card-body">
         <div class="row">
             <div class="col-3 d-none d-md-block d-lg-block d-xl-block">
@@ -15,13 +21,18 @@
                     <p class="post-card-title"><a
                             href="{% url 'post-detail' post.id %}">{{post.title|truncatewords:10}}</a> ({{post.get_read_time_in_minutes}} mins read)</p>
                     <p class="post-card-content">{{post.content_without_images_or_empty_paragraphs|safe|truncatewords:20}}</p>
-                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    <p class="inline-content"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-eye" viewBox="0 0 16 16">
                             <path
                                 d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
                             <path
                                 d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
-                        </svg> {{post.read.count}} | {% include 'base/likes.html' %} | <svg
+                        </svg> {{post.read.count}} | {% if request.user not in post.likes.all %}
+                        <i class="bi bi-heart like-icon"></i>
+                        {% else %}
+                        <i class="bi bi-heart-fill like-icon"></i>
+                        {% endif %}
+                        {{post.likes.count}} | <svg
                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-chat-left" viewBox="0 0 16 16">
                             <path
@@ -62,79 +73,7 @@
 
     </div>
 
-
-
-    <div class="modal fade" id="exampleModal1Toggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
-        tabindex="-1">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalToggleLabel">Edit Post</h5>
-                    <button type="button" class="btn-close" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
-                        data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{% url 'edit-post' post.id %}" method="POST" enctype="multipart/form-data"
-                        id="post-form">
-                        {% csrf_token %}
-                        <div class="post-form">
-                            <input type="text" class="post-title my-3" name="post-title" placeholder=""
-                                value="{{post.title}}">
-                            {% if post.post_cover %}
-                            <img src="{{ post.post_cover.url }}" alt="Post Cover" height="70" width="70">
-                            {% endif %}
-                            <label for="post-cover-image">Change post cover:</label>
-                            <input type="file" name="post-cover-image" accept="image/*" value="">
-                            <textarea name="post-text" class="post-text-area my-3"
-                                placeholder="Talk about something...">{{post.content}}</textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
-                        data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3"
-                        data-bs-toggle="modal" data-bs-dismiss="modal">Edit Post</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
-        tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalToggleLabel2">End Editing</h5>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to close?
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
-                        data-bs-dismiss="modal">Go back</button>
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
-        tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalToggleLabel2">Post Confirm</h5>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to edit this post?
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
-                        data-bs-dismiss="modal">Go back</button>
-                    <button class="btn btn-secondary" type="submit" data-bs-dismiss="modal"
-                        form="post-form">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+
+{% endfor %}
+

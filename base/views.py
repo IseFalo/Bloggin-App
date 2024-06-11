@@ -10,6 +10,8 @@ from django.http import HttpResponseRedirect
 from random import sample
 from django.template import loader
 import random
+from django.views.generic import ListView
+from django.utils.decorators import method_decorator
 import re
 from datetime import date
 from django.views import View
@@ -17,14 +19,15 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import timedelta
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core import paginator
+from django.core.paginator import Paginator
 from .models import Notification as note
 from django.template.loader import render_to_string
 from .forms import PostForm
 from django.urls import reverse
 # Create your views here.
 
-
+POST_COUNT_PER_PAGE = 9
 
 def register(request):
     if request.method == 'POST':
@@ -102,26 +105,124 @@ def logoutUser(request):
 #         read_time_in_minutes = read_time_in_seconds/60
 #         return round(read_time_in_minutes)
 
-@login_required
-def home(request):
-    # current_user=request.GET.get('user')
-    current_user = request.user
 
-    profile = Profile.objects.get(username=request.user)
-    users_already_following = profile.username.following.all()
-    suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
-    posts=Post.objects.filter(status='published').order_by("-updated")
-    form = PostForm(request.POST or None)
-    today = date.today()
-    top_read_posts = Post.objects.filter(read__in=[current_user], status='published') \
-                                  .annotate(read_count=Count('read')) \
-                                  .order_by('-read_count')[:6]
-    for post in posts:
-        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
-        post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
-    context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users, 'top_read_posts':top_read_posts, 'form':form}
+class HomeView(ListView):
+    model = Post
+    context_object_name = 'posts'
+    paginate_by = 10
+
+
+
+    def get_template_names(self):
+        if self.request.htmx:
+            return "base/feed_posts.html"
+        return "base/feed.html"
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        return Post.objects.filter(status='published').order_by("-updated")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_user = self.request.user
+
+        profile = Profile.objects.get(username=current_user)
+        users_already_following = profile.username.following.all()
+        suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
+
+        form = PostForm(self.request.POST or None)
+        today = timezone.now().date()
+        top_read_posts = Post.objects.filter(read__in=[current_user], status='published') \
+                                     .annotate(read_count=Count('read')) \
+                                     .order_by('-read_count')[:6]
+
+        page_obj = context['page_obj']
+        for post in page_obj:
+            content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
+            post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
+
+        context.update({
+            'profile': profile,
+            'suggested_users': suggested_users,
+            'top_read_posts': top_read_posts,
+            'form': form,
+        })
+        return context
+
+# @login_required
+# def home(request):
+#     # current_user=request.GET.get('user')
+#     current_user = request.user
+
+#     profile = Profile.objects.get(username=request.user)
+#     users_already_following = profile.username.following.all()
+#     suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
+#     posts=Post.objects.filter(status='published').order_by("-updated")
+#     paginator = Paginator(posts, 10)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     if page_number:
+#         if int(page_number) <= paginator.num_pages:
+
+#             obj_list = paginator.get_page(page_number)
+
+#             # obj_list = obj_list.object_list.values()
+#             data = []
+#             for obj in obj_list:
+#                 content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', obj.content)
+#                 item = {
+#                     "id": obj.id,
+#                     "title": obj.title,
+#                     "cover": obj.post_cover.url if obj.post_cover else None,
+#                     "content": content_without_images_or_empty_paragraphs,
+#                     "author": obj.author.username,
+#                     "liked": True if request.user in obj.likes.all() else False,
+#                     "count": obj.like_count,
+#                     "category": obj.category.name if obj.category else None,  
+#                     "created":obj.created,
+#                     "get_read_time_in_minutes": obj.get_read_time_in_minutes(),
+#                 }
+#                 data.append(item)
+#             return JsonResponse(data, status=200, safe=False)
+
+#     form = PostForm(request.POST or None)
+#     today = date.today()
+#     top_read_posts = Post.objects.filter(read__in=[current_user], status='published') \
+#                                   .annotate(read_count=Count('read')) \
+#                                   .order_by('-read_count')[:6]
+#     for post in page_obj:
+#         content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
+#         post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
+#     context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users, 'top_read_posts':top_read_posts, 'form':form, 'page_obj': page_obj}
     
-    return render(request, 'base/feed.html', context)
+#     return render(request, 'base/feed.html', context)
+
+def load_post_data_view(request, num_posts):
+    visible = 3
+    upper = num_posts
+    lower = upper - visible
+    size = Post.objects.all().count()
+    qs = Post.objects.all()
+    data = []
+    for obj in qs:
+        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', obj.content)
+        item = {
+            
+            "id":obj.id,
+            
+            "title":obj.title,
+            "cover":obj.post_cover.url if obj.post_cover else None,
+            "content": content_without_images_or_empty_paragraphs,
+            "author":obj.author.username,
+            "liked":True if request.user in obj.likes.all() else False,
+            "count":obj.like_count,
+            "get_read_time_in_minutes":obj.get_read_time_in_minutes(),
+        }
+        data.append(item)
+    return JsonResponse({'data':data[lower:upper], 'size':size})
+
 
 def like_post(request, pk):
     post = get_object_or_404(Post, id=pk)
@@ -362,31 +463,9 @@ def profile(request, username):
 
     return render(request, 'base/profile-page.html', context)
 
-def load_post_data_view(request, num_posts):
-    visible = 3
-    upper = num_posts
-    lower = upper - visible
-    size = Post.objects.all().count()
-    qs = Post.objects.all()
-    data = []
-    for obj in qs:
-        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', obj.content)
-        item = {
-            
-            "id":obj.id,
-            
-            "title":obj.title,
-            "cover":obj.post_cover.url if obj.post_cover else None,
-            "content": content_without_images_or_empty_paragraphs,
-            "author":obj.author.username,
-            "liked":True if request.user in obj.likes.all() else False,
-            "count":obj.like_count,
-            "get_read_time_in_minutes":obj.get_read_time_in_minutes(),
-        }
-        data.append(item)
-    return JsonResponse({'data':data[lower:upper], 'size':size})
-def profile_post_list(request, pk):
-    user_object=get_object_or_404(User, pk=pk)
+
+def profile_post_list(request, username):
+    user_object=get_object_or_404(User, username=username)
     profile = Profile.objects.get(username=request.user)
     author_profile = Profile.objects.get(username=user_object)
     user_posts = Post.objects.filter(author=user_object)[0:5]
@@ -394,29 +473,7 @@ def profile_post_list(request, pk):
     context = {'user_object':user_object, 'profile':profile, 'user_posts':user_posts, 'author_profile':author_profile, 'top_pick_posts':top_pick_posts}
     return render(request, 'base/profile_post_list.html', context)
 
-def load_more(request, username):
-    page = request.POST.get('page')
-    user_object=get_object_or_404(User, username=username)
-    results_per_page = 5
-    user_posts = Post.objects.filter(author=user_object)
-    paginator = Paginator(user_posts, results_per_page)
-    try:
-        user_posts = paginator.page(page)
-    except PageNotAnInteger:
-        user_posts=paginator.page(2)
-    except EmptyPage:
-        user_posts=paginator.page(paginator.num_pages)
-    
-    posts_html = loader.render_to_string(
-        'base/profile-page.html',
-        {'user_posts':user_posts}
-    )
-    output_data={
-        'posts_html':posts_html,
-        'has_next':user_posts.has_next()
-    }
 
-    return JsonResponse(output_data)
 def add_to_picks(request, pk):
     user_profile = Profile.objects.get(username=request.user)
     post = get_object_or_404(Post, id=pk)
@@ -517,8 +574,8 @@ def series_detail(request, pk):
   context = {'series': series, 'series_posts': series_posts}
   return render(request, 'base/series-detail.html', context)
 
-def series_list(request, pk):
-    user_object=User.objects.get(pk=pk)
+def series_list(request, username):
+    user_object=User.objects.get(username=username)
     user_series = Series.objects.filter(creator=user_object)
     for series in user_series:
         post_count = series.post_set.count()
@@ -541,8 +598,8 @@ def create_organization_profile(request):
         new_org.save()
     return redirect('/')
 
-def organization_profile_list(request, pk):
-    user_object=User.objects.get(pk=pk)
+def organization_profile_list(request, username):
+    user_object=User.objects.get(username=username)
     author_profile = Profile.objects.get(username=user_object)
     user_organizations = user_object.organizations.all()
     profile = Profile.objects.get(username=request.user)
