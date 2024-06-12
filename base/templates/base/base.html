@@ -22,7 +22,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/owl-carousel.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tooplate-artxibition.css' %}">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
 </head>
 
 <body>
@@ -32,6 +32,7 @@
           color: red;
         }
       </style>
+
     <header class="header-area header-sticky">
         <div class="container">
             <div class="row">
@@ -59,9 +60,10 @@
                             <li><a href="{% url 'create-post' %}"><img width="25" height="25"
                                         src="https://img.icons8.com/pulsar-line/48/add.png" alt="add" /></a></li>
                             <li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-                                    aria-controls="offcanvasExample"><img width="25" height="25"
-                                        src="https://img.icons8.com/ios/50/appointment-reminders--v1.png"
-                                        alt="appointment-reminders--v1" /></a></li>
+                                    aria-controls="offcanvasExample" id="notification-link">
+                                    <img width="25" height="25" id="notification-icon" src="https://img.icons8.com/ios/50/appointment-reminders--v1.png" alt="appointment-reminders--v1" style="display: inline;" />
+                                    <img width="30" height="30" id="notification-icon-gif" src="{% static 'images/icons8-notification.gif' %}" alt="notification-gif" style="display: none;" />
+                                </a></li>
                             <li><a  class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{profile.profile_img.url}}"
                                         style="width: 30px; height: 30px; border: 1px solid; border-radius: 100%; object-fit: cover;"
                                         id="nav-profile-img" alt="..."></a>
@@ -86,79 +88,15 @@
         </div>
     </header>
 
+    <div id="notification-area"></div>
 
 
 
 
+{% include "base/notification.html" %}
 
 
-
-
-    <!-- Notifications -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h3 class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h3>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div>
-                <h4>Today</h4>
-                <div>
-
-                    <div id="notifications-container">
-                        <!-- Notifications will be appended here using JavaScript -->
-                    </div>
-
-                    {% comment %} <div class="row">
-                        <div class="col-2">
-                            <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50"
-                                srcset="">
-                        </div>
-                        <div class="col-10 justify-content-start">
-                            <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"
-                                <span>7h</span></p>
-                        </div>
-                    </div> {% endcomment %}
-
-
-                </div>
-                <hr>
-
-                {% comment %} <h4>This Week</h4>
-                <div>
-
-                    <div class="row">
-                        <div class="col-2">
-                            <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50"
-                                srcset="">
-                        </div>
-                        <div class="col-10 justify-content-start">
-                            <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"
-                                <span>7h</span></p>
-                        </div>
-                    </div>
-
-                </div>
-                <hr> {% endcomment %}
-
-                {% comment %} <div>
-                    <h4>This Month</h4>
-                    <div class="row">
-                        <div class="col-2">
-                            <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50"
-                                srcset="">
-                        </div>
-                        <div class="col-10 justify-content-start">
-                            <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"
-                                <span>7h</span></p>
-                        </div>
-                    </div>
-
-                </div> {% endcomment %}
-            </div>
-        </div>
-    </div>
-
+<!-- <img src="{% static 'images/icons8-notification.gif' %}" alt="" srcset="">   -->
 
 
 
@@ -175,17 +113,28 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-      $(document).ready(function() {
-        $("#submitButton").click(function(e) {
-          e.preventDefault(); // Prevent default form submission
-          $("#myForm").submit(); // Manually trigger form submission
-    
-          // Display error messages
-          $(".error-message").css("display", "block");
-        });
-      });
-    </script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const socket = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+            const notificationIcon = document.getElementById('notification-icon');
+            const notificationIconGif = document.getElementById('notification-icon-gif');
+            const notificationLink = document.getElementById('notification-link');
 
+            socket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                // const notificationArea = document.getElementById('notification-area');
+                // notificationArea.innerHTML += data.html;
+                // Toggle icons
+                notificationIcon.style.display = 'none';
+                notificationIconGif.style.display = 'inline';
+            };
+
+            notificationLink.addEventListener('click', function() {
+                // Reset icons
+                notificationIcon.style.display = 'inline';
+                notificationIconGif.style.display = 'none';
+            });
+        });
+    </script>
 
 
 

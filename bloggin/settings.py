@@ -33,9 +33,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
-    
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'base',
     'ckeditor',
     'ckeditor_uploader',
-    'django_htmx'
-
+    'django_htmx',
+    "channels",
     
 
 ]
@@ -161,9 +161,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = ''
 LOGOUT_REDIRECT_URL = '/login/'
+ASGI_APPLICATION = 'bloggin.asgi.application'
 
-
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 
 customColorPalette = [
