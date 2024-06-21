@@ -1,64 +1,13 @@
-<!-- Notifications -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" hx-swap-oob="afterbegin">
-    <div class="offcanvas-header">
-        <h3 class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h3>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+{% for notification in notifications %}
+<div class="row">
+    <div class="col-2">
+        <img src="" class="start-post-image" alt="" width="50" height="50"
+            srcset="">
     </div>
-    <div class="offcanvas-body">
-        <div>
-            <h4>Today</h4>
-            <div>
-
-                <div id="notifications-container">
-                    <!-- Notifications will be appended here using JavaScript -->
-                </div>
-
-                {% comment %} <div class="row">
-                    <div class="col-2">
-                        <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50"
-                            srcset="">
-                    </div>
-                    <div class="col-10 justify-content-start">
-                        <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"
-                            <span>7h</span></p>
-                    </div>
-                </div> {% endcomment %}
-
-
-            </div>
-            <hr>
-
-            {% comment %} <h4>This Week</h4>
-            <div>
-
-                <div class="row">
-                    <div class="col-2">
-                        <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50"
-                            srcset="">
-                    </div>
-                    <div class="col-10 justify-content-start">
-                        <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"
-                            <span>7h</span></p>
-                    </div>
-                </div>
-
-            </div>
-            <hr> {% endcomment %}
-
-            {% comment %} <div>
-                <h4>This Month</h4>
-                <div class="row">
-                    <div class="col-2">
-                        <img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50"
-                            srcset="">
-                    </div>
-                    <div class="col-10 justify-content-start">
-                        <p><a href="">Iseoluwa's Food Blog</a> just comment "This is such a good write up"
-                            <span>7h</span></p>
-                    </div>
-                </div>
-
-            </div> {% endcomment %}
-        </div>
+    <div class="col-10 justify-content-start">
+        <p><a href="">{{ notification.message }}
+            <span>7h</span></p>
     </div>
 </div>
+<hr>
+{% endfor %}

@@ -27,6 +27,7 @@ from .forms import PostForm
 from django.urls import reverse
 # Create your views here.
 
+
 POST_COUNT_PER_PAGE = 9
 
 def register(request):
@@ -322,55 +323,57 @@ def search_view(request):
 
 
 def create_post(request):
-    form = PostForm()
-    profile = Profile.objects.get(username=request.user)
+    profile = Profile.objects.get(username=request.user)  # Ensure you're using the correct field for filtering profile
+    
     if request.method == 'POST':
-        form = PostForm(request.POST or None, request.FILES)
+        form = PostForm(request.POST, request.FILES)
+        
         if form.is_valid():
             author = request.user
-        
-            title=form.cleaned_data['title']
-            post_cover=form.cleaned_data['post_cover']
-            post_text=form.cleaned_data['content']
-            if not title or not post_text:
-                messages.error(request,"Please don't leave any field empty")  # Get all form errors (including non-field errors)
-                return render(request, 'base/create-post.html', {'form': form, 'profile':profile})
-            profile=Profile.objects.get(username=author)
-            new_post = Post.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
+            title = form.cleaned_data['title']
+            post_cover = form.cleaned_data['post_cover']
+            post_text = form.cleaned_data['content']
+            category = form.cleaned_data['category']
+            new_post = Post.objects.create(
+                author=author, 
+                title=title, 
+                content=post_text, 
+                post_cover=post_cover,
+                category=category
+            )
             
             if request.POST.get('save_draft'):
-                    new_post.status = 'draft'
+                new_post.status = 'draft'
+                redirect_url = 'drafts'  # Redirect to the drafts list page
             else:
-                
                 new_post.status = 'published'
-            new_post.save()
-            if request.POST.get('save_draft'):
-                return redirect('drafts_list')  # Redirect to drafts list
-            else:
-                return redirect('/')
+                redirect_url = '/'  # Redirect to the home page or any other appropriate page
             
+            new_post.save()
+            
+            return redirect(redirect_url)
         else:
-            return render(request, 'base/create-post.html', {'form': form, 'profile':profile})  # Render form with validation errors
+            messages.error(request, "Please correct the errors below.")
+            return render(request, 'base/create-post.html', {'form': form, 'profile': profile})
     else:
-        # Handle GET requests (optional)
-        return render(request, 'base/create-post.html', {'form': PostForm(), 'profile':profile})  # Render empty form
-    
+        form = PostForm()
+        return render(request, 'base/create-post.html', {'form': form, 'profile': profile}) 
     
 def drafts_list(request):
     drafts = Post.objects.filter(status='draft', author=request.user)
     profile = Profile.objects.get(username=request.user)
     return render(request, 'base/drafts.html', {'drafts': drafts, 'profile':profile})
-def publish_post(request, pk):
-    post = Post.objects.get(id=pk)
-    form = PostForm(instance=post)
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES, instance=post)
-        if form.is_valid():
-            post.status = "published"
-            form.save()
-            return redirect('/')
-    context = {'form':form, 'post':post}
-    return render(request, 'base/create-post.html', context)
+# def publish_post(request, pk):
+#     post = Post.objects.get(id=pk)
+#     form = PostForm(instance=post)
+#     if request.method == 'POST':
+#         form = PostForm(request.POST, request.FILES, instance=post)
+#         if form.is_valid():
+#             post.status = "published"
+#             form.save()
+#             return redirect('/')
+#     context = {'form':form, 'post':post}
+#     return render(request, 'base/create-post.html', context)
 # def draft_post(request):
 #     if request.method == 'POST':
 #         author = request.user
@@ -502,50 +505,56 @@ def unfollow(request, username):
     user_profile = Profile.objects.get(username=user)
     user_profile.followers.remove(request.user)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-
-def format_time_difference(created_at):
-    now = timezone.now()
-    time_difference = now - created_at
-
-    # If the notification was created less than 2 minutes ago
-    if time_difference.total_seconds() < 120:
-        return "Just Now"
-
-    # If the notification was created less than 1 hour ago
-    elif time_difference.total_seconds() < 3600:
-        minutes_ago = int(time_difference.total_seconds() / 60)
-        return f"{minutes_ago} {'minute' if minutes_ago == 1 else 'minutes'} ago"
-
-    # If the notification was created less than 24 hours ago
-    elif time_difference.total_seconds() < 86400:
-        hours_ago = int(time_difference.total_seconds() / 3600)
-        return f"{hours_ago} {'hour' if hours_ago == 1 else 'hours'} ago"
-
-    # If the notification was created less than 48 hours ago (but more than 24 hours ago)
-    elif time_difference.total_seconds() < 172800:
-        return "Yesterday"
-
-    # If the notification was created less than 1 week ago (but more than 48 hours ago)
-    elif time_difference.total_seconds() < 604800:
-        days_ago = int(time_difference.total_seconds() / 86400)
-        return f"{days_ago} {'day' if days_ago == 1 else 'days'} ago"
-
-    # For any other case, return the formatted date and time
-    else:
-        return created_at.strftime("%Y-%m-%d %H:%M:%S")
-    
 def get_notifications(request):
-    user = request.user 
-    notifications = note.objects.filter(user=user).order_by('-created_at')[:10]
-    data = [
-        {'message': notification.message, 
-         'post.id':notification.post.id,
-         'author': notification.comment.author.username,
-         'created_at_formatted': format_time_difference(notification.created_at),
-         } 
-         for notification in notifications
-         ]
-    return JsonResponse(data, safe=False)
+    user = request.user
+    notifications = Notification.objects.filter(user=user).order_by('-created_at')
+    context = {
+        'notifications': notifications
+    }
+    return render(request, 'base/notification.html', context)
+# def format_time_difference(created_at):
+#     now = timezone.now()
+#     time_difference = now - created_at
+
+#     # If the notification was created less than 2 minutes ago
+#     if time_difference.total_seconds() < 120:
+#         return "Just Now"
+
+#     # If the notification was created less than 1 hour ago
+#     elif time_difference.total_seconds() < 3600:
+#         minutes_ago = int(time_difference.total_seconds() / 60)
+#         return f"{minutes_ago} {'minute' if minutes_ago == 1 else 'minutes'} ago"
+
+#     # If the notification was created less than 24 hours ago
+#     elif time_difference.total_seconds() < 86400:
+#         hours_ago = int(time_difference.total_seconds() / 3600)
+#         return f"{hours_ago} {'hour' if hours_ago == 1 else 'hours'} ago"
+
+#     # If the notification was created less than 48 hours ago (but more than 24 hours ago)
+#     elif time_difference.total_seconds() < 172800:
+#         return "Yesterday"
+
+#     # If the notification was created less than 1 week ago (but more than 48 hours ago)
+#     elif time_difference.total_seconds() < 604800:
+#         days_ago = int(time_difference.total_seconds() / 86400)
+#         return f"{days_ago} {'day' if days_ago == 1 else 'days'} ago"
+
+#     # For any other case, return the formatted date and time
+#     else:
+#         return created_at.strftime("%Y-%m-%d %H:%M:%S")
+    
+# def get_notifications(request):
+#     user = request.user 
+#     notifications = note.objects.filter(user=user).order_by('-created_at')[:10]
+#     data = [
+#         {'message': notification.message, 
+#          'post.id':notification.post.id,
+#          'author': notification.comment.author.username,
+#          'created_at_formatted': format_time_difference(notification.created_at),
+#          } 
+#          for notification in notifications
+#          ]
+#     return JsonResponse(data, safe=False)
 
 
 

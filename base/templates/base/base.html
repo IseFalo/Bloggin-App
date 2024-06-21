@@ -60,9 +60,9 @@
                             <li><a href="{% url 'create-post' %}"><img width="25" height="25"
                                         src="https://img.icons8.com/pulsar-line/48/add.png" alt="add" /></a></li>
                             <li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-                                    aria-controls="offcanvasExample" id="notification-link">
+                                    aria-controls="offcanvasExample" id="notification-link" hx-get="{% url 'get_new_notifications' %}" hx-trigger="click" hx-target="#notifications-container">
                                     <img width="25" height="25" id="notification-icon" src="https://img.icons8.com/ios/50/appointment-reminders--v1.png" alt="appointment-reminders--v1" style="display: inline;" />
-                                    <img width="30" height="30" id="notification-icon-gif" src="{% static 'images/icons8-notification.gif' %}" alt="notification-gif" style="display: none;" />
+                                    <img width="30" height="30" id="notification-icon-gif" src="{% static 'images/icons8-notification.gif' %}" alt="notification-gif" style="display: none;"/>
                                 </a></li>
                             <li><a  class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{profile.profile_img.url}}"
                                         style="width: 30px; height: 30px; border: 1px solid; border-radius: 100%; object-fit: cover;"
@@ -88,12 +88,9 @@
         </div>
     </header>
 
-    <div id="notification-area"></div>
+    
 
-
-
-
-{% include "base/notification.html" %}
+{% include "base/notification-canva.html" %}
 
 
 <!-- <img src="{% static 'images/icons8-notification.gif' %}" alt="" srcset="">   -->
@@ -180,7 +177,7 @@
     </script>
 
 
-    <script>
+    <!-- <script>
         // Your AJAX script for fetching and updating notifications
         function fetchNotifications() {
             $.ajax({
@@ -227,7 +224,7 @@
 
 
         
-    </script>
+    </script> -->
     {% block content %}
     {% endblock %}
 </body>

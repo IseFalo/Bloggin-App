@@ -13,7 +13,7 @@ urlpatterns=[
     path('search/', views.search_view, name='search_view'),
     path('create-post', views.create_post, name="create-post"),
     path('drafts', views.drafts_list, name="drafts"),
-    path('publish_post/<int:pk>', views.publish_post, name="publish_post"),
+    
     path('post-detail/<int:pk>/', views.post_detail, name="post-detail"),
     path('comment-sent/<int:pk>/', views.comment_sent, name="comment-sent"),
     path('delete-post/<int:pk>/', views.delete_post, name="delete-post"),
@@ -36,7 +36,7 @@ urlpatterns=[
     path('remove-from-picks/<int:pk>/', views.remove_from_picks, name='remove_from_picks'),
     path('follow/<str:username>/', views.follow, name="follow"),
     path('unfollow/<str:username>/', views.unfollow, name="unfollow"),
-    path('get_notifications/', views.get_notifications, name='get_notifications'),
+    path('get_new_notifications/', views.get_notifications, name='get_new_notifications'),
     path('data/<int:num_posts>/', views.load_post_data_view, name="posts-data"),
 
 ]
