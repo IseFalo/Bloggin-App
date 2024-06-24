@@ -24,6 +24,8 @@ from django.core.paginator import Paginator
 from .models import Notification as note
 from django.template.loader import render_to_string
 from .forms import PostForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from django.urls import reverse
 # Create your views here.
 
@@ -93,7 +95,22 @@ def logoutUser(request):
     logout(request)
     return redirect("login")
 
-
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'base/change_password.html', {
+        'form': form
+    })
 # def get_read_time(words):
 #     """
 #     Calculates the estimated reading time for the post's content.
@@ -342,12 +359,17 @@ def create_post(request):
                 category=category
             )
             
-            if request.POST.get('save_draft'):
-                new_post.status = 'draft'
-                redirect_url = 'drafts'  # Redirect to the drafts list page
-            else:
+            if request.POST.get('published'):
                 new_post.status = 'published'
-                redirect_url = '/'  # Redirect to the home page or any other appropriate page
+                redirect_url = '/'
+                # Redirect to the home page or any other appropriate page
+                 
+            else:
+                print("draft")
+                new_post.status = 'draft'
+                redirect_url = 'drafts' 
+                # Redirect to the drafts list page
+                  
             
             new_post.save()
             
@@ -363,17 +385,17 @@ def drafts_list(request):
     drafts = Post.objects.filter(status='draft', author=request.user)
     profile = Profile.objects.get(username=request.user)
     return render(request, 'base/drafts.html', {'drafts': drafts, 'profile':profile})
-# def publish_post(request, pk):
-#     post = Post.objects.get(id=pk)
-#     form = PostForm(instance=post)
-#     if request.method == 'POST':
-#         form = PostForm(request.POST, request.FILES, instance=post)
-#         if form.is_valid():
-#             post.status = "published"
-#             form.save()
-#             return redirect('/')
-#     context = {'form':form, 'post':post}
-#     return render(request, 'base/create-post.html', context)
+def publish_post(request, pk):
+    post = Post.objects.get(id=pk)
+    form = PostForm(instance=post)
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post.status = "published"
+            form.save()
+            return redirect('/')
+    context = {'form':form, 'post':post}
+    return render(request, 'base/create-post.html', context)
 # def draft_post(request):
 #     if request.method == 'POST':
 #         author = request.user

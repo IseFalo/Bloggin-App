@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'django_htmx',
     "channels",
-    
+    'widget_tweaks',
 
 ]
 
