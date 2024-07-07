@@ -2,7 +2,7 @@
   <header>
       <img src="{{author_profile.profile_img.url}}" alt="" width="100" height="100" id="profile-image">
     <h2>{{author_profile.username}}</h2>
-    <h4>{{author_profile.followers.count}} Followers | 3 Following | {{user_posts.count}} posts</h4>
+    <h5>{{author_profile.followers.count}} Followers | {{total_posts_count}} posts</h5>
     <p>{{author_profile.bio}}</p>
     
     {% if request.user != author_profile.username %}

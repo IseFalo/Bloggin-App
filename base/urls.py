@@ -20,15 +20,16 @@ urlpatterns=[
     path('delete-post/<int:pk>/', views.delete_post, name="delete-post"),
     path('edit-post/<int:pk>/', views.edit_post, name="edit-post"),
     path('profile/<str:username>/', views.profile, name='profile'),
-    path('profile-post-list/<str:username>', views.profile_post_list, name="profile-post-list"),
+    path('profile-post-list/<str:username>', views.ProfilePostListView.as_view(), name="profile-post-list"),
     path('create-series/', views.create_series, name='create-series'),
     path('save-post/<int:pk>/', views.save_post, name="save-post"),
     path('saved_posts_list/', views.saved_posts_list, name="saved_posts_list"),
     path('add_post_to_series/<int:post_id>', views.add_post_to_series, name='add_post_to_series'),
     path('series-detail/<int:pk>/', views.series_detail, name='series-detail'),
-    path('series-list/<str:username>/', views.series_list, name='series-list'),
+    path('series-list/<str:username>/', views.SeriesListView.as_view(), name='series-list'),
     path('organization-profile-list/<str:username>/', views.organization_profile_list, name="organization-profile-list"),
-    path('organization-profile/<int:pk>/', views.organization_profile, name="organization-profile"),
+    path('organization-profile/<int:pk>/', views.OrganizationProfileView.as_view(), name="organization-profile"),
+    
     path('organization-series-list/<int:pk>/', views.organization_series, name="organization-series-list"),
     path('organization-posts-list/<int:pk>/', views.organization_posts_list, name="organization-posts-list"),
     path('add-org-member/<int:user_id>', views.add_org_member, name="add-org-member"),
@@ -38,6 +39,6 @@ urlpatterns=[
     path('follow/<str:username>/', views.follow, name="follow"),
     path('unfollow/<str:username>/', views.unfollow, name="unfollow"),
     path('get_new_notifications/', views.get_notifications, name='get_new_notifications'),
-    path('data/<int:num_posts>/', views.load_post_data_view, name="posts-data"),
+    
 
 ]

@@ -6,13 +6,12 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
 from random import sample
-from django.template import loader
-import random
-from django.views.generic import ListView
+from datetime import datetime
+from django.views.generic import ListView ,DetailView
 from django.utils.decorators import method_decorator
 import re
+from django.db.models import Count
 from datetime import date
 from django.views import View
 from django.contrib.auth.decorators import login_required
@@ -217,29 +216,7 @@ class HomeView(ListView):
     
 #     return render(request, 'base/feed.html', context)
 
-def load_post_data_view(request, num_posts):
-    visible = 3
-    upper = num_posts
-    lower = upper - visible
-    size = Post.objects.all().count()
-    qs = Post.objects.all()
-    data = []
-    for obj in qs:
-        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', obj.content)
-        item = {
-            
-            "id":obj.id,
-            
-            "title":obj.title,
-            "cover":obj.post_cover.url if obj.post_cover else None,
-            "content": content_without_images_or_empty_paragraphs,
-            "author":obj.author.username,
-            "liked":True if request.user in obj.likes.all() else False,
-            "count":obj.like_count,
-            "get_read_time_in_minutes":obj.get_read_time_in_minutes(),
-        }
-        data.append(item)
-    return JsonResponse({'data':data[lower:upper], 'size':size})
+
 
 
 def like_post(request, pk):
@@ -359,16 +336,20 @@ def create_post(request):
                 category=category
             )
             
-            if request.POST.get('published'):
+            print("POST data:", request.POST)
+
+            if 'published' in request.POST:
                 new_post.status = 'published'
                 redirect_url = '/'
                 # Redirect to the home page or any other appropriate page
-                 
-            else:
-                print("draft")
+
+            elif 'save_draft' in request.POST:
                 new_post.status = 'draft'
-                redirect_url = 'drafts' 
+                redirect_url = 'drafts'
                 # Redirect to the drafts list page
+
+            else:
+                redirect_url = '/'
                   
             
             new_post.save()
@@ -396,19 +377,7 @@ def publish_post(request, pk):
             return redirect('/')
     context = {'form':form, 'post':post}
     return render(request, 'base/create-post.html', context)
-# def draft_post(request):
-#     if request.method == 'POST':
-#         author = request.user
-#         title=request.POST['post-title']
-#         post_cover=request.FILES.get('post-cover-image')
-#         post_text=request.POST['post-text']
-#         profile=Profile.objects.get(username=author)
-#         new_draft = DraftedPost.objects.create(author=author, title=title, content=post_text, post_cover=post_cover)
-#         new_draft.save()
-        
-#         return redirect('/')
-#     else:
-#         return redirect('/')
+
 def post_detail(request, pk):
     post=Post.objects.get(id=pk)
     all_posts=Post.objects.all()
@@ -463,10 +432,14 @@ def saved_posts_list(request):
 def profile(request, username):
     user_object=get_object_or_404(User, username=username)
     profile = Profile.objects.get(username=request.user)
-    user_posts = Post.objects.filter(status='published', author=user_object)[0:5]
-    for post in user_posts:
+    user_posts = Post.objects.filter(status='published', author=user_object)
+    paginator = Paginator(user_posts, 5)  # 5 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    for post in page_obj:
         content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
         post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
+        post.comment_count = Comment.objects.filter(post=post).count()
     author_profile = Profile.objects.get(username=user_object)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
     suggested_posts = sample(list(user_posts), min(3, len(user_posts)))
@@ -483,20 +456,41 @@ def profile(request, username):
         'user_series':user_series,
         'saved_posts':saved_posts,
         'created_organizations':created_organizations,
+        'page_obj': page_obj,
        
     }
+    template_name = "base/profile-page-posts.html" if request.htmx else "base/profile-page.html"
+    return render(request, template_name, context)
 
-    return render(request, 'base/profile-page.html', context)
 
+class ProfilePostListView(ListView):
+    model = Post
+    context_object_name = 'user_posts'
+    paginate_by = 10
+    def get_template_names(self):
+        if self.request.htmx:
+            return "base/profile_post_list_posts.html"
+        return "base/profile_post_list.html"
+    def get_queryset(self):
+        self.user_object = get_object_or_404(User, username=self.kwargs['username'])
+        return Post.objects.filter(author=self.user_object)
 
-def profile_post_list(request, username):
-    user_object=get_object_or_404(User, username=username)
-    profile = Profile.objects.get(username=request.user)
-    author_profile = Profile.objects.get(username=user_object)
-    user_posts = Post.objects.filter(author=user_object)[0:5]
-    top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
-    context = {'user_object':user_object, 'profile':profile, 'user_posts':user_posts, 'author_profile':author_profile, 'top_pick_posts':top_pick_posts}
-    return render(request, 'base/profile_post_list.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_object = self.user_object
+        profile = Profile.objects.get(username=self.request.user)
+        author_profile = Profile.objects.get(username=user_object)
+        top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+        total_posts_count = Post.objects.filter(author=user_object).count()
+        context.update({
+            'user_object': user_object,
+            'profile': profile,
+            'author_profile': author_profile,
+            'top_pick_posts': top_pick_posts,
+            'total_posts_count': total_posts_count,
+        })
+        return context
+
 
 
 def add_to_picks(request, pk):
@@ -605,18 +599,59 @@ def series_detail(request, pk):
   context = {'series': series, 'series_posts': series_posts}
   return render(request, 'base/series-detail.html', context)
 
-def series_list(request, username):
-    user_object=User.objects.get(username=username)
-    user_series = Series.objects.filter(creator=user_object)
-    for series in user_series:
-        post_count = series.post_set.count()
-        series.post_count = post_count
-    author_profile = Profile.objects.get(username=user_object)
-    profile = Profile.objects.get(username=request.user)
-    created_organizations=Organization.objects.filter(creator=request.user)
-    top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
-    context = {'user_series':user_series, 'author_profile':author_profile, 'user_object':user_object, 'created_organizations':created_organizations, 'top_pick_posts':top_pick_posts, 'profile':profile}
-    return render(request, 'base/profile-series-list.html', context)
+
+
+# def series_list(request, username):
+#     user_object=User.objects.get(username=username)
+#     user_series = Series.objects.filter(creator=user_object)
+#     for series in user_series:
+#         post_count = series.post_set.count()
+#         series.post_count = post_count
+#     author_profile = Profile.objects.get(username=user_object)
+#     profile = Profile.objects.get(username=request.user)
+#     created_organizations=Organization.objects.filter(creator=request.user)
+#     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+#     context = {'user_series':user_series, 'author_profile':author_profile, 'user_object':user_object, 'created_organizations':created_organizations, 'top_pick_posts':top_pick_posts, 'profile':profile}
+#     return render(request, 'base/profile-series-list.html', context)
+
+
+
+class SeriesListView(ListView):
+    model = Series
+    context_object_name = 'user_series'
+    paginate_by = 10
+
+    def get_template_names(self):
+        if self.request.htmx:
+            return "base/profile-series-list-items.html"
+        return "base/profile-series-list.html"
+
+    def get_queryset(self):
+        username = self.kwargs.get('username')
+        user_object = get_object_or_404(User, username=username)
+        user_series = Series.objects.filter(creator=user_object)
+        for series in user_series:
+            series.post_count = series.post_set.count()
+        return user_series
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        username = self.kwargs.get('username')
+        user_object = get_object_or_404(User, username=username)
+        author_profile = get_object_or_404(Profile, username=user_object)
+        profile = get_object_or_404(Profile, username=self.request.user)
+        created_organizations = Organization.objects.filter(creator=self.request.user)
+        top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+
+        context.update({
+            'author_profile': author_profile,
+            'user_object': user_object,
+            'created_organizations': created_organizations,
+            'top_pick_posts': top_pick_posts,
+            'profile': profile,
+        })
+        return context
+
 
 
 
@@ -638,17 +673,68 @@ def organization_profile_list(request, username):
     context = {'user_object':user_object, 'author_profile':author_profile, 'user_organizations':user_organizations, 'top_pick_posts':top_pick_posts, 'profile':profile}
     return render(request, 'base/profile-organization-list.html', context)
 
-def organization_profile(request, pk):
-    organization_profile = Organization.objects.get(pk=pk)
-    organization_posts = Post.objects.filter(organization=organization_profile)
-    for post in organization_posts:
-        content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
-        post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
-    profile = Profile.objects.get(username=request.user)
-    suggested_posts = sample(list(organization_posts), min(3, len(organization_posts)))
-    most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
-    context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'suggested_posts':suggested_posts, 'profile':profile, 'most_read_posts':most_read_posts}
-    return render(request, 'base/organization-profile.html', context)
+
+class OrganizationProfileView(DetailView):
+    model = Organization
+    context_object_name = 'organization_profile'
+    template_name = 'base/organization-profile.html'
+    pk_url_kwarg = 'pk'
+
+    def get_template_names(self):
+        if self.request.htmx:
+            return ["base/organization-profile-posts-parts.html"]
+        return [self.template_name]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        organization_profile = self.object
+        organization_posts = Post.objects.filter(organization=organization_profile)
+        paginator = Paginator(organization_posts, 5)  # 5 posts per page
+        page_number = self.request.GET.get('page') or 1
+        page_obj = paginator.get_page(page_number)
+
+        for post in page_obj:
+            content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
+            post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
+
+        profile = get_object_or_404(Profile, username=self.request.user)
+        suggested_posts = sample(list(organization_posts), min(3, len(organization_posts)))
+        most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
+
+        context.update({
+            'page_obj': page_obj,
+            'suggested_posts': suggested_posts,
+            'profile': profile,
+            'most_read_posts': most_read_posts
+        })
+        return context
+
+# Organization Profile as Function based view
+# def organization_profile(request, pk):
+#     organization_profile = get_object_or_404(Organization, pk=pk)
+#     organization_posts = Post.objects.filter(organization=organization_profile)
+#     paginator = Paginator(organization_posts, 5)  # 5 posts per page
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+
+#     for post in page_obj:
+#         content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
+#         post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
+
+#     profile = get_object_or_404(Profile, username=request.user)
+#     suggested_posts = sample(list(organization_posts), min(3, len(organization_posts)))
+#     most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
+
+#     context = {
+#         'organization_profile': organization_profile,
+#         'page_obj': page_obj,
+#         'suggested_posts': suggested_posts,
+#         'profile': profile,
+#         'most_read_posts': most_read_posts
+#     }
+#     template_name = "base/organization-profile-posts-parts.html" if request.htmx else "base/organization-profile.html"
+#     return render(request, template_name, context)
+
 
 def organization_series(request, pk):
     organization_profile = Organization.objects.get(pk=pk)
@@ -664,6 +750,7 @@ def organization_posts_list(request, pk):
     most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
     context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'profile':profile, 'most_read_posts':most_read_posts}
     return render(request, 'base/organization_posts_list.html', context)
+
 def follow_organization(request, pk):
     organization_profile = Organization.objects.get(pk=pk)
     organization_profile.followers.add(request.user)

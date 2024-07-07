@@ -79,6 +79,9 @@ class Post(models.Model):
     @property
     def like_count(self):
         return self.likes.all().count()
+    @property
+    def read_count(self):
+        return self.read.all().count()
 
 class LikedPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
