@@ -19,7 +19,14 @@
 
   {% block content %}
   {% include 'base/profile_info.html' %}
+  {% if top_pick_posts %}
   {% include 'base/profile_top_picks_carousel.html' %}
+  {% else %}
+  {% if request.user == user_object %}
+  {% include 'base/profile_no_top_picks.html' %}
+  {% else %}
+  {% endif %}
+  {% endif %}
   <div class="container">
   
   <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
@@ -64,7 +71,7 @@
         <div class="card" style="width: 60%; text-align: center; margin: 0 auto;">
 
           <div class="card-body">
-            <a data-bs-toggle="modal"  data-bs-target="#exampleModal" href="#exampleModal" role="button">
+            <a data-bs-toggle="modal"  data-bs-target="#create-series-modal" href="#create-series-modal" role="button">
               <form action="">
                   <img src="{{profile.profile_img.url}}" class="start-post-image" alt="" srcset="">
                   <input type="text" class="start-post" placeholder="Create Series">
@@ -73,7 +80,7 @@
           </div>
         </div>
       </div>
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="create-series-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">

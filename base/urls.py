@@ -29,7 +29,7 @@ urlpatterns=[
     path('series-list/<str:username>/', views.SeriesListView.as_view(), name='series-list'),
     path('organization-profile-list/<str:username>/', views.organization_profile_list, name="organization-profile-list"),
     path('organization-profile/<int:pk>/', views.OrganizationProfileView.as_view(), name="organization-profile"),
-    
+    path('organization-top-posts', views.organization_top_posts_view, name="organization-top-posts"),
     path('organization-series-list/<int:pk>/', views.organization_series, name="organization-series-list"),
     path('organization-posts-list/<int:pk>/', views.organization_posts_list, name="organization-posts-list"),
     path('add-org-member/<int:user_id>', views.add_org_member, name="add-org-member"),

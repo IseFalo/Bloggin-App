@@ -40,8 +40,8 @@
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal1Toggle" href="#exampleModalToggle1" role="button">Edit</a></li>
                             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a></li>
                             <li><a class="dropdown-item" href="#">Save</a></li>
-                            <li><a class="dropdown-item" href="#">Add to Picks</a></li>
-                            <li><a class="dropdown-item" href="#">Remove from Picks</a></li>
+                            <li><a class="dropdown-item" href="{% url 'add_to_picks' post.pk %}">Add to Picks</a></li>
+                            <li><a class="dropdown-item" href="{% url 'remove_from_picks' post.pk %}">Remove from Picks</a></li>
                         </ul>
                     </div>
                 </div>

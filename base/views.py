@@ -31,6 +31,20 @@ from django.urls import reverse
 
 POST_COUNT_PER_PAGE = 9
 
+def organization_top_posts_view(request, organization_id):
+    organization = get_object_or_404(Organization, id=organization_id)
+    top_three_posts = Post.objects.filter(organization=organization,) \
+                                  .annotate(read_count=Count('read')) \
+                                  .order_by('-read_count')[:3]
+    
+    context = {
+        'organization': organization,
+        'top_three_posts': top_three_posts,
+    }
+    
+    return render(request, 'organization_top_posts.html', context)
+
+
 def register(request):
     if request.method == 'POST':
         blogname = request.POST['blog-name']
@@ -433,6 +447,7 @@ def profile(request, username):
     user_object=get_object_or_404(User, username=username)
     profile = Profile.objects.get(username=request.user)
     user_posts = Post.objects.filter(status='published', author=user_object)
+    user_posts_count = user_posts.count()
     paginator = Paginator(user_posts, 5)  # 5 posts per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -457,6 +472,7 @@ def profile(request, username):
         'saved_posts':saved_posts,
         'created_organizations':created_organizations,
         'page_obj': page_obj,
+        'user_posts_count':user_posts_count,
        
     }
     template_name = "base/profile-page-posts.html" if request.htmx else "base/profile-page.html"
@@ -473,7 +489,7 @@ class ProfilePostListView(ListView):
         return "base/profile_post_list.html"
     def get_queryset(self):
         self.user_object = get_object_or_404(User, username=self.kwargs['username'])
-        return Post.objects.filter(author=self.user_object)
+        return Post.objects.filter(status='published', author=self.user_object)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -481,13 +497,14 @@ class ProfilePostListView(ListView):
         profile = Profile.objects.get(username=self.request.user)
         author_profile = Profile.objects.get(username=user_object)
         top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
-        total_posts_count = Post.objects.filter(author=user_object).count()
+        user_posts = Post.objects.filter(status='published', author=user_object)
+        user_posts_count = user_posts.count()
         context.update({
             'user_object': user_object,
             'profile': profile,
             'author_profile': author_profile,
             'top_pick_posts': top_pick_posts,
-            'total_posts_count': total_posts_count,
+            'user_posts_count':user_posts_count,
         })
         return context
 
@@ -692,20 +709,22 @@ class OrganizationProfileView(DetailView):
         paginator = Paginator(organization_posts, 5)  # 5 posts per page
         page_number = self.request.GET.get('page') or 1
         page_obj = paginator.get_page(page_number)
-
+        top_three_posts = Post.objects.filter(organization=organization_profile, status='published') \
+                                  .annotate(read_count_annotated=Count('read')) \
+                                  .order_by('-read_count_annotated')[:3]
         for post in page_obj:
             content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
             post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
 
         profile = get_object_or_404(Profile, username=self.request.user)
         suggested_posts = sample(list(organization_posts), min(3, len(organization_posts)))
-        most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
+      
 
         context.update({
             'page_obj': page_obj,
             'suggested_posts': suggested_posts,
             'profile': profile,
-            'most_read_posts': most_read_posts
+            'top_three_posts': top_three_posts,
         })
         return context
 
@@ -740,15 +759,20 @@ def organization_series(request, pk):
     organization_profile = Organization.objects.get(pk=pk)
     organization_posts = Post.objects.filter(organization=organization_profile)
     organization_series = Series.objects.filter(organization=organization_profile)
-    most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
-    context = {'organization_series':organization_series, 'organization_profile':organization_profile, 'most_read_posts':most_read_posts, 'organization_posts':organization_posts}
+    top_three_posts = Post.objects.filter(organization=organization_profile, status='published') \
+                                  .annotate(read_count_annotated=Count('read')) \
+                                  .order_by('-read_count_annotated')[:3]
+    profile = get_object_or_404(Profile, username=request.user)
+    context = {'organization_series':organization_series, 'organization_profile':organization_profile, 'top_three_posts':top_three_posts, 'organization_posts':organization_posts, 'profile':profile}
     return render(request, 'base/organization_series_profile.html', context)
 def organization_posts_list(request, pk):
     organization_profile = Organization.objects.get(pk=pk)
     organization_posts = Post.objects.filter(organization=organization_profile)
     profile = Profile.objects.get(username=request.user)
-    most_read_posts = Post.objects.annotate(read_count=Count('read')).order_by('-read_count')[:3]
-    context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'profile':profile, 'most_read_posts':most_read_posts}
+    top_three_posts = Post.objects.filter(organization=organization_profile, status='published') \
+                                  .annotate(read_count_annotated=Count('read')) \
+                                  .order_by('-read_count_annotated')[:3]
+    context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'profile':profile, 'top_three_posts':top_three_posts}
     return render(request, 'base/organization_posts_list.html', context)
 
 def follow_organization(request, pk):

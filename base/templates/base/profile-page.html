@@ -24,8 +24,14 @@
 
   {% block content %}
   {% include 'base/profile_info.html' %}
-
+  {% if top_pick_posts %}
   {% include 'base/profile_top_picks_carousel.html' %}
+  {% else %}
+  {% if request.user == user_object %}
+  {% include 'base/profile_no_top_picks.html' %}
+  {% else %}
+  {% endif %}
+  {% endif %}
 
   <div class="container">
   

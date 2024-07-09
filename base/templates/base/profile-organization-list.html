@@ -18,7 +18,14 @@
 
   {% block content %}
   {% include 'base/profile_info.html' %}
+  {% if top_pick_posts %}
   {% include 'base/profile_top_picks_carousel.html' %}
+  {% else %}
+  {% if request.user == user_object %}
+  {% include 'base/profile_no_top_picks.html' %}
+  {% else %}
+  {% endif %}
+  {% endif %}
 
   <div class="container">
   
@@ -59,7 +66,7 @@
 
   <section>
     <div class="container">
-      <p class="container-title">Organizations</p>
+      <h4 class="text-center mb-3">Organizations</h4>
 
       <!-- <form action="{% url 'create-series' %}" method="POST">
         {% csrf_token %}
@@ -68,7 +75,7 @@
       </form> -->
 
 
-      <a data-bs-toggle="modal" class="text-center" data-bs-target="#exampleModal7" data-bs-whatever="@getbootstrap" role="button">
+      <a data-bs-toggle="modal" class="text-center" data-bs-target="#create-org" data-bs-whatever="@getbootstrap" role="button">
         <form action="">
             <img src="{{profile.profile_img.url}}" class="start-post-image" alt="" srcset="">
             <input type="text" class="start-post" placeholder="Create Organization">
@@ -76,7 +83,7 @@
       </a>
       
       
-      <div class="modal fade" id="exampleModal7" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="create-org" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
