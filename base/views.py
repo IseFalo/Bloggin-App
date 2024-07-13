@@ -1,3 +1,5 @@
+import imgkit
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from .models import *
@@ -161,7 +163,7 @@ class HomeView(ListView):
 
         profile = Profile.objects.get(username=current_user)
         users_already_following = profile.username.following.all()
-        suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:3]
+        suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:5]
 
         form = PostForm(self.request.POST or None)
         today = timezone.now().date()
@@ -404,6 +406,21 @@ def post_detail(request, pk):
     total_count = comment_count + replies_count
     context={'post':post, 'profile':profile, 'suggested_posts':suggested_posts, 'total_count':total_count}
     return render(request, 'base/post-detail.html', context)
+def post_image(request, pk):
+    post = Post.objects.get(id=pk)
+    post_cover_url = request.build_absolute_uri(post.post_cover.url)
+    html = render_to_string('base/post_image.html', {'post': post, 'post_cover_url': post_cover_url,})
+    options = {
+        'format': 'png',
+        'encoding': 'UTF-8',
+        'enable-local-file-access': '',
+    }
+    wkhtmltoimage_path = r'C:\Program Files (x86)\wkhtmltopdf\bin\wkhtmltoimage.exe'
+    config = imgkit.config(wkhtmltoimage=wkhtmltoimage_path)
+    img = imgkit.from_string(html, False, options=options, config=config)
+    response = HttpResponse(img, content_type='image/png')
+    response['Content-Disposition'] = f'attachment; filename="{post.title}.png"'
+    return response
 def comment_sent(request, pk):
     if request.method == 'POST':
         post=Post.objects.get(id=pk)

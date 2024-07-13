@@ -46,6 +46,7 @@
           ">
 
           <h6>Post by <a href="{% url 'profile' post.author.username %}">{{post.author}}</a>(25.3k Subscribers)</h6>
+          <a href="{% url 'post_image' post.id %}" class="btn btn-primary">Download Image</a>
           {% include 'base/likes.html' %}
          
           

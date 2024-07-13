@@ -1,8 +1,9 @@
 from django.urls import path
 from . import views
-
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns=[
+    path('post/<int:pk>/image/', views.post_image, name='post_image'),
     path('settings/', views.settings, name="settings"),
     path('settings/change-password/', views.change_password, name='change_password'),
     path('register/', views.register, name="register"),
@@ -42,3 +43,7 @@ urlpatterns=[
     
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

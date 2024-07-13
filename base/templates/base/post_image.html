@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .post-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .post-cover img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .post-content {
+            font-size: 18px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="post-title">{{ post.title }}</div>
+        <div class="post-cover">
+            <img src="{{ post_cover_url }}" alt="{{ post.title }}">
+        </div>
+        <div class="post-content">
+            {{ post.content|safe }}
+        </div>
+    </div>
+</body>
+</html>

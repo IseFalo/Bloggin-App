@@ -34,3 +34,13 @@ class NotificationConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'html': html
         }))
+
+    def new_post(self, event):
+        html = render_to_string("base/notification-alert.html", context={
+            'message': event['text'],
+            'post_url': event['post_url'],
+            'post_cover_url': event['post_cover_url'],
+        })
+        self.send(text_data=json.dumps({
+            'html': html
+        }))

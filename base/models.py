@@ -138,6 +138,8 @@ class Reply(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
+    post_url = models.URLField(max_length=200, null=True, blank=True)
+    post_cover_url = models.URLField(max_length=200, null=True, blank=True)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True)
     message = models.CharField(max_length=500, null=True, blank=True)
     is_read = models.BooleanField(default=False)
