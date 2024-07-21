@@ -1,9 +1,5 @@
-{% for post in page_obj %}
+{% for post in top_read_posts %}
 <div class="card feed-post-card" id="feed-post-card" 
-     {% if forloop.last and page_obj.has_next %}
-     hx-get="{% url 'profile' user_object.username %}?page={{ page_obj.next_page_number }}" 
-     hx-trigger="revealed" hx-swap="afterend"
-     {% endif %}
      style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
     <div class="card-body">
         <div class="row">

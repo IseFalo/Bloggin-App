@@ -45,114 +45,17 @@
           
           ">
 
-          <h6>Post by <a href="{% url 'profile' post.author.username %}">{{post.author}}</a>(25.3k Subscribers)</h6>
-          <a href="{% url 'post_image' post.id %}" class="btn btn-primary">Download Image</a>
+          <h6>Post by <a href="{% url 'profile' post.author.username %}">{{post.author}}</a>({{author_followers_count}} Followers)</h6>
+          
           {% include 'base/likes.html' %}
          
           
                 <p>
                   {% if request.user == post.author%}
-                    <a href="" class="btn btn-sm btn-primary" data-bs-toggle="modal"  data-bs-target="#exampleModalToggle" href="#exampleModalToggle" role="button">Edit Post</a>
-                    <a href="" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Post</a>
+                    <a href="" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"  data-bs-target="#exampleModalToggle" href="#exampleModalToggle" role="button">Edit Post</a>
+                    <a href="" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Post</a>
                     {% endif %} 
-
-
-
-
-
-                <!-- Edit post modal   -->
-                <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                  <div class="modal-dialog modal-fullscreen">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalToggleLabel">Edit Post</h5>
-                        <button type="button" class="btn-close" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <form action="{% url 'edit-post' post.id %}" method="POST" enctype="multipart/form-data" id="post-form">
-                          {% csrf_token %}
-                          <div class="post-form">
-                          <input type="text" class="post-title my-3" name="post-title" placeholder="" value="{{post.title}}">
-                          {% if post.post_cover %}
-                          <img src="{{ post.post_cover.url }}" alt="Post Cover" height="70" width="70">
-                          {% endif %}
-                          <label for="post-cover-image">Change post cover:</label>
-                          <input type="file" name="post-cover-image" accept="image/*" value="">
-                          <textarea name="post-text" class="post-text-area my-3" placeholder="Talk about something...">{{post.content}}</textarea>
-                        </div>
-                        </form>  
-                      </div>
-                      <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">Edit Post</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalToggleLabel2">End Editing</h5>
-                      </div>
-                      <div class="modal-body">
-                        Are you sure you want to close?
-                      </div>
-                      <div class="modal-footer">
-                        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Go back</button>
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-          
-                <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalToggleLabel2">Post Confirm</h5>
-                      </div>
-                      <div class="modal-body">
-                        Are you sure you want to edit this post?
-                      </div>
-                      <div class="modal-footer">
-                        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Go back</button>
-                        <button class="btn btn-secondary" type="submit" data-bs-dismiss="modal" form="post-form">Yes</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <!-- Delete post Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        Are you sure you want to delete this post?
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="{% url 'delete-post' post.id %}" type="button" class="btn btn-danger">Yes</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    <a href="{% url 'post_image' post.id %}" class="btn btn-sm btn-outline-dark"><i class="bi bi-download"></i></a>
                 </p>
                 <small>Posted on {{post.created}} 
                   {% if post.edited %}
@@ -164,7 +67,7 @@
                 <hr>
                 <div class="post-cover">
                   {% if post.post_cover %}
-                  <img src="{{post.post_cover.url}}" width="400" height="300" alt="">
+                  <img src="{{post.post_cover.url}}" width="500" height="400" alt="">
                   {% endif %}  
                 </div>
                 <hr>

@@ -378,6 +378,7 @@ hr {
     float: none;
     margin-right: 0 auto;
 }
+
 #trending-card{
     border: 0;
     background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
@@ -392,6 +393,7 @@ hr {
     border: 0;
     background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
 }
+
 #post-feed-card{
     width: 100%;
 }

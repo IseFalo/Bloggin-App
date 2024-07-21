@@ -1,43 +1,101 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ post.title }}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
     <style>
+        h1{
+            text-align: center;
+        }
         body {
             font-family: Arial, sans-serif;
+            background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
         }
+
         .container {
             width: 800px;
             margin: 0 auto;
-            text-align: center;
+            /* text-align: center; */
         }
+
         .post-title {
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 20px;
+           
         }
+
         .post-cover img {
             max-width: 100%;
-            height: auto;
-            margin-bottom: 20px;
+            height: 100vh;
+            
         }
-        .post-content {
-            font-size: 18px;
-            text-align: left;
-        }
+
+       
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="post-title">{{ post.title }}</div>
+    
+    <div class="container" style="
+    background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
+    border-radius: 5px;
+    padding: 20px; 
+    ">
+    <h1>Bloggin</h1>
+        <!-- <div class="post-title">{{ post.title }}</div>
+        <hr>
         <div class="post-cover">
             <img src="{{ post_cover_url }}" alt="{{ post.title }}">
-        </div>
-        <div class="post-content">
-            {{ post.content|safe }}
+        </div> -->
+
+
+
+
+        <div class="post-detail-card" style="
+          background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
+          border-radius: 5px;
+          
+          ">
+
+            <h6 style="font-size: 20px; font-family: 'Kanit', sans-serif; font-weight: 200;
+          margin-bottom: 5px;">Post by <b>{{post.author}} </b></h6>
+            <p style="font-size: 15px; margin-bottom: 5px;">Posted on {{post.created}}
+                {% if post.edited %}
+                (edited)
+                {% endif %}
+
+            </p>
+            <h3 style="font-size: 30px;
+                font-family: 'Quicksand', sans-serif;
+                font-weight: 500;
+                font-style: normal;
+                font-optical-sizing: auto;
+                margin-top: 5px;
+                margin-bottom: 5px;">{{post.title}}</h3>
+            <hr style="width: 100%;
+                height: 10px;
+                border: 0;
+                box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);">
+            <div class="post-cover">
+                {% if post.post_cover %}
+                <img src="{{post_cover_url}}" width="500" height="400" alt="">
+                {% endif %}
+            </div>
+
+
+
         </div>
     </div>
 </body>
+
 </html>

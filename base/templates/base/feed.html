@@ -14,8 +14,8 @@
 
 <body>
   {% block content %}
-  
-<div class="container">
+  {% include 'base/feed_trending_image.html' %}
+<!-- <div class="container">
   <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
     <li class="nav-item">
       <a class="nav-link active" aria-current="page" href="">All</a>
@@ -27,22 +27,10 @@
       <a class="nav-link" href="">Organizations</a>
     </li>
 
-    <!-- <li class="nav-item">
-      <a class="nav-link" href="">Organizations</a>
-    </li> -->
     
-
-    <!-- <li class="nav-item">
-      <a class="nav-link btn btn-outline-dark" href="#"><svg
-        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-        fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-        <path
-            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-    </svg></a>
-    </li> -->
   </ul>
 
-</div>
+</div> -->
   
 
 
@@ -80,12 +68,14 @@
   
 
   <div class="container my-5">
+    
+
     <div class="row" id="row">
 
 
 
 
-      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-9 posts-list" id="col">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-9 posts-list my-5" id="col">
         
         {% include 'base/feed_posts.html' %}
         
@@ -95,7 +85,7 @@
 
 
       
-      <div class="col-lg-3 d-none d-md-none d-lg-none d-xl-block" id="col">
+      <div class="col-lg-3 d-none d-md-none d-lg-none d-xl-block my-5" id="col">
         <div id="fixedElement">
           <div class="card" style="width: 100%;" id="suggest-card">
             <div class="card-body">
@@ -108,12 +98,16 @@
                     srcset="">
                 </div>
                 <div class="col-8">
-                  <p style="font-size: 15px; font-weight: 500;"><a href="{% url 'profile' suggested_user.username %}">{{ suggested_user.username }}</a></p>
-                  <p>{{suggested_user.followers.count}} followers</p>
+                  <p style="font-size: 13px; font-weight: 500;">{{ suggested_user.username }}</p>
+                  <p>{{suggested_user.followers.count}} followers | {{suggested_user.post_count}} posts</p>
                   
                 </div>
                 <div class="col-2">
-                  <a href="#" class="btn btn-sm btn-outline-dark" id="suggest-button"> <i class="bi bi-person-plus"></i></a>
+                 
+                  <a href="{% url 'profile' suggested_user.username %}" class="btn btn-sm btn-outline-dark"> <i class="bi bi-arrow-right"></i></a>
+                  
+
+                  
                 </div>
               </div>
               {% endfor %}

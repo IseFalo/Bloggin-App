@@ -12,7 +12,7 @@
               <div class="col-lg-6  d-flex align-items-center px-5" id="captions">
                 <div class="captions">
                   <h4 class="text-muted">Editor's Pick {{ forloop.counter }}</h4>
-                  <h3>{{ post.title }}</h3>
+                  <h6 style="font-size: 20px;">{{ post.title }}</h6>
                   <p>Read by {{post.read.count}} people</p>
                   <a class="btn btn-sm btn-outline-dark" href="{% url 'post-detail' post.id %}">View Post</a>
                   <p>Posted on {{post.created}} and {% if post.edited %}

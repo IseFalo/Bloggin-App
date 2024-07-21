@@ -13,7 +13,7 @@ from datetime import datetime
 from django.views.generic import ListView ,DetailView
 from django.utils.decorators import method_decorator
 import re
-from django.db.models import Count
+from django.db.models import Count,Q
 from datetime import date
 from django.views import View
 from django.contrib.auth.decorators import login_required
@@ -163,13 +163,11 @@ class HomeView(ListView):
 
         profile = Profile.objects.get(username=current_user)
         users_already_following = profile.username.following.all()
-        suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following).order_by('?')[:5]
-
+        suggested_users = Profile.objects.exclude(id=profile.id).exclude(id__in=users_already_following) \
+                                         .annotate(post_count=Count('username__post', filter=Q(username__post__status='published'))) \
+                                         .order_by('?')[:5]
         form = PostForm(self.request.POST or None)
-        today = timezone.now().date()
-        top_read_posts = Post.objects.filter(read__in=[current_user], status='published') \
-                                     .annotate(read_count=Count('read')) \
-                                     .order_by('-read_count')[:6]
+        
 
         page_obj = context['page_obj']
         for post in page_obj:
@@ -179,7 +177,7 @@ class HomeView(ListView):
         context.update({
             'profile': profile,
             'suggested_users': suggested_users,
-            'top_read_posts': top_read_posts,
+            
             'form': form,
         })
         return context
@@ -289,7 +287,7 @@ def settings(request):
         if request.FILES.get('image') != None:
             blogname = request.POST['username']
             image = request.FILES.get('image')
-            bio = request.POST.get['bio']
+            bio = request.POST.get('bio')
             phone_no = request.POST['phone-no']
 
             if User.objects.filter(username=blogname).exists() and blogname != request.user.username:
@@ -401,10 +399,13 @@ def post_detail(request, pk):
     user = request.user
     profile= Profile.objects.get(username=user)
     suggested_posts = sample(list(all_posts), min(5, len(all_posts)))
+    author = post.author
+    author_profile = Profile.objects.get(username=author)
+    author_followers_count = author_profile.followers.count()
     comment_count = post.comment_set.count()
     replies_count = sum(comment.replies.count() for comment in post.comment_set.all())
     total_count = comment_count + replies_count
-    context={'post':post, 'profile':profile, 'suggested_posts':suggested_posts, 'total_count':total_count}
+    context={'post':post, 'profile':profile, 'suggested_posts':suggested_posts, 'total_count':total_count, 'author_followers_count': author_followers_count}
     return render(request, 'base/post-detail.html', context)
 def post_image(request, pk):
     post = Post.objects.get(id=pk)
@@ -465,16 +466,15 @@ def profile(request, username):
     profile = Profile.objects.get(username=request.user)
     user_posts = Post.objects.filter(status='published', author=user_object)
     user_posts_count = user_posts.count()
-    paginator = Paginator(user_posts, 5)  # 5 posts per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    for post in page_obj:
+    
+    for post in user_posts:
         content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
         post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
         post.comment_count = Comment.objects.filter(post=post).count()
     author_profile = Profile.objects.get(username=user_object)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
-    suggested_posts = sample(list(user_posts), min(3, len(user_posts)))
+    top_read_posts = sorted(Post.objects.filter(author=user_object, status='published'), key=lambda x: x.read_count, reverse=True)[:5]
+    suggested_posts = sample(list(user_posts), min(5, len(user_posts)))
     user_series = Series.objects.filter(creator=user_object)
     saved_posts = profile.saved_posts.all()
     created_organizations=Organization.objects.filter(creator=request.user)
@@ -488,7 +488,7 @@ def profile(request, username):
         'user_series':user_series,
         'saved_posts':saved_posts,
         'created_organizations':created_organizations,
-        'page_obj': page_obj,
+        'top_read_posts':top_read_posts,
         'user_posts_count':user_posts_count,
        
     }

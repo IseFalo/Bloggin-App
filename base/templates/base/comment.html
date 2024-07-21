@@ -17,7 +17,7 @@
   <div class="collapse mb-5" id="collapseExample">
     <div class="comment-scroll">
         {% for comment in post.comment_set.all %}
-        <div class="row g-0" >
+        <div class="row g-0 mt-4" >
             <div class="col-sm-2 col-xl-1">
                 <img src="{{comment.author.profile.profile_img.url}}" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
             </div>
@@ -26,8 +26,8 @@
                 <p>{{comment.text}}</p>
             </div>
         </div>
-        <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">Replies</a>
-        {% include 'base/comment_reply.html' %}
+        <!-- <a class="btn btn-sm btn-dark" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">Replies</a>
+        {% include 'base/comment_reply.html' %} -->
         <hr>
         {% endfor %}
        
