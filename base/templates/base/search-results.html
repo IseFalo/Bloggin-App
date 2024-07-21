@@ -1,0 +1,185 @@
+{% extends 'base\base.html' %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    {% block title %}{{post.title}}{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      
+    <div class="container">
+      <ul class="nav nav-tabs justify-content-center mt-5">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Profiles</a>
+        </li>
+
+      </ul>
+    {% if query %}
+      <h3 class="my-5">Search results for "{{query}}"</h3>
+      
+
+
+
+    {% for result in results %}
+    <div class="card search-card" id="search-card"
+      style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
+
+
+      <div class="card-body">
+        <div class="row">
+          <div class="col-2 d-none d-md-block d-lg-block d-xl-block">
+            <img src="{{result.post_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
+              height="100">
+          </div>
+          <div class="col-sm-12 col-md-10">
+            <p>By <a href="">Ise's Food Blog</a></p>
+            <h6>{{result.title}}</h6>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo qui hic pariatur mollitia maiores magnam culpa saepe vitae dolore possimus.</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p>No search query provided.</p>
+
+      {% endif %}
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <div class="container">
+      <ul class="nav nav-tabs justify-content-center mt-5">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">All</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Profiles</a>
+        </li>
+
+      </ul>
+      <div class="gradient-cards">
+    
+    
+        <div class="post-card">
+          <div class="container-card bg-white-box">
+    
+            <h3 class="my-5">Search results for "{{query}}"</h3>
+            <div class="row g-0">
+              <div class="col-sm-2 col-xl-1">
+                <img src="images/link 1.jpg" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
+              </div>
+              <div class="col-sm-10 col-xl-11 text-start">
+                <a href="">
+                  <h5 class="comment-username">@Iseoluwa's Food Blog</h5>
+                </a>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row g-0">
+              <div class="col-sm-2 col-xl-1">
+                <img src="images/img2.jpg" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
+              </div>
+              <div class="col-sm-10 col-xl-11 text-start">
+                <a href="">
+                  <h5 class="comment-username">The Emergence of new computers</h5>
+                </a>
+                <p>Posted by Iseoluwa's food blog</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row g-0">
+              <div class="col-sm-2 col-xl-1">
+                <img src="images/link 1.jpg" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
+              </div>
+              <div class="col-sm-10 col-xl-11 text-start">
+                <a href="">
+                  <h5 class="comment-username">@Iseoluwa's Food Blog</h5>
+                </a>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row g-0">
+              <div class="col-sm-2 col-xl-1">
+                <img src="images/link 1.jpg" class="comment-scroll-image" alt="" width="50" height="50" srcset="">
+              </div>
+              <div class="col-sm-10 col-xl-11 text-start">
+                <a href="">
+                  <h5 class="comment-username">@Iseoluwa's Food Blog</h5>
+                </a>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              </div>
+            </div>
+            <hr>
+    
+    
+    
+    
+    
+    
+          </div>
+        </div>
+      </div>
+    
+    
+    </div> -->
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+   
+  </body>
+</html>

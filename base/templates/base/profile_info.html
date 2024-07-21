@@ -1,0 +1,63 @@
+<section style="text-align: center;" class="container">
+  <header>
+      <img src="{{author_profile.profile_img.url}}" class="mt-3" alt="" width="80" height="80" id="profile-image">
+    <h5>{{author_profile.username}}</h5>
+    <h5>{{author_profile.followers.count}} Followers | {{user_posts_count}} posts</h5>
+    <p style="font-size: 15px;">{{author_profile.bio}}</p>
+ 
+    
+    
+    {% if request.user != author_profile.username %}
+    <!-- <button type="button" class="btn btn-sm btn-outline-dark justify-content-center" data-bs-toggle="modal" data-bs-target="#add-to-org-modal" data-bs-whatever="@getbootstrap">Add to Organization</button>
+      
+    <div class="modal fade" id="add-to-org-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Add {{author_profile.username}} to Organization</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'add-org-member' user_object.pk %}" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <h6>Select Organization:</h6>
+                {% for organization in created_organizations %}
+                <input type="radio" id="org-{{ organization.id }}" name="organization_id" value="{{ organization.id }}" required>
+                <label for="org-{{ organization.id }}">{{ organization.name }}</label>
+                <br>
+                {% endfor %}
+              </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add to Organization</button>
+          </div>
+      </form>
+        </div>
+      </div>
+    </div> -->
+    {% if request.user in author_profile.followers.all %}
+    <a href="{% url 'unfollow' user_object.username %}" class="btn btn-sm btn-outline-dark px-5">Unfollow <svg
+        xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill"
+        viewBox="0 0 16 16">
+        <path
+          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+      </svg></a>
+    {% else %}
+    <a href="{% url 'follow' user_object.username %}" class="btn btn-sm btn-outline-dark px-5">Follow <svg
+        xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-check-circle-fill"
+        viewBox="0 0 16 16">
+        <path
+          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+      </svg></a>
+    {% endif %}
+    {% endif %}
+  </header>
+</section>
+
+
+
+
+

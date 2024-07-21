@@ -1,0 +1,90 @@
+
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+tabindex="-1">
+<div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalToggleLabel">Create Post</h5>
+            <button type="button" class="btn-close" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+                data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="create-post" method="POST" enctype="multipart/form-data" id="post-form">
+                {% csrf_token %}
+                
+                    {{form.media}}
+                    {{form.as_p}}
+                    <!-- <input type="text" class="post-title my-3" id="post-title" name="post-title" placeholder="Post title">
+                    <label for="post-cover-image">Add post cover:</label>
+                    <input type="file" name="post-cover-image" accept="image/*">
+                    <textarea name="post-text" class="post-text-area my-3"
+                        placeholder="Talk about something..."></textarea> -->
+                
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+                data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" name="save_draft">Draft</button>
+            <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3"
+                data-bs-toggle="modal" data-bs-dismiss="modal">Add Post</button>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalToggleLabel2">End Creating</h5>
+        </div>
+        <div class="modal-body">
+            Are you sure you want to close?
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                data-bs-dismiss="modal">Go back</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Yes</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalToggleLabel2">Post Confirm</h5>
+        </div>
+        <div class="modal-body">
+            Are you sure you want to post this?
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                data-bs-dismiss="modal">Go back</button>
+            <button class="btn btn-secondary" type="submit" name="published" data-bs-dismiss="modal" form="post-form">Yes</button>
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+  $('#exampleModalToggle3 .btn-secondary').click(function() {
+    $('#post-form').submit();  // Submit the form programmatically
+  });
+});
+</script>
+
+
+
+
+
+

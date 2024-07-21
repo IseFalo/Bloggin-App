@@ -1,0 +1,51 @@
+{% for series in page_obj %}
+{% if forloop.last %}
+        <div class="col-xl-6" id="posts" hx-get="{% url 'series-list' author_profile.username %}?page={{ page_obj.number|add:1 }}" hx-trigger="revealed" hx-swap="afterend">
+{% else %}
+        <div class="col-xl-6" id="posts">
+{% endif %}
+          <div class="card feed-post-card" id="feed-post-card"
+            style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
+            <style>
+              .card-body {
+                display: flex;
+                flex-direction: column;
+              }
+              .col-3, .col-sm-12.col-md-9 {
+                flex-grow: 1;
+              }
+            </style>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-3 d-none d-md-block d-lg-block d-xl-block">
+                  
+                  <img src="{{series.series_cover.url}}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
+                    height="100">
+                  
+                </div>
+                <div class="col-sm-12 col-md-9">
+                  <div>
+
+                    <p class="post-card-title"><a
+                        href="{% url 'series-detail' series.id %}">{{series.name}}</a></p>
+                    <p class="post-card-content"></p>
+                    <small>{{series.post_count}} Posts</small>
+
+                  </div>
+                </div>
+              </div>
+            </div>  
+          </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+        {% endfor %}

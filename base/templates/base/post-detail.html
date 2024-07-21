@@ -1,0 +1,197 @@
+{% extends 'base\base.html' %}
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  {% block title %}{{post.title}}{% endblock %}
+  
+</head>
+
+<body>
+  {% block content %}
+  <style>
+    #like{
+      cursor: pointer;
+    }
+    #unlike{
+      cursor: pointer;
+    }
+  </style>
+
+
+
+  <div class="container">
+    
+
+
+
+    <div class="row">
+
+
+
+      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
+        <div class="post-detail-card" style="
+          background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc);
+          border-radius: 5px;
+          padding: 20px;
+          
+          
+          ">
+
+          <h6>Post by <a href="{% url 'profile' post.author.username %}">{{post.author}}</a>({{author_followers_count}} Followers)</h6>
+          
+          {% include 'base/likes.html' %}
+         
+          
+                <p>
+                  {% if request.user == post.author%}
+                    <a href="" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"  data-bs-target="#exampleModalToggle" href="#exampleModalToggle" role="button">Edit Post</a>
+                    <a href="" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Post</a>
+                    {% endif %} 
+                    <a href="{% url 'post_image' post.id %}" class="btn btn-sm btn-outline-dark"><i class="bi bi-download"></i></a>
+                </p>
+                <small>Posted on {{post.created}} 
+                  {% if post.edited %}
+                  (edited)
+                  {% endif %}
+
+                </small>
+                <h3>{{post.title}}</h3>
+                <hr>
+                <div class="post-cover">
+                  {% if post.post_cover %}
+                  <img src="{{post.post_cover.url}}" width="500" height="400" alt="">
+                  {% endif %}  
+                </div>
+                <hr>
+                <p>{{post.content|safe}}</p>
+
+
+                {% include 'base/comment.html' %}
+        </div>
+      </div>
+
+
+
+
+    <div class="col-lg-4 d-none d-md-none d-lg-block d-xl-block">
+      <div id="fixedElement">
+        <div class="card" style="width: 100%;" id="suggest-card">
+          <div class="card-body">
+            <h5 class="text-center">Suggested</h5>
+            <hr>
+            {% for post in suggested_posts %}
+            <div class="row mt-4">
+              <div class="col-3">
+                {% if post.post_cover %}
+                <img src="{{post.post_cover.url}}" class="profile-suggested-posts" alt="" width="60" height="60"
+                  srcset="">
+                {% endif %}
+              </div>
+              <div class="col-9">
+                <h5><a href="{% url 'post-detail' post.id %}">{{ post.title|truncatewords:10 }}</a></h5>
+                <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-eye" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                    <path
+                      d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                  </svg> {{post.read.count}} | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                    <path
+                      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                  </svg> 123 | <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-chat-left" viewBox="0 0 16 16">
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                  </svg> 3</p>
+              </div>
+            </div>
+
+            {% endfor %}
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {% endblock %}
+
+
+
+
+
+
+
+  <script src="assets/js/jquery-2.1.0.min.js"></script>
+
+  <!-- Bootstrap -->
+  <script src="assets/js/popper.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+
+  <!-- Plugins -->
+  <script src="assets/js/scrollreveal.min.js"></script>
+  <script src="assets/js/waypoints.min.js"></script>
+  <script src="assets/js/jquery.counterup.min.js"></script>
+  <script src="assets/js/imgfix.min.js"></script>
+  <script src="assets/js/mixitup.js"></script>
+  <script src="assets/js/accordions.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+
+  <!-- Global Init -->
+  <script src="assets/js/custom.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+    integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>

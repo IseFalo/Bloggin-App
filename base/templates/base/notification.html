@@ -1,0 +1,14 @@
+{% for notification in notifications %}
+<div class="row mb-2">
+    <div class="col-auto">
+        <img src="{{ notification.post_cover_url }}" class="" alt="" width="50" height="50">
+    </div>
+    <div class="col">
+        <p class="mb-0">
+            <a href="{{notification.post_url}}" class="text-decoration-none">{{ notification.message }}</a>
+            <span class="text-muted small">7h</span>
+        </p>
+    </div>
+</div>
+<hr>
+{% endfor %}

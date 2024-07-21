@@ -1,0 +1,45 @@
+{% if top_three_posts %}
+<section class="container">
+  <div id="carouselExampleDark" class="carousel carousel-dark slide mt-5" data-bs-ride="carousel">
+    <div class="container my-5">
+      <div class="carousel-inner">
+        {% for post in top_three_posts %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="10000">
+          <div class="row g-0">
+            <div class="col-lg-6" style="position: relative;">
+              <img src="{{post.post_cover.url}}" class="d-block w-100" alt="..." id="caro-img"
+                style="background-size: 100%; image-rendering: -webkit-optimize-contrast;" height="100%" width="100%">
+            </div>
+            <div class="col-lg-6  d-flex align-items-center px-5" id="captions">
+              <div class="captions">
+                <h4 class="text-muted">Editor's Pick {{ forloop.counter }}</h4>
+                <h3>{{ post.title }}</h3>
+                <p>Read by {{post.read.count}} people</p>
+                <a class="btn btn-sm btn-outline-dark" href="{% url 'post-detail' post.id %}">View Post</a>
+                <p>Posted on {{post.created}} and {% if post.edited %}
+                  edited
+                  {% endif %}</p>
+                <p>{{post.get_read_time_in_minutes}} mins read</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+       
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
+</section>
+
+  {% else %}
+  <h5>NO POSTS AVAILABLE YET</h5>
+{% endif %}

@@ -1,0 +1,148 @@
+{% extends 'base\base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Settings</title>
+</head>
+
+<body>
+    {% block content %}
+    <div class="container p-0">
+        <div class="row">
+            <div class="col-md-5 col-xl-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Profile Settings</h5>
+                    </div>
+                    <div class="list-group list-group-flush" role="tablist">
+                        <a class="list-group-item list-group-item-action active" id="list-group-item" data-toggle="list"
+                            href="#account" role="tab">
+                            Account
+                        </a>
+                        <a class="list-group-item list-group-item-action" href="{% url 'change_password' %}"
+                            >
+                            Password
+                        </a>
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 col-xl-8">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="account" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Public info</h5>
+                            </div>
+                            <div class="card-body">
+                                {% for message in messages %}
+                                <h5>{{message}}</h5>
+                                {% endfor %}
+                                <form action="{% url 'settings' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="inputUsername">Username</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="username" value="{{profile.username}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputUsername">Biography</label>
+                                                <textarea rows="5" name="bio" class="form-control" id="inputBio"
+                                                    placeholder="Tell something about yourself">{{profile.bio}}</textarea>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="inputUsername">Phone-no</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="phone-no" value="{{user_profile.phone_no}}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputUsername">Instagram link:</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="instagram-link">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputUsername">Twitter Link:</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="twitter-link">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputUsername">Facebook Link:</label>
+                                                <input type="text" class="form-control" id="inputUsername"
+                                                name="facebook-link">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="text-center">
+                                                <h6 id="outputName">{{profile.username}}</h6>
+                                                {% if profile.profile_img %}
+                                                <img class="edit-profile-image mt-5" id="settings-profile-img" alt="" width="100" height="100"  src="{{profile.profile_img.url}}" >
+                                                {% endif %}
+                                                <div class="mt-2">
+                                                    <input id="profile-image-input" type="file" name="image" value=""
+                                                        class="shadow-none bg-gray-100">
+                                                </div>
+                                                <small>For best results, use an image at least 128px by 128px in .jpg
+                                                    format</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-outline-dark">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+    document.getElementById('profile-image-input').addEventListener('change', function (event) {
+        var input = event.target
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            var dataURL = reader.result;
+            var previewImage = document.getElementById('settings-profile-img');
+            previewImage.src = dataURL;
+
+        };
+        reader.readAsDataURL(input.files[0]);
+    })
+    const realnameInput = document.getElementById('inputUsername');
+    const realnameOutput = document.getElementById('outputName');
+
+    realnameInput.addEventListener('input', (event) => {
+    realnameOutput.innerText = event.target.value;
+    });
+
+    </script>
+
+    <script src="{% static 'my-js/settings.js' %}"></script>
+
+
+{% endblock %}
+
+    
+</body>
+
+
+</html>

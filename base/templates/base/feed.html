@@ -1,0 +1,196 @@
+{% extends 'base\base.html' %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block title %}Home{% endblock %}
+
+
+
+</head>
+
+<body>
+  {% block content %}
+  {% include 'base/feed_trending_image.html' %}
+<!-- <div class="container">
+  <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="">All</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="">Following</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="">Organizations</a>
+    </li>
+
+    
+  </ul>
+
+</div> -->
+  
+
+
+
+
+
+  <!--Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Logout</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5>Are you sure you want to logout?</h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-sm btn-primary">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  
+
+  <div class="container my-5">
+    
+
+    <div class="row" id="row">
+
+
+
+
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-9 posts-list my-5" id="col">
+        
+        {% include 'base/feed_posts.html' %}
+        
+      </div>
+
+
+
+
+      
+      <div class="col-lg-3 d-none d-md-none d-lg-none d-xl-block my-5" id="col">
+        <div id="fixedElement">
+          <div class="card" style="width: 100%;" id="suggest-card">
+            <div class="card-body">
+              <h5 class="text-center">Suggestions</h5>
+              <hr>
+              {% for suggested_user in suggested_users %}
+              <div class="row mt-4">
+                <div class="col-2">
+                  <img src="{{ suggested_user.profile_img.url }}" class="suggested-user-image" style="border-radius: 50%;" alt="" width="37" height="37"
+                    srcset="">
+                </div>
+                <div class="col-8">
+                  <p style="font-size: 13px; font-weight: 500;">{{ suggested_user.username }}</p>
+                  <p>{{suggested_user.followers.count}} followers | {{suggested_user.post_count}} posts</p>
+                  
+                </div>
+                <div class="col-2">
+                 
+                  <a href="{% url 'profile' suggested_user.username %}" class="btn btn-sm btn-outline-dark"> <i class="bi bi-arrow-right"></i></a>
+                  
+
+                  
+                </div>
+              </div>
+              {% endfor %}
+
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+<script>
+  const prev = document.querySelector("#prev");
+const next = document.querySelector("#next");
+
+let carouselVp = document.querySelector("#carousel-vp");
+
+let cCarouselInner = document.querySelector("#cCarousel-inner");
+let carouselInnerWidth = cCarouselInner.getBoundingClientRect().width;
+
+let leftValue = 0;
+
+// Variable used to set the carousel movement value (card's width + gap)
+const totalMovementSize =
+  parseFloat(
+    document.querySelector(".cCarousel-item").getBoundingClientRect().width,
+    10
+  ) +
+  parseFloat(
+    window.getComputedStyle(cCarouselInner).getPropertyValue("gap"),
+    10
+  );
+
+prev.addEventListener("click", () => {
+  if (!leftValue == 0) {
+    leftValue -= -totalMovementSize;
+    cCarouselInner.style.left = leftValue + "px";
+  }
+});
+
+next.addEventListener("click", () => {
+  const carouselVpWidth = carouselVp.getBoundingClientRect().width;
+  if (carouselInnerWidth - Math.abs(leftValue) > carouselVpWidth) {
+    leftValue -= totalMovementSize;
+    cCarouselInner.style.left = leftValue + "px";
+  }
+});
+
+const mediaQuery510 = window.matchMedia("(max-width: 510px)");
+const mediaQuery770 = window.matchMedia("(max-width: 770px)");
+
+mediaQuery510.addEventListener("change", mediaManagement);
+mediaQuery770.addEventListener("change", mediaManagement);
+
+let oldViewportWidth = window.innerWidth;
+
+function mediaManagement() {
+  const newViewportWidth = window.innerWidth;
+
+  if (leftValue <= -totalMovementSize && oldViewportWidth < newViewportWidth) {
+    leftValue += totalMovementSize;
+    cCarouselInner.style.left = leftValue + "px";
+    oldViewportWidth = newViewportWidth;
+  } else if (
+    leftValue <= -totalMovementSize &&
+    oldViewportWidth > newViewportWidth
+  ) {
+    leftValue -= totalMovementSize;
+    cCarouselInner.style.left = leftValue + "px";
+    oldViewportWidth = newViewportWidth;
+  }
+}
+</script>
+
+
+
+
+{% endblock %}
+</body>
+
+</html>

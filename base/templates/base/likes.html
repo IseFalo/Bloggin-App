@@ -1,0 +1,55 @@
+<style>
+    .like-btn{
+        background: none;
+        border: none;
+        color: inherit;
+        font: inherit;
+        line-height: normal;
+        overflow: visible;
+        padding: 0;
+        cursor: pointer;
+    }
+
+</style>
+<form action="{% url 'like-post' post.id %}" class="like-form" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="like-btn" name="post_id" value="{{post.id}}">
+        {% if request.user not in post.likes.all %}
+        <i class="bi bi-heart like-icon"></i>
+        {% else %}
+        <i class="bi bi-heart-fill like-icon"></i>
+        {% endif %}
+    </button>
+ <span class="like-count" id="like-count">{{post.likes.count}} </span> 
+</form>
+
+
+<script>
+    $(document).ready(function(){
+        $('.like-form').submit(function(e){
+            e.preventDefault();
+            const post_id = $('.like-btn').val()
+            const token = $('input[name=csrfmiddlewaretoken]').val()
+            const url =$(this).attr('action')
+            $.ajax({
+                method:'POST',
+                url:url,
+                headers:{'X-CSRFToken':token,},
+                data:{
+                    'post_id':post_id
+                },
+                success:function(response){
+                    if(response.liked === true){
+                        $('.like-icon').removeClass('bi-heart').addClass('bi-heart-fill');
+                    } else {
+                        $('.like-icon').removeClass('bi-heart-fill').addClass('bi-heart');
+                    }
+                    $('#like-count').text(response.likes_count);
+                },
+                error:function(response){
+                    console.log("Failed", response)
+                },
+            })
+        })
+    })
+</script>
