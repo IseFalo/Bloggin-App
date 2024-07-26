@@ -1,0 +1,9 @@
+SECRET_KEY = os.environ.get("SECRET_KEY")
+# 'django-insecure-poi=hb8j(z!^oa*kwodg1k6o-lbb-hc9u(kb39zwqe+w7_lp@1'
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.environ.get("DEBUG", "False").lower()=="true"
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+
+database_url = os.environ.get("DATABASE_URL")
+DATABASES["default"] = dj_database_url.parse(database_url)
