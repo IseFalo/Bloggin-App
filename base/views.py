@@ -87,7 +87,7 @@ def register(request):
 
 
     else:
-        return render(request, 'base/register1.html')
+        return render(request, 'register1.html')
 
 def login(request):
     if request.method == 'POST':
@@ -104,7 +104,7 @@ def login(request):
             return redirect('login')
 
     else:
-        return render(request, 'base/login1.html')
+        return render(request, 'login1.html')
 
 def logoutUser(request):
     logout(request)
@@ -123,7 +123,7 @@ def change_password(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'base/change_password.html', {
+    return render(request, 'change_password.html', {
         'form': form
     })
 # def get_read_time(words):
@@ -148,8 +148,8 @@ class HomeView(ListView):
 
     def get_template_names(self):
         if self.request.htmx:
-            return "base/feed_posts.html"
-        return "base/feed.html"
+            return "feed_posts.html"
+        return "feed.html"
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
@@ -228,7 +228,7 @@ class HomeView(ListView):
 #         post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
 #     context={'posts':posts, 'profile':profile, 'suggested_users':suggested_users, 'top_read_posts':top_read_posts, 'form':form, 'page_obj': page_obj}
     
-#     return render(request, 'base/feed.html', context)
+#     return render(request, 'feed.html', context)
 
 
 
@@ -309,7 +309,7 @@ def settings(request):
                 profile.save()
 
         return redirect('settings')
-    return render(request, 'base/settings.html', {'profile': profile})
+    return render(request, 'settings.html', {'profile': profile})
 
 def search_view(request):
     
@@ -324,9 +324,9 @@ def search_view(request):
             'profile':profile,
         }
 
-        return render(request, 'base/search-results.html', context)
+        return render(request, 'search-results.html', context)
     else:
-        return render(request, 'base/search-results.html')
+        return render(request, 'search-results.html')
 
 
 
@@ -371,15 +371,15 @@ def create_post(request):
             return redirect(redirect_url)
         else:
             messages.error(request, "Please correct the errors below.")
-            return render(request, 'base/create-post.html', {'form': form, 'profile': profile})
+            return render(request, 'create-post.html', {'form': form, 'profile': profile})
     else:
         form = PostForm()
-        return render(request, 'base/create-post.html', {'form': form, 'profile': profile}) 
+        return render(request, 'create-post.html', {'form': form, 'profile': profile}) 
     
 def drafts_list(request):
     drafts = Post.objects.filter(status='draft', author=request.user)
     profile = Profile.objects.get(username=request.user)
-    return render(request, 'base/drafts.html', {'drafts': drafts, 'profile':profile})
+    return render(request, 'drafts.html', {'drafts': drafts, 'profile':profile})
 def publish_post(request, pk):
     post = Post.objects.get(id=pk)
     form = PostForm(instance=post)
@@ -390,7 +390,7 @@ def publish_post(request, pk):
             form.save()
             return redirect('/')
     context = {'form':form, 'post':post}
-    return render(request, 'base/create-post.html', context)
+    return render(request, 'create-post.html', context)
 
 def post_detail(request, pk):
     post=Post.objects.get(id=pk)
@@ -406,11 +406,11 @@ def post_detail(request, pk):
     replies_count = sum(comment.replies.count() for comment in post.comment_set.all())
     total_count = comment_count + replies_count
     context={'post':post, 'profile':profile, 'suggested_posts':suggested_posts, 'total_count':total_count, 'author_followers_count': author_followers_count}
-    return render(request, 'base/post-detail.html', context)
+    return render(request, 'post-detail.html', context)
 def post_image(request, pk):
     post = Post.objects.get(id=pk)
     post_cover_url = request.build_absolute_uri(post.post_cover.url)
-    html = render_to_string('base/post_image.html', {'post': post, 'post_cover_url': post_cover_url,})
+    html = render_to_string('post_image.html', {'post': post, 'post_cover_url': post_cover_url,})
     options = {
         'format': 'png',
         'encoding': 'UTF-8',
@@ -460,7 +460,7 @@ def saved_posts_list(request):
     profile = Profile.objects.get(username=request.user)
     saved_posts = profile.saved_posts.all()
     context = {'saved_posts': saved_posts, 'profile':profile}
-    return render(request, 'base/saved_posts_list.html', context)
+    return render(request, 'saved_posts_list.html', context)
 def profile(request, username):
     user_object=get_object_or_404(User, username=username)
     profile = Profile.objects.get(username=request.user)
@@ -492,7 +492,7 @@ def profile(request, username):
         'user_posts_count':user_posts_count,
        
     }
-    template_name = "base/profile-page-posts.html" if request.htmx else "base/profile-page.html"
+    template_name = "profile-page-posts.html" if request.htmx else "profile-page.html"
     return render(request, template_name, context)
 
 
@@ -502,8 +502,8 @@ class ProfilePostListView(ListView):
     paginate_by = 10
     def get_template_names(self):
         if self.request.htmx:
-            return "base/profile_post_list_posts.html"
-        return "base/profile_post_list.html"
+            return "profile_post_list_posts.html"
+        return "profile_post_list.html"
     def get_queryset(self):
         self.user_object = get_object_or_404(User, username=self.kwargs['username'])
         return Post.objects.filter(status='published', author=self.user_object)
@@ -561,7 +561,7 @@ def get_notifications(request):
     context = {
         'notifications': notifications
     }
-    return render(request, 'base/notification.html', context)
+    return render(request, 'notification.html', context)
 # def format_time_difference(created_at):
 #     now = timezone.now()
 #     time_difference = now - created_at
@@ -631,7 +631,7 @@ def series_detail(request, pk):
   series = Series.objects.get(pk=pk)
   series_posts = Post.objects.filter(series=series, author=request.user)
   context = {'series': series, 'series_posts': series_posts}
-  return render(request, 'base/series-detail.html', context)
+  return render(request, 'series-detail.html', context)
 
 
 
@@ -646,7 +646,7 @@ def series_detail(request, pk):
 #     created_organizations=Organization.objects.filter(creator=request.user)
 #     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
 #     context = {'user_series':user_series, 'author_profile':author_profile, 'user_object':user_object, 'created_organizations':created_organizations, 'top_pick_posts':top_pick_posts, 'profile':profile}
-#     return render(request, 'base/profile-series-list.html', context)
+#     return render(request, 'profile-series-list.html', context)
 
 
 
@@ -657,8 +657,8 @@ class SeriesListView(ListView):
 
     def get_template_names(self):
         if self.request.htmx:
-            return "base/profile-series-list-items.html"
-        return "base/profile-series-list.html"
+            return "profile-series-list-items.html"
+        return "profile-series-list.html"
 
     def get_queryset(self):
         username = self.kwargs.get('username')
@@ -705,18 +705,18 @@ def organization_profile_list(request, username):
     profile = Profile.objects.get(username=request.user)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
     context = {'user_object':user_object, 'author_profile':author_profile, 'user_organizations':user_organizations, 'top_pick_posts':top_pick_posts, 'profile':profile}
-    return render(request, 'base/profile-organization-list.html', context)
+    return render(request, 'profile-organization-list.html', context)
 
 
 class OrganizationProfileView(DetailView):
     model = Organization
     context_object_name = 'organization_profile'
-    template_name = 'base/organization-profile.html'
+    template_name = 'organization-profile.html'
     pk_url_kwarg = 'pk'
 
     def get_template_names(self):
         if self.request.htmx:
-            return ["base/organization-profile-posts-parts.html"]
+            return ["organization-profile-posts-parts.html"]
         return [self.template_name]
 
     def get_context_data(self, **kwargs):
@@ -768,7 +768,7 @@ class OrganizationProfileView(DetailView):
 #         'profile': profile,
 #         'most_read_posts': most_read_posts
 #     }
-#     template_name = "base/organization-profile-posts-parts.html" if request.htmx else "base/organization-profile.html"
+#     template_name = "organization-profile-posts-parts.html" if request.htmx else "organization-profile.html"
 #     return render(request, template_name, context)
 
 
@@ -781,7 +781,7 @@ def organization_series(request, pk):
                                   .order_by('-read_count_annotated')[:3]
     profile = get_object_or_404(Profile, username=request.user)
     context = {'organization_series':organization_series, 'organization_profile':organization_profile, 'top_three_posts':top_three_posts, 'organization_posts':organization_posts, 'profile':profile}
-    return render(request, 'base/organization_series_profile.html', context)
+    return render(request, 'organization_series_profile.html', context)
 def organization_posts_list(request, pk):
     organization_profile = Organization.objects.get(pk=pk)
     organization_posts = Post.objects.filter(organization=organization_profile)
@@ -790,7 +790,7 @@ def organization_posts_list(request, pk):
                                   .annotate(read_count_annotated=Count('read')) \
                                   .order_by('-read_count_annotated')[:3]
     context={'organization_profile':organization_profile,'organization_posts':organization_posts, 'profile':profile, 'top_three_posts':top_three_posts}
-    return render(request, 'base/organization_posts_list.html', context)
+    return render(request, 'organization_posts_list.html', context)
 
 def follow_organization(request, pk):
     organization_profile = Organization.objects.get(pk=pk)

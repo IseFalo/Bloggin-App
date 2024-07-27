@@ -1,4 +1,4 @@
-{% extends 'base\base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -14,7 +14,7 @@
 
 <body>
   {% block content %}
-  {% include 'base/feed_trending_image.html' %}
+  {% include 'feed_trending_image.html' %}
 <!-- <div class="container">
   <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
     <li class="nav-item">
@@ -77,7 +77,7 @@
 
       <div class="col-sm-12 col-md-12 col-lg-12 col-xl-9 posts-list my-5" id="col">
         
-        {% include 'base/feed_posts.html' %}
+        {% include 'feed_posts.html' %}
         
       </div>
 
