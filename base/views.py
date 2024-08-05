@@ -28,10 +28,21 @@ from .forms import PostForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.urls import reverse
+from django.core.files.storage import default_storage
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
 POST_COUNT_PER_PAGE = 9
+@csrf_exempt
+def upload_editor_image(request):
+    if request.method == 'POST' and request.FILES.get('file'):
+        uploaded_file = request.FILES['file']
+        file_name = default_storage.save(uploaded_file.name, uploaded_file)
+        file_url = default_storage.url(file_name)
+        return JsonResponse({'location': file_url})
+    return JsonResponse({'error': 'No file uploaded'}, status=400)
+
 
 def organization_top_posts_view(request, organization_id):
     organization = get_object_or_404(Organization, id=organization_id)

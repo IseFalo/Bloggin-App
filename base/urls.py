@@ -40,10 +40,10 @@ urlpatterns=[
     path('follow/<str:username>/', views.follow, name="follow"),
     path('unfollow/<str:username>/', views.unfollow, name="unfollow"),
     path('get_new_notifications/', views.get_notifications, name='get_new_notifications'),
-    
+    path('upload-editor-image/', views.upload_editor_image, name='upload_editor_image'),
 
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

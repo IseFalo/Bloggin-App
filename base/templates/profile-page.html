@@ -1,4 +1,4 @@
-{% extends 'base\base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -23,12 +23,12 @@
   </style> -->
 
   {% block content %}
-  {% include 'base/profile_info.html' %}
+  {% include 'profile_info.html' %}
   {% if top_pick_posts %}
-  {% include 'base/profile_top_picks_carousel.html' %}
+  {% include 'profile_top_picks_carousel.html' %}
   {% else %}
   {% if request.user == user_object %}
-  {% include 'base/profile_no_top_picks.html' %}
+  {% include 'profile_no_top_picks.html' %}
   {% else %}
   {% endif %}
   {% endif %}
@@ -72,7 +72,7 @@
         <div class="col-xl-8">
           <p style="font-size: 30px; margin-bottom: 30px; text-align: center;">Top Posts</p>
           <div id="posts-box">
-          {% include 'base/profile-page-posts.html' %}
+          {% include 'profile-page-posts.html' %}
           <a href="{% url 'profile-post-list' user_object.username %}" class="btn  btn-sm btn-outline-dark w-100">View all posts</a>
           </div>
 
