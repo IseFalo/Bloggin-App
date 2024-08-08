@@ -1,4 +1,4 @@
-{% extends 'base\base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 <!doctype html>
@@ -47,7 +47,7 @@
 
           <h6>Post by <a href="{% url 'profile' post.author.username %}">{{post.author}}</a>({{author_followers_count}} Followers)</h6>
           
-          {% include 'base/likes.html' %}
+          {% include 'likes.html' %}
          
           
                 <p>
@@ -74,7 +74,7 @@
                 <p>{{post.content|safe}}</p>
 
 
-                {% include 'base/comment.html' %}
+                {% include 'comment.html' %}
         </div>
       </div>
 

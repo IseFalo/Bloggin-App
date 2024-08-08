@@ -30,6 +30,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.urls import reverse
 from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
+import os
 # Create your views here.
 
 
@@ -42,7 +43,6 @@ def upload_editor_image(request):
         file_url = default_storage.url(file_name)
         return JsonResponse({'location': file_url})
     return JsonResponse({'error': 'No file uploaded'}, status=400)
-
 
 def organization_top_posts_view(request, organization_id):
     organization = get_object_or_404(Organization, id=organization_id)

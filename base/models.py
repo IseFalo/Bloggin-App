@@ -4,7 +4,9 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.db.models import Count
-from tinymce.models import HTMLField
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
+
 import uuid
 import readtime
 # Create your models here.
@@ -38,7 +40,7 @@ class Post(models.Model):
     title=models.CharField(max_length=500)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     post_cover = models.ImageField(upload_to="post_covers", default="no-image.png")
-    content= HTMLField()
+    content= RichTextUploadingField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     read = models.ManyToManyField(User, related_name="blog_posts")
