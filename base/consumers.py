@@ -30,13 +30,13 @@ class NotificationConsumer(WebsocketConsumer):
             )
 
     def user_comment(self, event):
-        html = render_to_string("base/notification-alert.html", context={'comment_author': event['text']})
+        html = render_to_string("notification-alert.html", context={'comment_author': event['text']})
         self.send(text_data=json.dumps({
             'html': html
         }))
 
     def new_post(self, event):
-        html = render_to_string("base/notification-alert.html", context={
+        html = render_to_string("notification-alert.html", context={
             'message': event['text'],
             'post_url': event['post_url'],
             'post_cover_url': event['post_cover_url'],

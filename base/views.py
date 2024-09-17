@@ -322,22 +322,33 @@ def settings(request):
         return redirect('settings')
     return render(request, 'settings.html', {'profile': profile})
 
-def search_view(request):
-    
-    profile = Profile.objects.get(username=request.user)
-    if request.method == 'POST':
-        query = request.POST['query']
-        results = Post.objects.filter(title__contains=query)
 
-        context = {
-            'query': query,
-            'results': results,
-            'profile':profile,
-        }
-
-        return render(request, 'search-results.html', context)
+def search_results_view(request):
+    query = request.GET.get('search', '')
+    if query:
+        results = Post.objects.filter(title__contains = query)
     else:
-        return render(request, 'search-results.html')
+        results = []
+    context = {'results':results}
+    return render(request, 'search-results.html', context)
+
+
+# def search_view(request):
+    
+#     profile = Profile.objects.get(username=request.user)
+#     if request.method == 'POST':
+#         query = request.POST['query']
+#         results = Post.objects.filter(title__contains=query)
+
+#         context = {
+#             'query': query,
+#             'results': results,
+#             'profile':profile,
+#         }
+
+#         return render(request, 'search-results.html', context)
+#     else:
+#         return render(request, 'search-results.html')
 
 
 
@@ -572,7 +583,7 @@ def get_notifications(request):
     context = {
         'notifications': notifications
     }
-    return render(request, 'notification.html', context)
+    return render(request, 'notifications.html', context)
 # def format_time_difference(created_at):
 #     now = timezone.now()
 #     time_difference = now - created_at

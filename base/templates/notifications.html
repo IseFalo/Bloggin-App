@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    {% block title %}Notifications{% endblock %}
+
+  </head>
+  <body>
+
+    {% block content %}
+      <style>
+        .notification-body {
+            width: 70%;
+            margin: 0 auto;
+}
+      </style>
+    <div class="notification-body">
+      
+
+
+
+    {% for notification in notifications %}
+    <div class="card search-card" id="search-card"
+      style="width: 100%; background: linear-gradient(71deg, #fffcfc, #faf9f9, #fffcfc); color: #0c0a0e; border: 2px solid transparent; margin-bottom: 10px;">
+
+
+      <div class="card-body">
+        <div class="row">
+          <div class="col-2 d-none d-md-block d-lg-block d-xl-block">
+            <img src="{{ notification.post_cover_url }}" class="d-none d-md-block d-lg-block d-xl-block" alt="" width="100"
+              height="100">
+          </div>
+          <div class="col-sm-12 col-md-10">
+            <p class="mb-0">
+                <a href="{{notification.post_url}}" class="text-decoration-none">{{ notification.message }}</a>
+                <span class="text-muted small">7h</span>
+            </p>
+        </div>
+        </div>
+      </div>
+
+<hr>
+
+
+
+
+
+
+
+    
+
+
+
+
+      {% endfor %}
+
+    </div>
+
+
+{% endblock %}
+   
+  </body>
+</html>

@@ -1,0 +1,97 @@
+{% load static %}
+<header>
+    <a href="/" class="logo-link">
+        <div class="small-logo">B</div>
+        <div class="big-logo">Bloggin</div>
+    </a>
+
+
+    <nav class="nav-bar">
+        <ul style="list-style-type: none; padding: 0; margin: 0;">
+            <li>
+                <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                    fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                    <h6 class="nav-icon-text">Search</h6>
+                </a>
+                
+                
+               
+            </li>
+            <li>
+                <a href="{% url 'create-post' %}"><img width="22" height="22"
+                    src="https://img.icons8.com/pulsar-line/48/add.png" alt="add" />
+                    <h6 class="nav-icon-text">Create Post</h6>
+                </a>
+                
+            </li>
+            <li>
+                <a href="{% url 'get_new_notifications' %}" role="button"
+                                    aria-controls="offcanvasExample" id="notification-link">
+                                    <img width="22" height="22" id="notification-icon" src="https://img.icons8.com/ios/50/appointment-reminders--v1.png" alt="appointment-reminders--v1" style="display: inline;" />
+                                    <img width="25" height="25" id="notification-icon-gif" src="{% static 'images/icons8-notification.gif' %}" alt="notification-gif" style="display: none;"/>
+                <h6 class="nav-icon-text">Notifications</h6>                    
+                </a>
+                
+            </li>
+            <li>
+                <a  class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{profile.profile_img.url}}"
+                    style="width: 25px; height: 25px; border: 1px solid; border-radius: 100%; object-fit: cover;"
+                    id="nav-profile-img" alt="...">
+                <h6 class="nav-icon-text">Profile</h6>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Search Modal -->
+
+  
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" style="height: 80vh;">
+      <div class="modal-content modal-dialog-scrollable">
+        <div class="modal-header">
+          <!-- <h1 class="modal-title fs-5" id="staticBackdropLabel">Search</h1> -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+        <form>
+        {% csrf_token %}
+        <div class="search-container">
+            <input class=""
+            type="search"
+            name="search"
+            placeholder="Search"
+            hx-get="{% url 'search_results' %}"
+            hx-trigger="keyup changed"
+            hx-target="#search-results"
+            hx-indicator=".htmx-indicator"
+            aria-label="Search">
+            
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+        viewBox="0 0 16 16">
+        <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+    </svg>
+        </div>
+        </form>
+
+        <h3>
+            <span class="htmx-indicator">
+              ...
+           </span>
+        </h3>
+        <div id="search-results">
+            {% include "search-results.html" %}
+        </div>
+        
+        </div>
+
+      </div>
+    </div>
+  </div>

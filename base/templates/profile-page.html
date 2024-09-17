@@ -16,14 +16,43 @@
 </head>
 
 <body>
-  <!-- <style>
+  <style>
     .not-visible{
       display: none;
     }
-  </style> -->
+  </style>
 
   {% block content %}
+  
   {% include 'profile_info.html' %}
+  <div class="container">
+  
+    <ul class="nav nav-tabs justify-content-start mt-5 mb-5">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile-post-list' user_object.username %}">Posts</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'series-list' user_object.username %}">Series</a>
+      </li>
+  
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="{% url 'organization-profile-list' user_object.username %}">Organizations</a>
+      </li> -->
+      
+  
+      <!-- <li class="nav-item">
+        <a class="nav-link btn btn-outline-dark" href="#"><svg
+          xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+          <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+      </svg></a>
+      </li> -->
+    </ul>
+  </div>
   {% if top_pick_posts %}
   {% include 'profile_top_picks_carousel.html' %}
   {% else %}
@@ -33,34 +62,7 @@
   {% endif %}
   {% endif %}
 
-  <div class="container">
-  
-  <ul class="nav nav-tabs justify-content-center mt-5 mb-5">
-    <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="#">Home</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'profile-post-list' user_object.username %}">Posts</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'series-list' user_object.username %}">Series</a>
-    </li>
 
-    <!-- <li class="nav-item">
-      <a class="nav-link" href="{% url 'organization-profile-list' user_object.username %}">Organizations</a>
-    </li> -->
-    
-
-    <!-- <li class="nav-item">
-      <a class="nav-link btn btn-outline-dark" href="#"><svg
-        xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-        fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-        <path
-            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-    </svg></a>
-    </li> -->
-  </ul>
-</div>
 
   <section>
     <div class="container">

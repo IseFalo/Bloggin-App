@@ -100,10 +100,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-import dj_database_url
-DATABASES ={
-    'default':dj_database_url.parse(env('DATABASE_URL'))
-}
+# import dj_database_url
+# DATABASES ={
+#     'default':dj_database_url.parse(env('DATABASE_URL'))
+# }
 
 
 CACHES = {
