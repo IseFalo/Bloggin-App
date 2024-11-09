@@ -23,6 +23,15 @@
     #unlike{
       cursor: pointer;
     }
+    .post-author-link a {
+    color: #595959;
+    text-decoration: none; /* Optional: Remove underline if desired */
+    
+}
+    .post-suggestions-link a{
+        text-decoration: none;
+        color: #595959;
+    }
   </style>
 
 
@@ -45,7 +54,7 @@
           
           ">
 
-          <h6>Post by <a href="{% url 'profile' post.author.username %}">{{post.author}}</a>({{author_followers_count}} Followers)</h6>
+          <h6 class="post-author-link">Post by <a href="{% url 'profile' post.author.username %}">{{post.author}}</a>({{author_followers_count}} Followers)</h6>
           
           {% include 'likes.html' %}
          
@@ -96,7 +105,7 @@
                 {% endif %}
               </div>
               <div class="col-9">
-                <h5><a href="{% url 'post-detail' post.id %}">{{ post.title|truncatewords:10 }}</a></h5>
+                <h5 class="post-suggestions-link"><a href="{% url 'post-detail' post.id %}">{{ post.title|truncatewords:10 }}</a></h5>
                 <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-eye" viewBox="0 0 16 16">
                     <path

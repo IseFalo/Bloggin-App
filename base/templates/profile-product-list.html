@@ -13,7 +13,7 @@
     // To be used for making AJAX requests in script.js
     window.CSRF_TOKEN = "{{ csrf_token }}";
   </script>
-  <link rel="stylesheet" href="{% static 'my-css/profile_posts_list.css' %}" />
+  
 </head>
 
 <body>
@@ -22,14 +22,7 @@
  
   
   {% include 'profile_info.html' %}
-  <!-- {% if top_pick_posts %}
-  {% include 'profile_top_picks_carousel.html' %}
-  {% else %}
-  {% if request.user == user_object %}
-  {% include 'profile_no_top_picks.html' %}
-  {% else %}
-  {% endif %}
-  {% endif %} -->
+
 
   <div class="container">
     <ul class="nav nav-fill nav-tabs mt-5 mb-5" role="tablist">
@@ -37,10 +30,10 @@
         <a class="nav-link" href="{% url 'profile' user_object.username %}"> Home </a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link active" href="#"> Posts </a>
+        <a class="nav-link" href="{% url 'profile-post-list' user_object.username %}"> Posts </a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'profile-product-list' user_object.username %}"> Products</a>
+        <a class="nav-link active" href="#"> Products </a>
       </li>
   
       <li class="nav-item" role="presentation">
@@ -52,12 +45,13 @@
 
 <section>
     <div class="container">
+      <!-- <p class="container-title">Products</p> -->
 
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Create Series</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -92,7 +86,7 @@
 
 
       <div class="row mt-5">
-        {% include 'profile_post_list_posts.html' %}
+        {% include 'profile-product-list-products.html' %}
       </div>
     </div>
 

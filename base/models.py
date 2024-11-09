@@ -133,9 +133,14 @@ class Reply(models.Model):
     class Meta:
         ordering = ['created']
 
+class Product(models.Model):
+    owner=models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    product_image = models.ImageField(upload_to="product_images")
 
-
-
+    def __str__(self):
+        return f'Product: {self.title}'
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)

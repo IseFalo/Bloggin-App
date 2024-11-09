@@ -15,7 +15,7 @@
                   <h6 style="font-size: 20px;">{{ post.title }}</h6>
                   <p>Read by {{post.read.count}} people</p>
                   <a class="btn btn-sm btn-outline-dark" href="{% url 'post-detail' post.id %}">View Post</a>
-                  <p>Posted on {{post.created}} and {% if post.edited %}
+                  <p>Posted on {{post.created}}{% if post.edited %} and 
                     edited
                     {% endif %}</p>
                   <p>{{post.get_read_time_in_minutes}} mins read</p>

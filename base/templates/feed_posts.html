@@ -1,12 +1,16 @@
 <style>
     .post-author-link a {
-    color: #5b5c5b;
+    color: #595959;
     text-decoration: none; /* Optional: Remove underline if desired */
     
 }
     .post-card-title a{
         text-decoration: none;
-        color: #5b5c5b;
+        color: #595959;
+        font-size: 20px;
+    }
+    .three-dots{
+        color: #595959;
     }
 
 </style>
@@ -29,6 +33,12 @@
             </div>
             <div class="col-sm-12 col-md-9">
                 <div>
+                    <a href="" class="dropdown-toggle float-end" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" class="three-dots" width="20"
+                        height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                        <path
+                            d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+                    </svg></a>
                     <small class="post-author-link">By <a  href="{% url 'profile' post.author.username %}">{{post.author}}</a>--- Category: {{post.category}}</small>
                     <p class="post-card-title"><a
                             href="{% url 'post-detail' post.id %}">{{post.title|truncatewords:10}}</a> <small>({{post.get_read_time_in_minutes}} mins read)</small></p>
@@ -54,12 +64,7 @@
 
                     <small>Posted {{post.created}} (edited)</small>
 
-                    <a href="" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                        aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" class="three-dots" width="20"
-                            height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                            <path
-                                d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-                        </svg></a>
+
 
 
                     <div class="dropdown">
@@ -86,6 +91,9 @@
     </div>
 
 </div>
-
+{% empty %}
+<div class="card" style="width: 100%; background-color: #f8f9fa; color: #6c757d; padding: 20px; text-align: center;">
+    <p>No posts created yet.</p>
+</div>
 {% endfor %}
 

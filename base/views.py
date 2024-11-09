@@ -462,16 +462,22 @@ def delete_post(request, pk):
     return redirect('/')
 
 def edit_post(request, pk):
-    post = Post.objects.get(id=pk)
+    profile = Profile.objects.get(username=request.user)
+    post = get_object_or_404(Post, id=pk)
     if request.method == 'POST':
-        post.title = request.POST['post-title']
-        new_cover = request.FILES.get('post-cover-image')
-        if new_cover:
-            post.post_cover = new_cover
-        post.content = request.POST['post-text']
-        post.edited = True
-        post.save()
-        return redirect('post-detail', pk=pk)
+        form = PostForm(request.POST, request.FILES, instance=post)
+        
+        if form.is_valid():
+            form.save()
+            post.edited = True
+            post.save()
+            return redirect('post-detail', pk=pk)
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = PostForm(instance=post)
+    
+    return render(request, 'edit-post.html', {'form': form, 'post': post, 'profile':profile})
 def save_post(request, pk):
     user_profile=Profile.objects.get(username=request.user)
     post = Post.objects.get(id=pk)
@@ -484,38 +490,42 @@ def saved_posts_list(request):
     context = {'saved_posts': saved_posts, 'profile':profile}
     return render(request, 'saved_posts_list.html', context)
 def profile(request, username):
-    user_object=get_object_or_404(User, username=username)
+    user_object = get_object_or_404(User, username=username)
     profile = Profile.objects.get(username=request.user)
     user_posts = Post.objects.filter(status='published', author=user_object)
     user_posts_count = user_posts.count()
-    
+
+    # Process each post
     for post in user_posts:
         content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
         post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
         post.comment_count = Comment.objects.filter(post=post).count()
+
     author_profile = Profile.objects.get(username=user_object)
     top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
     top_read_posts = sorted(Post.objects.filter(author=user_object, status='published'), key=lambda x: x.read_count, reverse=True)[:5]
     suggested_posts = sample(list(user_posts), min(5, len(user_posts)))
     user_series = Series.objects.filter(creator=user_object)
     saved_posts = profile.saved_posts.all()
-    created_organizations=Organization.objects.filter(creator=request.user)
+    created_organizations = Organization.objects.filter(creator=request.user)
+
     context = {
-        'top_pick_posts':top_pick_posts,
+        'top_pick_posts': top_pick_posts,
         'profile': profile,
         'user_posts': user_posts,
-        'suggested_posts':suggested_posts,
-        'author_profile':author_profile,
-        'user_object':user_object,
-        'user_series':user_series,
-        'saved_posts':saved_posts,
-        'created_organizations':created_organizations,
-        'top_read_posts':top_read_posts,
-        'user_posts_count':user_posts_count,
-       
+        'suggested_posts': suggested_posts,
+        'author_profile': author_profile,
+        'user_object': user_object,
+        'user_series': user_series,
+        'saved_posts': saved_posts,
+        'created_organizations': created_organizations,
+        'top_read_posts': top_read_posts,
+        'user_posts_count': user_posts_count,
     }
+
     template_name = "profile-page-posts.html" if request.htmx else "profile-page.html"
     return render(request, template_name, context)
+
 
 
 class ProfilePostListView(ListView):
@@ -538,6 +548,11 @@ class ProfilePostListView(ListView):
         top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
         user_posts = Post.objects.filter(status='published', author=user_object)
         user_posts_count = user_posts.count()
+        page_obj = context['page_obj']
+        for post in user_posts:
+            content_without_images_or_empty_paragraphs = re.sub(r'(<img[^>]*>)|(<p>&nbsp;</p>)', '', post.content)
+            post.content_without_images_or_empty_paragraphs = content_without_images_or_empty_paragraphs
+            post.comment_count = Comment.objects.filter(post=post).count()
         context.update({
             'user_object': user_object,
             'profile': profile,
@@ -546,6 +561,46 @@ class ProfilePostListView(ListView):
             'user_posts_count':user_posts_count,
         })
         return context
+
+class ProfileProductListView(ListView):
+    model = Product
+    context_object_name = 'user_products'
+    paginate_by = 9
+    def get_template_names(self):
+        if self.request.htmx:
+            return "profile-product-list.html"
+        return "profile-product-list.html"
+    def get_queryset(self):
+        self.user_object = get_object_or_404(User, username=self.kwargs['username'])
+        return Product.objects.filter(owner=self.user_object)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_object = self.user_object
+        profile = Profile.objects.get(username=self.request.user)
+        author_profile = Profile.objects.get(username=user_object)
+        top_pick_posts = author_profile.top_picks.filter(is_top_pick=True).order_by('-top_pick_selected_at')[:3]
+        user_posts = Post.objects.filter(status='published', author=user_object)
+        user_posts_count = user_posts.count()
+        context.update({
+            'user_object': user_object,
+            'profile': profile,
+            'author_profile': author_profile,
+            'top_pick_posts': top_pick_posts,
+            'user_posts_count':user_posts_count,
+        })
+        return context
+
+def profile_bio(request, username):
+    user_object = get_object_or_404(User, username=username)
+    author_profile = get_object_or_404(Profile, username=user_object)
+    profile = Profile.objects.get(username=request.user)
+    context = {
+        'profile':profile,
+        'user_object':user_object,
+        'author_profile': author_profile,
+    }
+    return render(request, 'profile-bio.html', context)
 
 
 
@@ -580,8 +635,10 @@ def unfollow(request, username):
 def get_notifications(request):
     user = request.user
     notifications = Notification.objects.filter(user=user).order_by('-created_at')
+    profile = Profile.objects.get(username=user)
     context = {
-        'notifications': notifications
+        'notifications': notifications,
+        'profile':profile
     }
     return render(request, 'notifications.html', context)
 # def format_time_difference(created_at):

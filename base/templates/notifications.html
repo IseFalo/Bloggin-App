@@ -19,7 +19,11 @@
             width: 70%;
             margin: 0 auto;
 }
+        .notification-link{
+            color: #595959;
+        }
       </style>
+
     <div class="notification-body">
       
 
@@ -38,7 +42,7 @@
           </div>
           <div class="col-sm-12 col-md-10">
             <p class="mb-0">
-                <a href="{{notification.post_url}}" class="text-decoration-none">{{ notification.message }}</a>
+                <a href="{{notification.post_url}}" class="text-decoration-none notification-link">{{ notification.message }}</a>
                 <span class="text-muted small">7h</span>
             </p>
         </div>

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block title %}Profile- {{user_profile.username}}{% endblock %}
+
+  <script type="text/javascript">
+    // A CSRF token is required when making post requests in Django
+    // To be used for making AJAX requests in script.js
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+  </script>
+  <link rel="stylesheet" href="{% static 'my-css/profile_posts_list.css' %}" />
+</head>
+
+<body>
+
+  {% block content %}
+ 
+  
+  {% include 'profile_info.html' %}
+  <!-- {% if top_pick_posts %}
+  {% include 'profile_top_picks_carousel.html' %}
+  {% else %}
+  {% if request.user == user_object %}
+  {% include 'profile_no_top_picks.html' %}
+  {% else %}
+  {% endif %}
+  {% endif %} -->
+
+  <div class="container">
+    <ul class="nav nav-fill nav-tabs mt-5 mb-5" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'profile' user_object.username %}"> Home </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'profile-post-list' user_object.username %}"> Posts </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'profile-product-list' user_object.username %}"> Products</a>
+      </li>
+  
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="#"> Bio </a>
+      </li>
+    </ul>
+  </div>
+
+
+<section>
+    <div class="container">
+      <p>
+        {{ author_profile.bio }}
+      </p>
+
+ 
+    </div>
+
+  </section>
+
+
+ 
+  {% endblock %}
+</body>
+
+</html>
