@@ -397,7 +397,7 @@ def create_post(request):
     else:
         form = PostForm()
         return render(request, 'create-post.html', {'form': form, 'profile': profile}) 
-    
+
 def drafts_list(request):
     drafts = Post.objects.filter(status='draft', author=request.user)
     profile = Profile.objects.get(username=request.user)
@@ -413,6 +413,8 @@ def publish_post(request, pk):
             return redirect('/')
     context = {'form':form, 'post':post}
     return render(request, 'create-post.html', context)
+
+
 
 def post_detail(request, pk):
     post=Post.objects.get(id=pk)
@@ -696,7 +698,14 @@ def add_post_to_series(request, post_id):
         post_to_add.save()
         return redirect('/')
     
-
+def create_product(request):
+    user = request.user
+    name = request.POST['product-name']
+    description = request.POST['product-description']
+    image = request.FILES.get('product-image')
+    new_product = Product.objects.create(owner=user, name=name, description=description, product_image=image)
+    new_product.save
+    return redirect('profile-product-list', username=user.username)
 def create_series(request):
     user = request.user
     name=request.POST['series-name']

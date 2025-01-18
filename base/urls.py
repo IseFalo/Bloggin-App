@@ -10,7 +10,7 @@ urlpatterns=[
     path('register/', views.register, name="register"),
     path('login/', views.login, name="login"),
     path('logout/', views.logoutUser, name="logout"),
-    # path('', views.home, name="home"),
+    
     path('', views.HomeView.as_view(), name="home"),
     path('like-post/<int:pk>', views.like_post, name="like-post"),
     path('search/results/', views.search_results_view, name='search_results'),
@@ -38,6 +38,7 @@ urlpatterns=[
     path('organization-posts-list/<int:pk>/', views.organization_posts_list, name="organization-posts-list"),
     path('add-org-member/<int:user_id>', views.add_org_member, name="add-org-member"),
     path('create-organization-profile', views.create_organization_profile, name="create-organization-profile"),
+    path('create-product/',views.create_product, name="create-product"),
     path('add-to-picks/<int:pk>/', views.add_to_picks, name='add_to_picks'),
     path('remove-from-picks/<int:pk>/', views.remove_from_picks, name='remove_from_picks'),
     path('follow/<str:username>/', views.follow, name="follow"),

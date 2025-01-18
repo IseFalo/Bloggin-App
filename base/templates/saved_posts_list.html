@@ -37,7 +37,7 @@
 
             <h6>{{post.title}}</h6>
             <p>{{post.content|truncatewords:20}}</p>
-            <a href="">View Post</a>
+            <a href="{% url 'post-detail' post.id %}">View Post</a>
         </div>
         </div>
       </div>

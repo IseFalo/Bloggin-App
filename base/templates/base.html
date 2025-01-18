@@ -94,10 +94,7 @@
           </div>
         </div>
       </div>
-<!-- {% include "notification-canva.html" %} -->
 
-
-<!-- <img src="{% static 'images/icons8-notification.gif' %}" alt="" srcset="">   -->
 
 
 
@@ -181,54 +178,6 @@
     </script>
 
 
-    <!-- <script>
-        // Your AJAX script for fetching and updating notifications
-        function fetchNotifications() {
-            $.ajax({
-                url: '/get_notifications/',  // Update with your actual URL
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Process the retrieved data and update the notifications container
-                    updateNotifications(data);
-                },
-                error: function (error) {
-                    console.log('Error fetching notifications:', error);
-                }
-            });
-        }
-
-        function updateNotifications(notifications) {
-            // Assuming notifications is an array of objects with 'message' attribute
-            var container = $('#notifications-container');
-
-            // Clear existing notifications
-            container.empty();
-
-            // Append new notifications
-            notifications.forEach(function (notification) {
-                container.append('<div class="row">' +
-                    '<div class="col-2">' +
-                    '<img src="images/link 1.jpg" class="start-post-image" alt="" width="50" height="50" srcset="">' +
-                    '</div>' +
-                    '<div class="col-10 justify-content-start">' +
-                    '<p><a href="#">' + notification.author + '</a> ' + notification.message + ' <span>' + notification.created_at_formatted + '</span></p>' +
-                    '</div>' +
-                    '</div>' +
-                    '<hr>');
-            });
-        }
-
-        // Fetch notifications initially and set an interval to refresh every 3 minutes
-        fetchNotifications();
-        setInterval(fetchNotifications, 180000);  // 180000 milliseconds = 3 minutes
-
-    
-
-
-
-        
-    </script> -->
     {% block content %}
     {% endblock %}
 </body>

@@ -46,8 +46,16 @@
 <section>
     <div class="container">
       <!-- <p class="container-title">Products</p> -->
+      <div class="card-body">
+        <a data-bs-toggle="modal"  data-bs-target="#create-product" href="#create-product" role="button">
+          <form action="">
+              <img src="{{profile.profile_img.url}}" class="start-post-image" alt="" srcset="">
+              <input type="text" class="start-post" placeholder="Create Product">
+          </form>
+      </a>
+      </div>
 
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="create-product" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -55,29 +63,33 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form action="{% url 'create-series' %}" method="POST">
+              <form action="{% url 'create-product' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="mb-3">
-                  <label for="series-name" class="col-form-label">Series Name:</label>
-                  <input type="text" class="form-control" id="series-name" name="series-name">
+                  <label for="product-name" class="col-form-label">Product Name:</label>
+                  <input type="text" class="form-control" id="product-name" name="product-name">
                 </div>
 
                 <div class="mb-3">
-                  <label for="select-org" class="col-form-label">Select Organization:</label>
-                  <select name="organization_id" id="select-org">
-                    <option value="">--- Select Organization ---</option>
-                    {% for organization in created_organizations %}
-                    <option value="{{ organization.id }}">{{organization.name}}</option>
-                    {% endfor %}
-                  </select>
+                  <label for="product-image" class="col-form-label">Product Image:</label>
+                  <img class="edit-product-image" id="product-img" alt="" width="100" height="100"  src="{{product.product_img.url}}" >
+                  <input id="product-image" type="file" name="product-image" value=""
+                      class="shadow-none bg-gray-100">
                 </div>
+
+                <div class="mb-3">
+                  <label for="product-description" class="col-form-label">Product Description</label>
+                  <textarea name="product-description" id="product-description"></textarea>
+                </div>
+
+                
 
 
               
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Create Series</button>
+              <button type="submit" class="btn btn-primary">Create Product</button>
             </div>
         </form>
           </div>
@@ -85,6 +97,23 @@
       </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
       <div class="row mt-5">
         {% include 'profile-product-list-products.html' %}
       </div>
